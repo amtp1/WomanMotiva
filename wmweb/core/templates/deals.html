@@ -15,6 +15,7 @@
         <th scope="col" class="text-center">Начало сеанса</th>
         <th scope="col" class="text-center">Конец сеанса</th>
         <th scope="col" class="text-center">Дата создания</th>
+        <th scope="col" class="text-center">Статус</th>
       </tr>
     </thead>
     <tbody>
@@ -27,6 +28,9 @@
           <td>{{deal.start_session}}</td>
           <td>{{deal.end_session}}</td>
           <td>{{deal.created}}</td>
+          {% if deal.status == 'new' %}
+            <td><span class="badge text-bg-secondary">Новая</span></td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>
