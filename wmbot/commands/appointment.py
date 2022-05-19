@@ -73,7 +73,7 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
 
         surgeons = api.get_surgeons(city=city)
         for surgeon in surgeons:
-            globals.surgeons[surgeon["id"]] = surgeon["name"]
+            globals.surgeons[surgeon["id"]] = (surgeon["name"], surgeon["wa_phone"],)
             id = surgeon["id"]
             name = surgeon["name"]
             city = surgeon["city"]
@@ -122,7 +122,9 @@ async def get_contact(message: Message, state: FSMContext):
         end_session = data.get("end_session")
         phone = re.sub('[^0-9]', "", message.contact.phone_number)
         user_id = message.from_user.id
-        surgeon_name = globals.surgeons[int(surgeon_id)]
+        state_surgeon_data = globals.surgeons[int(surgeon_id)]
+        surgeon_name = state_surgeon_data[0]
+        surgeon_wa_phone = state_surgeon_data[1]
         deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
             phone=phone, city=city,
             start_session=start_session, end_session=end_session)
@@ -135,7 +137,7 @@ async def get_contact(message: Message, state: FSMContext):
                    F"Начало консультации: {start_session}\n"
                    F"Конец консультации: {end_session}\n"
                    F"Телефон: {phone}")
-        wa_api.send_message("79951060644", surgeon_message_text)
+        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
         complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
                              F"Начало консультации: {start_session}\n"
