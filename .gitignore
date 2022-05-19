@@ -1,0 +1,7 @@
+__pycache__
+env/
+migrations/
+
+wmweb/media/profile_pictures/
+
+.env

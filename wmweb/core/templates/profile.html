@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% block title%}Profile{% endblock %}
+
+{% load static %}
+{% block body %}
+<!-- Modal windows -->
+<!-- Add account (modal) -->
+<div id="addNewProfile" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Новый профиль</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#addNewProfile').modal('hide');"></button>
+      </div>
+      <form method="post" enctype="multipart/form-data" action="save_profile">
+        {% csrf_token %}
+        <div class="upload-container">
+          <div class="border-container">
+            <div class="icons fa-4x">
+              <i class="fas fa-file-image" data-fa-transform="shrink-3 down-2 left-6 rotate--45"></i>
+              <i class="fas fa-file-alt" data-fa-transform="shrink-2 up-4"></i>
+              <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
+            </div>
+            <div class="d-flex justify-content-center">
+              <p><input id="file" type="file" name="user_pic"/><p>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="name" placeholder="ФИО">
+        </div>
+        <div class="input-group mb-3">
+          <select class="form-select" name="city" aria-label="Города">
+            <option selected disabled>Выберите город</option>
+            <option value="Алматы">Алматы</option>
+            <option value="Нур-Султан">Нур-Султан</option>
+            <option value="Шымкент">Шымкент</option>
+            <option value="Актобе">Актобе</option>
+            <option value="Караганда">Караганда</option>
+            <option value="Атырау">Атырау</option>
+            <option value="Тараз">Тараз</option>
+            <option value="Павлодар">Павлодар</option>
+            <option value="Семей">Семей</option>
+            <option value="Усть-Каменогорск">Усть-Каменогорск</option>
+            <option value="Кызылорда">Кызылорда</option>
+          </select>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span></div>
+          <input type="text" class="form-control" name="wa_phone" placeholder="Введите номер телефона (WhatsApp)">
+        </div>
+        <small>Номер телефона вводить без символов</small>
+        <div class="modal-footer">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary" name="save_account">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="/" class="brand-link">
+    <!--<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">-->
+    <svg class="file-word" width="40" height="32"></svg>
+    <span class="brand-text font-weight-light">Woman Motivia</span>
+  </a>
+  
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <!--<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="info">
+        <span class="d-block" readonly>Any Info</span>
+      </div>
+    </div>-->
+  
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+        <!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+        <li class="nav-item">
+          <a href="/surgeons" class="nav-link">
+            <i class="bi bi-people-fill"></i>
+            <p>Хирурги</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/deals" class="nav-link">
+            <i class="bi bi-people-fill"></i>
+            <p>Заявки</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  {% block pages_body %}{% endblock %}
+</nav>
+{% endblock %}

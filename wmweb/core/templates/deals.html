@@ -1,0 +1,10 @@
+{% extends 'profile.html' %}
+{% block title%}Deals{% endblock %}
+
+{% load static %}
+{% block pages_body %}
+{% if deals %}
+{% else %}
+  <h1>Заявки не найдены</h1>
+{% endif %}
+{% endblock %}

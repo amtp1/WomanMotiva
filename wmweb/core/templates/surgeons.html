@@ -1,0 +1,33 @@
+{% extends 'profile.html' %}
+{% block title%}Surgeons{% endblock %}
+
+{% load static %}
+{% block pages_body %}
+<!-- Profiles of surgeons -->
+<div class="album py-3 w-100 bg-light">
+  <div class="table-scroll-y my-custom-scrollbar">
+    <div class="container">
+      <p><button type="button" class="btn btn-secondary" onclick="$('#addNewProfile').modal('show');">Добавить профиль</button></p>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      {% for surgeon in surgeons %}
+        <div id="card_{{surgeon.pk}}" class="card">
+          <img src="{{surgeon.image.url}}" class="card-img-top w-50 h-50" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">{{surgeon.name}}
+              {% if surgeon.wa_phone %}
+                <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link"><i class="bi bi-whatsapp"></i></a></span>
+              {% endif %}
+            </h5>
+            <p class="card-text">Город: <strong>{{surgeon.city}}</strong></p>
+            <div class="btn-group">
+              <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary" disabled>Редактировать</button>
+              <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id)">Удалить</button>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+body {
+    /*max-width: 100%;
+    background-color: #eee;*/
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.my-custom-scrollbar {
+    max-height: 650px;
+    overflow-y: scroll;
+}
+
+.my-custom-scrollbar::-webkit-scrollbar
+{
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+.my-custom-scrollbar::-webkit-scrollbar-thumb
+{
+    background-color: #000000;
+}
+
+input[type="file"] {
+    /*display: none;*/
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.upload-container {
+    background-color: rgb(239, 239, 239);
+    border-radius: 6px;
+    padding: 10px;
+  }
+
+  .border-container {
+    border: 5px dashed rgba(198, 198, 198, 0.65);
+    padding: 20px;
+  }
+
+  .border-container p {
+    color: #130f40;
+    font-weight: 600;
+    font-size: 1.1em;
+    letter-spacing: -1px;
+    margin-top: 30px;
+    margin-bottom: 0;
+    opacity: 0.65;
+  }
+
+  .icons {
+    color: #95afc0;
+    opacity: 0.55;}
+
+.table{
+    height: 10px;
+}
