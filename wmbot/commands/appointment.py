@@ -145,9 +145,15 @@ async def get_contact(message: Message, state: FSMContext):
                              F"Хирург: {surgeon_name}\n"
                              F"Адрес: г.{city}\n"
                              F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
-        return await message.answer(complete_reg_page, reply_markup=remove_keyboard)
+        await message.answer(complete_reg_page, reply_markup=remove_keyboard)
+        return await message.answer_photo(read_qr_code_from_url("https://qrkodgenerator.ru/img/qrcode1652995002.png"))
 
 def read_image(image_path: str):
     response = requests.get(F"http://{config.host}:{config.port}{image_path}")
+    img = BytesIO(response.content)
+    return img
+
+def read_qr_code_from_url(image_url: str):
+    response = requests.get(image_url)
     img = BytesIO(response.content)
     return img
