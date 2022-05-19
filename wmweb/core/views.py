@@ -22,13 +22,13 @@ class API:
     class CreateDealView(ListAPIView):
         serializer_class = Deals
         def get(self, request, surgeon_id, user_id, phone, city, start_session, end_session):
-            #surgeon = Surgeons.objects.get(pk=surgeon_id)
-            deal = Deals.objects.filter(user_id=user_id, surgeon_id=surgeon_id,
+            surgeon = Surgeons.objects.get(pk=surgeon_id)
+            deal = Deals.objects.filter(user_id=user_id, surgeon=surgeon,
                     phone=phone, city=city, start_session=start_session,
                     end_session=end_session)
             if not deal.exists():
                 deal = Deals.objects.create(
-                    surgeon_id=surgeon_id, user_id=user_id,
+                    surgeon=surgeon, user_id=user_id,
                     phone=phone, city=city, start_session=start_session,
                     end_session=end_session
                 )
