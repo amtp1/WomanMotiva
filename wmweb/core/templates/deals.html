@@ -4,6 +4,34 @@
 {% load static %}
 {% block pages_body %}
 {% if deals %}
+<div id="MyOrdersTable" class="table-wrapper-scroll-y my-custom-scrollbar">
+  <table class="table">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col" class="text-center">ID заявки</th>
+        <th scope="col" class="text-center">Имя хирурга</th>
+        <th scope="col" class="text-center">Номер телефона</th>
+        <th scope="col" class="text-center">Город</th>
+        <th scope="col" class="text-center">Начало сеанса</th>
+        <th scope="col" class="text-center">Конец сеанса</th>
+        <th scope="col" class="text-center">Дата создания</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for deal in deals %}
+        <tr>
+          <td>{{deal.pk}}</td>
+          <td>{{deal.surgeon.name}}</td>
+          <td>{{deal.phone}}</td>
+          <td>{{deal.city}}</td>
+          <td>{{deal.start_session}}</td>
+          <td>{{deal.end_session}}</td>
+          <td>{{deal.created}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% else %}
   <h1>Заявки не найдены</h1>
 {% endif %}
