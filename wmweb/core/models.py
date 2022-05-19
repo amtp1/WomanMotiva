@@ -17,7 +17,7 @@ class Surgeons(models.Model):
 
 
 class Deals(models.Model):
-    surgeon_id = models.IntegerField(null=True)
+    surgeon = models.ForeignKey(Surgeons, on_delete=models.PROTECT, null=True)
     user_id = models.BigIntegerField(null=True)
     phone = models.BigIntegerField(null=True)
     city = models.CharField(max_length=255, null=True)
