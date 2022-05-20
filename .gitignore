@@ -4,6 +4,7 @@ migrations/
 
 wmbot/qr_code/
 
+wmweb/media/qrcode
 wmweb/media/profile_pictures/
 
 .env
