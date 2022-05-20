@@ -2,6 +2,8 @@ __pycache__
 env/
 migrations/
 
+wmbot/qr_code/
+
 wmweb/media/profile_pictures/
 
 .env
