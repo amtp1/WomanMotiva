@@ -1,6 +1,7 @@
 import re
 import json
 from datetime import datetime as dt
+from asyncio import sleep
 
 import requests
 from io import BytesIO
@@ -137,7 +138,7 @@ async def get_contact(message: Message, state: FSMContext):
                    F"Начало консультации: {start_session}\n"
                    F"Конец консультации: {end_session}\n"
                    F"Телефон: {phone}")
-        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+        #wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
         complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
                              F"Начало консультации: {start_session}\n"
@@ -146,14 +147,27 @@ async def get_contact(message: Message, state: FSMContext):
                              F"Адрес: г.{city}\n"
                              F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
         await message.answer(complete_reg_page, reply_markup=remove_keyboard)
-        return await message.answer_photo(read_qr_code_from_url("https://qrkodgenerator.ru/img/qrcode1652995002.png"))
+        await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
+        await notify_about_deal(message)
+
+async def notify_about_deal(message: Message):
+    await sleep(300)
+    inline_markup = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Да", callback_data="communicate_yes"),
+             InlineKeyboardButton(text="Нет", callback_data="communicate_no")]
+        ]
+    )
+    await message.answer(
+        "Пожалуйста ответьте, связался ли с вами представитель хирурга к которому вы записались?",
+        reply_markup=inline_markup)
 
 def read_image(image_path: str):
     response = requests.get(F"http://{config.host}:{config.port}{image_path}")
     img = BytesIO(response.content)
     return img
 
-def read_qr_code_from_url(image_url: str):
-    response = requests.get(image_url)
-    img = BytesIO(response.content)
+def read_qr_code_from_path(image_path: str):
+    with open(image_path, "rb") as img:
+        img = img.read()
     return img
