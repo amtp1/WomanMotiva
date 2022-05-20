@@ -10,6 +10,7 @@ urlpatterns = [
     path("surgeons", Web.surgeons, name="surgeons"),
     path("deals", Web.deals, name="deals"),
     path("save_profile", Web.save_profile, name="save_profile"),
+    path("activate_code", Web.activate_code, name="activate_code"),
 
     path("del_profile/", Web.delete_profile, name="delete_profile"),
 
