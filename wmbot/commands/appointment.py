@@ -138,7 +138,7 @@ async def get_contact(message: Message, state: FSMContext):
                    F"Начало консультации: {start_session}\n"
                    F"Конец консультации: {end_session}\n"
                    F"Телефон: {phone}")
-        #wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
         complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
                              F"Начало консультации: {start_session}\n"
