@@ -147,7 +147,8 @@ async def get_contact(message: Message, state: FSMContext):
                              F"Адрес: г.{city}\n"
                              F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
         await message.answer(complete_reg_page, reply_markup=remove_keyboard)
-        await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
+        await message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
+        # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
         await notify_about_deal(message)
 
 async def notify_about_deal(message: Message):
@@ -164,6 +165,11 @@ async def notify_about_deal(message: Message):
 
 def read_image(image_path: str):
     response = requests.get(F"http://{config.host}:{config.port}{image_path}")
+    img = BytesIO(response.content)
+    return img
+
+def read_qr_code_from_url(image_name: str):
+    response = requests.get(F"http://{config.host}:{config.port}/media/qrcode/{image_name}")
     img = BytesIO(response.content)
     return img
 
