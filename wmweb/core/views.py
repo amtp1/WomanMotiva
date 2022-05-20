@@ -62,9 +62,8 @@ class Web:
         return render(request, "deals.html", dict(deals=_deals))
 
     def activate_code(request):
-        digit_code = request.POST['6-digit_code']
-        if digit_code:
-            pass
+        if request.POST['6-digit_code']:
+            digit_code = request.POST['6-digit_code']
         return render(request, "activate_code.html")
 
     def save_profile(request) -> HttpResponseRedirect:
