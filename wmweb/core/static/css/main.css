@@ -5,20 +5,21 @@ body {
     overflow-y: hidden;
 }
 
-.my-custom-scrollbar {
-    max-height: 650px;
+table tbody {
+    display: block;
+    max-height: 500px;
     overflow-y: scroll;
 }
 
-.my-custom-scrollbar::-webkit-scrollbar
-{
+table thead, table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }::-webkit-scrollbar{
     width: 6px;
     background-color: #F5F5F5;
-}
-
-.my-custom-scrollbar::-webkit-scrollbar-thumb
-{
-    background-color: #000000;
+        }::-webkit-scrollbar-thumb{
+            background-color: #000000;
 }
 
 input[type="file"] {
