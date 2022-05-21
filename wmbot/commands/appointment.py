@@ -108,7 +108,7 @@ async def time_interval(query: CallbackQuery, state: FSMContext):
     button_phone = KeyboardButton(text="Отправить телефон",
                                 request_contact=True)
     keyboard.add(button_phone)
-    await query.message.answer("Ваш номер телефона", reply_markup=keyboard)
+    await query.message.answer('Нажмите кнопку "отправить телефон" 🙂⬇️⬇️⬇️', reply_markup=keyboard)
 
 @dp.message_handler(content_types=['contact'])
 async def get_contact(message: Message, state: FSMContext):
