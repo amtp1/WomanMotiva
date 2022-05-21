@@ -3,119 +3,6 @@
 
 {% load static %}
 {% block body %}
-<!-- Modal windows -->
-<!-- Add account (modal) -->
-<div id="addNewProfile" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Новый профиль</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#addNewProfile').modal('hide');"></button>
-      </div>
-      <form method="post" enctype="multipart/form-data" action="save_profile">
-        {% csrf_token %}
-        <div class="upload-container">
-          <div class="border-container">
-            <div class="icons fa-4x">
-              <i class="fas fa-file-image" data-fa-transform="shrink-3 down-2 left-6 rotate--45"></i>
-              <i class="fas fa-file-alt" data-fa-transform="shrink-2 up-4"></i>
-              <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
-            </div>
-            <div class="d-flex justify-content-center">
-              <p><input id="file" type="file" name="user_pic"/><p>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="name" placeholder="ФИО">
-        </div>
-        <div class="input-group mb-3">
-          <select class="form-select" name="city" aria-label="Города">
-            <option selected disabled>Выберите город</option>
-            <option value="Алматы">Алматы</option>
-            <option value="Нур-Султан">Нур-Султан</option>
-            <option value="Шымкент">Шымкент</option>
-            <option value="Актобе">Актобе</option>
-            <option value="Караганда">Караганда</option>
-            <option value="Атырау">Атырау</option>
-            <option value="Тараз">Тараз</option>
-            <option value="Павлодар">Павлодар</option>
-            <option value="Семей">Семей</option>
-            <option value="Усть-Каменогорск">Усть-Каменогорск</option>
-            <option value="Кызылорда">Кызылорда</option>
-          </select>
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span></div>
-          <input type="text" class="form-control" name="wa_phone" placeholder="Введите номер телефона (WhatsApp)">
-        </div>
-        <small>Номер телефона вводить без символов</small>
-        <div class="modal-footer">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary" name="save_account">Сохранить</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- Edit account (modal) -->
-<div id="EditProfile" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Изменить профиль</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#EditProfile').modal('hide');"></button>
-      </div>
-      <form method="post" enctype="multipart/form-data" action="save_profile">
-        {% csrf_token %}
-        <div class="upload-container">
-          <div class="border-container">
-            <div class="icons fa-4x">
-              <i class="fas fa-file-image" data-fa-transform="shrink-3 down-2 left-6 rotate--45"></i>
-              <i class="fas fa-file-alt" data-fa-transform="shrink-2 up-4"></i>
-              <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
-            </div>
-            <div class="d-flex justify-content-center">
-              <p><input id="file" type="file" name="user_pic"/><p>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="name" placeholder="ФИО">
-        </div>
-        <div class="input-group mb-3">
-          <select class="form-select" name="city" aria-label="Города">
-            <option selected disabled>Выберите город</option>
-            <option value="Алматы">Алматы</option>
-            <option value="Нур-Султан">Нур-Султан</option>
-            <option value="Шымкент">Шымкент</option>
-            <option value="Актобе">Актобе</option>
-            <option value="Караганда">Караганда</option>
-            <option value="Атырау">Атырау</option>
-            <option value="Тараз">Тараз</option>
-            <option value="Павлодар">Павлодар</option>
-            <option value="Семей">Семей</option>
-            <option value="Усть-Каменогорск">Усть-Каменогорск</option>
-            <option value="Кызылорда">Кызылорда</option>
-          </select>
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span></div>
-          <input type="text" class="form-control" name="wa_phone" placeholder="Введите номер телефона (WhatsApp)">
-        </div>
-        <small>Номер телефона вводить без символов</small>
-        <div class="modal-footer">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary" name="save_account">Сохранить</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <div class="container-fluid">
   <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
@@ -136,7 +23,11 @@
                   <li>
                     <a href="/deals" class="nav-link px-0 align-middle">
                         <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Заявки</span></a>
-                </li>
+                  </li>
+                  <li>
+                    <a href="/cities" class="nav-link px-0 align-middle">
+                      <i class="fs-4 bi-map"></i></i> <span class="ms-1 d-none d-sm-inline">Города</span></a>
+                  </li>
               </ul>
               <hr>
               <!--<div class="dropdown pb-4">
