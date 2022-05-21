@@ -53,32 +53,48 @@ class Web:
         surgeons = Surgeons.objects.all()
         deals = Deals.objects.all()
         new_deals = Deals.objects.filter(status="new").all()
+        cities = Cities.objects.all()
         data = dict(surgeons=surgeons, deals=deals,
-            new_deals=new_deals)
+            new_deals=new_deals, cities=cities)
         return render(request, "statistic.html", data)
 
     def surgeons(request) -> HttpResponse:
         _surgeons = Surgeons.objects.all()
-        return render(request, "surgeons.html", dict(surgeons=_surgeons))
+        cities = Cities.objects.all()
+        return render(request, "surgeons.html", dict(surgeons=_surgeons, cities=cities))
 
     def deals(request) -> HttpResponse:
         _deals = Deals.objects.all()
         return render(request, "deals.html", dict(deals=_deals))
 
+    def cities(request) -> HttpResponse:
+        cities = Cities.objects.all()
+        data = dict(cities=cities)
+        return render(request, "cities.html", data)
+
     def activate_code(request):
         return render(request, "activate_code.html")
 
     def save_profile(request) -> HttpResponseRedirect:
-        if request.method == 'POST' and request.FILES['user_pic']:
+        if request.method == 'POST' and request.FILES:
             user_pic = request.FILES['user_pic']
             name = request.POST['name']
             city = request.POST['city']
             wa_phone = request.POST['wa_phone']
+            instagram_link = request.POST['instagram_link']
             Surgeons.objects.create(
                 name=name, city=city,
-                image=user_pic, wa_phone=wa_phone
+                image=user_pic, wa_phone=wa_phone,
+                instagram_link=instagram_link
             )
         return redirect("surgeons")
+
+    def save_city(request) -> HttpResponse:
+        city = request.POST['city']
+        city_db_obj = Cities.objects.filter(name=city)
+        if not city_db_obj:
+            Cities.objects.create(name=city)
+        return redirect("cities")
 
     def delete_profile(request) -> HttpResponse:
         surgeon_id = request.POST['id']
@@ -87,3 +103,23 @@ class Web:
         surgeon = Surgeons.objects.filter(pk=surgeon_id)
         surgeon.delete()
         return HttpResponse(dumps(True), content_type="application/json")
+
+    def delete_city(request) -> HttpResponse:
+        city_id = request.POST['id']
+        Cities.objects.filter(pk=city_id).delete()
+        return HttpResponse(dumps(True), content_type="application/json")
+
+    def edit_profile(request) -> HttpResponseRedirect:
+        edit_surgeon_id = request.COOKIES.get("edit_surgeon_id")
+        surgeon = Surgeons.objects.filter(pk=edit_surgeon_id)
+        if request.method == 'POST':
+            name = request.POST['name']
+            city = request.POST['city']
+            wa_phone = request.POST['wa_phone']
+            instagram_link = request.POST['instagram_link']
+            if request.FILES:
+                #user_pic = request.FILES['user_pic']
+                user_pic = F"profile_pictures/{request.FILES['user_pic']}"
+                surgeon.update(name=name, city=city, image=user_pic, wa_phone=wa_phone, instagram_link=instagram_link)
+            surgeon.update(name=name, city=city, wa_phone=wa_phone, instagram_link=instagram_link)
+        return redirect("surgeons")
