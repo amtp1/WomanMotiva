@@ -15,7 +15,8 @@ class Surgeons(models.Model):
         return dict(
             id=self.id, name=self.name,
             clinic=self.clinic, city=self.city,
-            wa_phone=self.wa_phone, image=self.image.url
+            wa_phone=self.wa_phone, instagram_link=self.instagram_link,
+            image=self.image.url
         )
 
 
