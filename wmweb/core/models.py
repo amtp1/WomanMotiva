@@ -8,7 +8,8 @@ class Surgeons(models.Model):
     clinic = models.CharField(max_length=255, null=False)
     city = models.CharField(max_length=255, null=False)
     wa_phone = models.BigIntegerField(null=True)
-    image = models.ImageField(upload_to="profile_pictures/")
+    instagram_link = models.TextField(null=True)
+    image = models.ImageField(upload_to="profile_pictures/", null=True)
 
     def to_dict(self):
         return dict(
@@ -47,3 +48,6 @@ class Deals(models.Model):
             city=self.city, start_session=self.start_session,
             end_session = self.end_session, created=self.created
         )
+
+class Cities(models.Model):
+    name = models.CharField(max_length=255)
