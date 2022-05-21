@@ -50,8 +50,12 @@ class Web:
             If user auth then 'render'.
             If user is not auth then 'redirect'.
         """
-
-        return render(request, "profile.html")
+        surgeons = Surgeons.objects.all()
+        deals = Deals.objects.all()
+        new_deals = Deals.objects.filter(status="new").all()
+        data = dict(surgeons=surgeons, deals=deals,
+            new_deals=new_deals)
+        return render(request, "statistic.html", data)
 
     def surgeons(request) -> HttpResponse:
         _surgeons = Surgeons.objects.all()
