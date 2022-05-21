@@ -78,7 +78,7 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
             id = surgeon["id"]
             name = surgeon["name"]
             city = surgeon["city"]
-            instagram_link = surgeon["instagram_link"]
+            instagram_link = surgeon["instagram_link"] if surgeon["instagram_link"] else "Отсутствует"
             image = read_image(surgeon["image"])
             choose_inline_markup = InlineKeyboardMarkup(
                 inline_keyboard=[
