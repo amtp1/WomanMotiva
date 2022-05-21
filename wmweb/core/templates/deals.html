@@ -1,5 +1,5 @@
 {% extends 'profile.html' %}
-{% block title%}Deals{% endblock %}
+{% block title%}Заявки{% endblock %}
 
 {% load static %}
 {% block pages_body %}
@@ -21,7 +21,7 @@
     <tbody>
       {% for deal in deals %}
         <tr>
-          <td>{{deal.pk}}</td>
+          <td><strong>{{deal.pk}}</strong></td>
           <td>{{deal.surgeon.name}}</td>
           <td>{{deal.phone}}</td>
           <td>{{deal.city}}</td>
