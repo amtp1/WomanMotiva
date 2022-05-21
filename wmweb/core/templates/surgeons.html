@@ -1,8 +1,113 @@
 {% extends 'profile.html' %}
-{% block title%}Surgeons{% endblock %}
+{% block title%}Хирурги{% endblock %}
 
 {% load static %}
 {% block pages_body %}
+<!-- Modal windows -->
+<!-- Add account (modal) -->
+<div id="addNewProfile" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Новый профиль</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#addNewProfile').modal('hide');"></button>
+      </div>
+      <form method="post" enctype="multipart/form-data" action="save_profile">
+        {% csrf_token %}
+        <div class="upload-container">
+          <div class="border-container">
+            <div class="icons fa-4x">
+              <i class="fas fa-file-image" data-fa-transform="shrink-3 down-2 left-6 rotate--45"></i>
+              <i class="fas fa-file-alt" data-fa-transform="shrink-2 up-4"></i>
+              <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
+            </div>
+            <div class="d-flex justify-content-center">
+              <p><input id="file" type="file" name="user_pic"/><p>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="name" placeholder="ФИО">
+        </div>
+        <div class="input-group mb-3">
+          <select class="form-select" name="city" aria-label="Города">
+            <option selected disabled>Выберите город</option>
+            {% for city in cities %}
+              <option value="{{city.name}}">{{city.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+          </div>
+          <input type="text" class="form-control" name="wa_phone" placeholder="Номер телефона (WhatsApp)">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-instagram"></i></span></div>
+          <input type="text" class="form-control" name="instagram_link" placeholder="Ссылка от Instagram">
+        </div>
+        <div class="modal-footer">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary" name="save_account">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit account (modal) -->
+<div id="EditProfile" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Изменить профль</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#EditProfile').modal('hide');"></button>
+      </div>
+      <form method="post" enctype="multipart/form-data" action="edit_profile">
+        {% csrf_token %}
+        <!--<div class="upload-container">
+          <div class="border-container">
+            <div class="icons fa-4x">
+              <i class="fas fa-file-image" data-fa-transform="shrink-3 down-2 left-6 rotate--45"></i>
+              <i class="fas fa-file-alt" data-fa-transform="shrink-2 up-4"></i>
+              <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
+            </div>
+            <div class="d-flex justify-content-center">
+              <p><input id="file" type="file" name="user_pic"/><p>
+            </div>
+          </div>
+        </div>
+        <br>-->
+        <div class="input-group mb-3">
+          <input type="text" class="form-control name" name="name" placeholder="ФИО">
+        </div>
+        <div class="input-group mb-3">
+          <select class="form-select city" name="city" aria-label="Города">
+            <option selected disabled>Выберите город</option>
+            {% for city in cities %}
+              <option value="{{city.name}}">{{city.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+          </div>
+          <input type="text" class="form-control wa_phone" name="wa_phone" placeholder="Номер телефона (WhatsApp)">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-instagram"></i></span></div>
+          <input type="text" class="form-control instagram_link" name="instagram_link" placeholder="Ссылка от Instagram">
+        </div>
+        <div class="modal-footer">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary" name="save_account">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Profiles of surgeons -->
 <div class="album py-3 w-100 bg-light">
   <div class="table-scroll-y my-custom-scrollbar">
@@ -17,10 +122,14 @@
               {% if surgeon.wa_phone %}
                 <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link"><i class="bi bi-whatsapp"></i></a></span>
               {% endif %}
+              {% if surgeon.instagram_link %}
+                <span><a href="{{surgeon.instagram_link}}" class="card-link"><i class="bi bi-instagram"></i></a></span>
+              {% endif %}
             </h5>
             <p class="card-text">Город: <strong>{{surgeon.city}}</strong></p>
             <div class="btn-group">
-              <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary" disabled>Редактировать</button>
+              <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
+                onclick="edit_profile(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}')">Редактировать</button>
               <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id)">Удалить</button>
             </div>
           </div>
