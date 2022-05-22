@@ -58,6 +58,7 @@ class Deals(models.Model):
         return dict(
             id=self.id, surgeon_id=self.surgeon_id,
             user_id=self.user_id, phone=self.phone,
+            fio=self.fio, email=self.email, cons_format=self.cons_format,
             city=self.city, start_session=self.start_session,
             end_session = self.end_session, created=self.created
         )
