@@ -130,21 +130,33 @@ async def get_fio(message: Message, state: FSMContext):
 async def get_email(message: Message, state: FSMContext):
     if message.text != "/skip":
         await state.update_data(email=message.text)
-    data = await state.get_data()
+
+    consultation_format_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Онлайн", callback_data="cons#online"),
+         InlineKeyboardButton(text="Оффлайн", callback_data="cons#offline")]
+    ])
+    globals.data = await state.get_data()
+    await state.finish()
+    return await message.answer("Выберите предпочтительный формат проведения консультации", reply_markup=consultation_format_markup)
+
+@dp.callback_query_handler(lambda query: query.data.startswith(("cons")))
+async def consultation_format(query: CallbackQuery, state: FSMContext):
+    data = globals.data
 
     surgeon_id = data.get("surgeon_id")
     phone = data.get("phone")
     city = data.get("city")
     fio = data.get("fio")
     email = data.get("email")
+    cons_format = re.sub("cons#", "", query.data)
     start_session = data.get("start_session")
     end_session = data.get("end_session")
-    user_id = message.from_user.id
+    user_id = query.message.from_user.id
     state_surgeon_data = globals.surgeons[int(surgeon_id)]
     surgeon_name = state_surgeon_data[0]
     surgeon_wa_phone = state_surgeon_data[1]
     deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
-        phone=phone, city=city, fio=fio, email=email,
+        phone=phone, city=city, fio=fio, email=email, cons_format=cons_format,
         start_session=start_session, end_session=end_session)
 
     deal_id = deal_response["deal_id"]
@@ -163,10 +175,10 @@ async def get_email(message: Message, state: FSMContext):
                             F"Хирург: {surgeon_name}\n"
                             F"Адрес: г.{city}\n"
                             F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
-    await message.answer(complete_reg_page)
-    await message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
+    await query.message.answer(complete_reg_page)
+    await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
-    await notify_about_deal(message)
+    await notify_about_deal(query.message)
 
 async def notify_about_deal(message: Message):
     await sleep(300)
