@@ -25,6 +25,6 @@ urlpatterns = [
     path("activate_code", Web.activate_code, name="activate_code"),
 
     path("api/surgeons/<str:city>", API.SurgeonsView.as_view(), name="api-surgeons"),
-    path("api/create_deal/<int:surgeon_id>/<int:user_id>/<int:phone>/<str:city>/<str:fio>/<str:email>/<str:start_session>/<str:end_session>",
+    path("api/create_deal/<int:surgeon_id>/<int:user_id>/<int:phone>/<str:city>/<str:fio>/<str:email>/<str:cons_format>/<str:start_session>/<str:end_session>",
         API.CreateDealView.as_view(), name="create_deal")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
