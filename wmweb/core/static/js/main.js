@@ -10,6 +10,10 @@ function redirect_to_cities_page(){
     window.location.replace("cities");
 }
 
+function redirect_to_questions_page(){
+    window.location.replace("questions");
+}
+
 $(document).ready(function () {
     $('#dtBasicExample').DataTable();
     $('.dataTables_length').addClass('bs-select');
@@ -17,7 +21,7 @@ $(document).ready(function () {
 
 function delete_profile(id){
     var data = new FormData(); // Init new FormData object.
-    data.append("id", id); // Add mail address in the FormData object.
+    data.append("id", id); // Add id in the FormData object.
     fetch("del_profile/", {
         method: "POST",
         body: data,
@@ -29,9 +33,19 @@ function delete_profile(id){
     }).then(function(response){
         response.json().then(
             function(data){
-                if (data==true){
+                ids_string = "";
+                if (data["response"]==true){
                     var surgeon_card = document.getElementById(`card_${id}`);
                     surgeon_card.remove();
+                }else if (data["response"]==false){
+                    var deals = data["deals"];
+                    $.cookie("delete_profile_id", id);
+                    deals.forEach(element => {
+                        ids_string += `${element}, `;
+                    });
+                    var delete_profile_modal = $('#DeleteProfile')
+                    delete_profile_modal.find("h6").text("Удаление профиля приведет к удалению зависимых записей.\n"+`Идентификаторы записей: ${ids_string}`);
+                    delete_profile_modal.modal("show");
                 }
             }
         );
@@ -40,7 +54,7 @@ function delete_profile(id){
 
 function delete_city(id){
     var data = new FormData(); // Init new FormData object.
-    data.append("id", id); // Add mail address in the FormData object.
+    data.append("id", id); // Add id in the FormData object.
     fetch("del_city/", {
         method: "POST",
         body: data,
@@ -54,6 +68,28 @@ function delete_city(id){
             function(data){
                 if (data==true){
                     redirect_to_cities_page();
+                }
+            }
+        );
+    });
+}
+
+function delete_question(id){
+    var data = new FormData(); // Init new FormData object.
+    data.append("id", id); // Add id in the FormData object.
+    fetch("del_question/", {
+        method: "POST",
+        body: data,
+        contentType: 'application/json',
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": $.cookie("csrftoken")
+        },
+    }).then(function(response){
+        response.json().then(
+            function(data){
+                if (data==true){
+                    redirect_to_questions_page();
                 }
             }
         );
