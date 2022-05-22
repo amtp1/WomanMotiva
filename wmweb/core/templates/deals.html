@@ -4,6 +4,31 @@
 {% load static %}
 {% block pages_body %}
 {% if deals %}
+<p>
+  <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Выгрузить
+    </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <form method="post" action="upload_to_excel">
+          {% csrf_token %}
+          <li><input type="submit" class="dropdown-item" value="За месяц" name="30"></li>
+          <li><input type="submit" class="dropdown-item" value="За неделю" name="7"></li>
+          <li><input type="submit" class="dropdown-item" value="За день" name="1"></li>
+        </form>
+      </ul>
+  </div>
+<!--<div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    Dropdown button
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" href="#">Action</a></li>
+    <li><a class="dropdown-item" href="#">Another action</a></li>
+    <li><a class="dropdown-item" href="#">Something else here</a></li>
+  </ul>
+</div>-->
+</p>
 <div id="MyOrdersTable" class="table-wrapper-scroll-y my-custom-scrollbar">
   <table class="table">
     <thead class="table-dark">
