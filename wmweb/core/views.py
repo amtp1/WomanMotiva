@@ -23,18 +23,20 @@ class API:
         serializer_class = Deals
         def get(self, request, surgeon_id,
             user_id, phone, city,
-            fio, email, start_session,
-            end_session
+            fio, email, cons_format,
+            start_session, end_session
         ) -> HttpResponse:
             surgeon = Surgeons.objects.get(pk=surgeon_id)
             deal = Deals.objects.filter(user_id=user_id, surgeon=surgeon,
                     phone=phone, city=city, fio=fio,
-                    email=email, start_session=start_session, end_session=end_session)
+                    email=email, cons_format=cons_format,
+                    start_session=start_session, end_session=end_session)
             if not deal.exists():
                 deal = Deals.objects.create(
                     surgeon=surgeon, user_id=user_id,
                     phone=phone, city=city, fio=fio,
-                    email=email, start_session=start_session, end_session=end_session
+                    email=email, cons_format=cons_format,
+                    start_session=start_session, end_session=end_session
                 )
             return HttpResponse(dumps({"deal_id": deal.pk, "deal_created": str(deal.created)}), content_type='application/json')
 
