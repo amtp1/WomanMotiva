@@ -33,12 +33,22 @@ class Deals(models.Model):
         def get_value(cls, member):
             return cls[member].value[0]
 
+    class FORMAT(Enum):
+        online = ('online', 'Online consultation')
+        offline = ('offline', 'Offline consultation')
+        unknow = ('unknow', 'Unknow')
+
+        @classmethod
+        def get_value(cls, member):
+            return cls[member].value[0]
+
     surgeon = models.ForeignKey(Surgeons, on_delete=models.PROTECT, null=True)
     user_id = models.BigIntegerField(null=True)
     phone = models.BigIntegerField(null=True)
     city = models.CharField(max_length=255, null=True)
     fio = models.CharField(max_length=255, null=True)
     email = models.CharField(max_length=255, null=True)
+    cons_format = models.CharField(max_length=10, choices=[x.value for x in FORMAT], default=FORMAT.get_value('unknow'))
     start_session = models.DateTimeField(null=True)
     end_session = models.DateTimeField(null=True)
     status = models.CharField(max_length=32, choices=[x.value for x in STATUS], default=STATUS.get_value('new'))
