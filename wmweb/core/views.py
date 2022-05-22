@@ -176,9 +176,10 @@ class Web:
         filename = "_".join([basename, suffix]) # e.g. 'analytic_deals_120508_171442'
         filepath = rF"{settings.BASE_DIR}/media/excel_analytics/{filename}.xlsx"
         df = pd.DataFrame(deals) # Convert data to the DataFrame.
-        df['created'] = df['created'].apply(lambda a: dt.strftime(a,"%Y-%m-%d %H:%M:%S"))
-        df['start_session'] = df['start_session'].apply(lambda a: dt.strftime(a,"%Y-%m-%d %H:%M:%S"))
-        df['end_session'] = df['end_session'].apply(lambda a: dt.strftime(a,"%Y-%m-%d %H:%M:%S"))
+        if deals:
+            df['created'] = df['created'].apply(lambda a: dt.strftime(a,"%Y-%m-%d %H:%M:%S"))
+            df['start_session'] = df['start_session'].apply(lambda a: dt.strftime(a,"%Y-%m-%d %H:%M:%S"))
+            df['end_session'] = df['end_session'].apply(lambda a: dt.strftime(a,"%Y-%m-%d %H:%M:%S"))
         writer = pd.ExcelWriter(filepath,
                         engine='xlsxwriter', datetime_format='dd-mmm-yyyy')
         df.to_excel(writer, sheet_name='Заявки')
