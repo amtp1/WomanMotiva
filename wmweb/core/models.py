@@ -37,6 +37,8 @@ class Deals(models.Model):
     user_id = models.BigIntegerField(null=True)
     phone = models.BigIntegerField(null=True)
     city = models.CharField(max_length=255, null=True)
+    fio = models.CharField(max_length=255, null=True)
+    email = models.CharField(max_length=255, null=True)
     start_session = models.DateTimeField(null=True)
     end_session = models.DateTimeField(null=True)
     status = models.CharField(max_length=32, choices=[x.value for x in STATUS], default=STATUS.get_value('new'))
@@ -50,5 +52,11 @@ class Deals(models.Model):
             end_session = self.end_session, created=self.created
         )
 
+
 class Cities(models.Model):
     name = models.CharField(max_length=255)
+
+
+class Questions(models.Model):
+    question = models.TextField()
+    answer = models.TextField()
