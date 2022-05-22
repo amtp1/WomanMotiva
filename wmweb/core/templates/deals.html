@@ -17,6 +17,7 @@
         <th scope="col" class="text-center">Конец сеанса</th>
         <th scope="col" class="text-center">Дата создания</th>
         <th scope="col" class="text-center">Статус</th>
+        <th scope="col" class="text-center">Формат</th>
         <th scope="col" class="text-center">Email</th>
       </tr>
     </thead>
@@ -34,6 +35,7 @@
           {% if deal.status == 'new' %}
             <td class="text-center"><span class="badge text-bg-secondary">Новая</span></td>
           {% endif %}
+          <td class="text-center">{{deal.cons_format}}</td>
           <td class="text-center">{{deal.email}}</td>
         </tr>
       {% endfor %}
