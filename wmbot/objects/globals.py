@@ -9,3 +9,4 @@ dp: Dispatcher = None # Set dispatcher object without initialize.
 
 
 surgeons: dict = {}
+data: dict = {}
