@@ -22,6 +22,7 @@ urlpatterns = [
     path("del_city/", Web.delete_city, name="delete_city"),
     path("del_question/", Web.delete_question, name="delete_question"),
 
+    path("upload_to_excel", Web.upload_to_excel, name="upload_to_excel"),
     path("activate_code", Web.activate_code, name="activate_code"),
 
     path("api/surgeons/<str:city>", API.SurgeonsView.as_view(), name="api-surgeons"),
