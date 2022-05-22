@@ -9,6 +9,7 @@
     <thead class="table-dark">
       <tr>
         <th scope="col" >ID заявки</th>
+        <th scope="col" class="text-center">ФИО</th>
         <th scope="col" class="text-center">Имя хирурга</th>
         <th scope="col" class="text-center">Номер телефона</th>
         <th scope="col" class="text-center">Город</th>
@@ -16,12 +17,14 @@
         <th scope="col" class="text-center">Конец сеанса</th>
         <th scope="col" class="text-center">Дата создания</th>
         <th scope="col" class="text-center">Статус</th>
+        <th scope="col" class="text-center">Email</th>
       </tr>
     </thead>
     <tbody>
       {% for deal in deals %}
         <tr>
           <td><strong>{{deal.pk}}</strong></td>
+          <td class="text-center">{{deal.fio}}</td>
           <td class="text-center">{{deal.surgeon.name}}</td>
           <td class="text-center">{{deal.phone}}</td>
           <td class="text-center">{{deal.city}}</td>
@@ -31,6 +34,7 @@
           {% if deal.status == 'new' %}
             <td class="text-center"><span class="badge text-bg-secondary">Новая</span></td>
           {% endif %}
+          <td class="text-center">{{deal.email}}</td>
         </tr>
       {% endfor %}
     </tbody>
