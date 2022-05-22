@@ -39,6 +39,11 @@
           </select>
         </div>
         <div class="input-group mb-3">
+          <!--<div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+          </div>-->
+          <input type="text" class="form-control" name="clinic" placeholder="Название клиники">
+        </div>
+        <div class="input-group mb-3">
           <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
           </div>
           <input type="text" class="form-control" name="wa_phone" placeholder="Номер телефона (WhatsApp)">
@@ -108,6 +113,27 @@
   </div>
 </div>
 
+<!-- Delete profile (modal) -->
+<div id="DeleteProfile" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Удалить профиль</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#DeleteProfile').modal('hide');"></button>
+      </div>
+      <p><h4 class="text-center">Профиль имеет несколько записей</h4></p>
+      <p><h6 class="text-center">Удаление профиля приведет к удалению зависимых записей.</h6></p>
+      <form method="post" enctype="multipart/form-data" action="del_profile_with_deals">
+        {% csrf_token %}
+        <div class="modal-footer">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger" name="save_account">Удалить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- Profiles of surgeons -->
 <div class="album py-3 w-100 bg-light">
   <div class="table-scroll-y my-custom-scrollbar">
@@ -126,7 +152,11 @@
                 <span><a href="{{surgeon.instagram_link}}" class="card-link"><i class="bi bi-instagram"></i></a></span>
               {% endif %}
             </h5>
-            <p class="card-text">Город: <strong>{{surgeon.city}}</strong></p>
+            <p class="card-text">
+              Город: <strong>{{surgeon.city}}</strong>
+              <br>
+              Клиника: <strong>{{surgeon.clinic}}</strong>
+            </p>
             <div class="btn-group">
               <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
                 onclick="edit_profile(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}');">Редактировать</button>
