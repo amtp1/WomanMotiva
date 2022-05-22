@@ -114,42 +114,59 @@ async def time_interval(query: CallbackQuery, state: FSMContext):
 
 @dp.message_handler(content_types=['contact'])
 async def get_contact(message: Message, state: FSMContext):
-    if message.contact is not None:
-        remove_keyboard = ReplyKeyboardRemove()
-        data = await state.get_data()
-        surgeon_id = data.get("surgeon_id")
-        city = data.get("city")
-        start_session = data.get("start_session")
-        end_session = data.get("end_session")
-        phone = re.sub('[^0-9]', "", message.contact.phone_number)
-        user_id = message.from_user.id
-        state_surgeon_data = globals.surgeons[int(surgeon_id)]
-        surgeon_name = state_surgeon_data[0]
-        surgeon_wa_phone = state_surgeon_data[1]
-        deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
-            phone=phone, city=city,
-            start_session=start_session, end_session=end_session)
+    await state.update_data(phone=re.sub('[^0-9]', "", message.contact.phone_number))
+    remove_keyboard = ReplyKeyboardRemove()
+    await message.answer("Ваше ФИО\n/skip - Пропустить", reply_markup=remove_keyboard)
+    await Deal.fio.set()
 
-        deal_id = deal_response["deal_id"]
-        deal_created = deal_response["deal_created"]
-        deal_created_str = dt.strftime(parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")
-        surgeon_message_text = (F"Заявка [#{deal_id}]\n"
-                   F"Дата и время заявки: {deal_created_str}\n"
-                   F"Начало консультации: {start_session}\n"
-                   F"Конец консультации: {end_session}\n"
-                   F"Телефон: {phone}")
-        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+@dp.message_handler(state=Deal.fio)
+async def get_fio(message: Message, state: FSMContext):
+    if message.text != "/skip":
+        await state.update_data(fio=message.text)
+    await message.answer("Ваш email\n/skip - Пропустить")
+    await Deal.email.set()
 
-        complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
-                             F"Начало консультации: {start_session}\n"
-                             F"Конец консультации: {end_session}\n"
-                             F"Хирург: {surgeon_name}\n"
-                             F"Адрес: г.{city}\n"
-                             F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
-        await message.answer(complete_reg_page, reply_markup=remove_keyboard)
-        await message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
-        # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
-        await notify_about_deal(message)
+@dp.message_handler(state=Deal.email)
+async def get_email(message: Message, state: FSMContext):
+    if message.text != "/skip":
+        await state.update_data(email=message.text)
+    data = await state.get_data()
+
+    surgeon_id = data.get("surgeon_id")
+    phone = data.get("phone")
+    city = data.get("city")
+    fio = data.get("fio")
+    email = data.get("email")
+    start_session = data.get("start_session")
+    end_session = data.get("end_session")
+    user_id = message.from_user.id
+    state_surgeon_data = globals.surgeons[int(surgeon_id)]
+    surgeon_name = state_surgeon_data[0]
+    surgeon_wa_phone = state_surgeon_data[1]
+    deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
+        phone=phone, city=city, fio=fio, email=email,
+        start_session=start_session, end_session=end_session)
+
+    deal_id = deal_response["deal_id"]
+    deal_created = deal_response["deal_created"]
+    deal_created_str = dt.strftime(parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")
+    surgeon_message_text = (F"Заявка [#{deal_id}]\n"
+                F"Дата и время заявки: {deal_created_str}\n"
+                F"Начало консультации: {start_session}\n"
+                F"Конец консультации: {end_session}\n"
+                F"Телефон: {phone}")
+    wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+
+    complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
+                            F"Начало консультации: {start_session}\n"
+                            F"Конец консультации: {end_session}\n"
+                            F"Хирург: {surgeon_name}\n"
+                            F"Адрес: г.{city}\n"
+                            F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
+    await message.answer(complete_reg_page)
+    await message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
+    # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
+    await notify_about_deal(message)
 
 async def notify_about_deal(message: Message):
     await sleep(300)
