@@ -65,9 +65,10 @@ class Web:
         cities = Cities.objects.all()
         questions = Questions.objects.all()
         new_deals = Deals.objects.filter(status="new").all()
+        activate_deals = Deals.objects.filter(status="attendance_confirmed").all()
         data = dict(surgeons=surgeons, deals=deals,
-            new_deals=new_deals, cities=cities,
-            questions=questions)
+            new_deals=new_deals, activate_deals=activate_deals,
+            cities=cities, questions=questions)
         return render(request, "statistic.html", data)
 
     def surgeons(request) -> HttpResponse:
