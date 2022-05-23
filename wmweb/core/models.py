@@ -63,6 +63,15 @@ class Deals(models.Model):
             end_session = self.end_session, created=self.created
         )
 
+    def to_excel_dict(self):
+        return dict(
+            id=self.id, surgeon_name=self.surgeon.name,
+            user_id=self.user_id, phone=self.phone,
+            fio=self.fio, email=self.email, cons_format=self.cons_format,
+            city=self.city, start_session=self.start_session,
+            end_session = self.end_session, created=self.created
+        )
+
 
 class Cities(models.Model):
     name = models.CharField(max_length=255)
@@ -71,3 +80,8 @@ class Cities(models.Model):
 class Questions(models.Model):
     question = models.TextField()
     answer = models.TextField()
+
+
+class GenerateOTP(models.Model):
+    deal = models.ForeignKey(Deals, on_delete=models.PROTECT, null=True)
+    code = models.BigIntegerField(unique=True, null=True)
