@@ -181,14 +181,27 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
     await query.message.answer(complete_reg_page)
     await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
-    await notify_about_deal(query.message)
+    await notify_about_deal(query.message, deal_id)
 
-async def notify_about_deal(message: Message):
-    await sleep(300)
+@dp.callback_query_handler(lambda query: query.data.startswith(("communicate")))
+async def communicate_ask(query: CallbackQuery):
+    data = re.sub("communicate#", "", query.data).split("_")
+    answer = data[0]
+    deal_id = data[1]
+    if answer == "yes":
+        response = api.change_status(deal_id=deal_id, status="confirmed")
+    elif answer == "no":
+        response = api.change_status(deal_id=deal_id, status="unconfirmed")
+    
+    if response["response"]:
+        return await query.message.edit_text("Запрос отправлен.")
+
+async def notify_about_deal(message: Message, deal_id: int):
+    await sleep(int(config.timeout_sec))
     inline_markup = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="Да", callback_data="communicate_yes"),
-             InlineKeyboardButton(text="Нет", callback_data="communicate_no")]
+            [InlineKeyboardButton(text="Да", callback_data=F"communicate#yes_{deal_id}"),
+             InlineKeyboardButton(text="Нет", callback_data=F"communicate#no_{deal_id}")]
         ]
     )
     await message.answer(
