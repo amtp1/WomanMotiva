@@ -29,6 +29,13 @@ class API:
         content = self.serialize_response_content(content=response.text)
         return content
 
+    def change_status(self,
+        deal_id: int, status: str
+    ) -> dict:
+        response = self._make_change_status_request(host=self.host, port=self.port, deal_id=deal_id, status=status)
+        content = self.serialize_response_content(content=response.content)
+        return content
+
     def _make_create_deal_request(self, **kwargs) -> requests.Response:
         url = (r"http://{host}:{port}/api/create_deal/{surgeon_id}/{user_id}/{phone}/{city}/{fio}/{email}/{cons_format}/{start_session}/{end_session}").format(**kwargs)
         response = requests.get(url=url, headers=self.headers)
@@ -36,6 +43,11 @@ class API:
 
     def _make_surgeons_request(self, **kwargs) -> requests.Response:
         url = r"http://{host}:{port}/api/surgeons/{city}".format(**kwargs)
+        response = requests.get(url=url, headers=self.headers)
+        return response
+
+    def _make_change_status_request(self, **kwargs) -> requests.Response:
+        url = r"http://{host}:{port}/api/change_status/{deal_id}/{status}".format(**kwargs)
         response = requests.get(url=url, headers=self.headers)
         return response
 
