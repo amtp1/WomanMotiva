@@ -61,6 +61,10 @@
             <td class="text-center"><span class="badge text-bg-secondary">Новая</span></td>
           {% elif deal.status == 'attendance_confirmed' %}
             <td class="text-center"><span class="badge text-bg-success">Активирована</span></td>
+          {% elif deal.status == 'confirmed' %}
+            <td class="text-center"><span class="badge text-bg-success">Подтверждена</span></td>
+          {% elif deal.status == 'unconfirmed' %}
+            <td class="text-center"><span class="badge text-bg-danger">Отклонена</span></td>
           {% endif %}
           <td class="text-center">{{deal.cons_format}}</td>
           <td class="text-center">{{deal.email}}</td>
