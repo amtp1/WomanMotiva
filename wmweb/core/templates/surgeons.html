@@ -135,10 +135,10 @@
 </div>
 
 <!-- Profiles of surgeons -->
+<p><button type="button" class="btn btn-secondary" onclick="$('#addNewProfile').modal('show');">Добавить профиль</button></p>
 <div class="album py-3 w-100 bg-light">
   <div class="table-scroll-y my-custom-scrollbar">
     <div class="container">
-      <p><button type="button" class="btn btn-secondary" onclick="$('#addNewProfile').modal('show');">Добавить профиль</button></p>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
       {% for surgeon in surgeons %}
         <div id="card_{{surgeon.pk}}" class="card">
