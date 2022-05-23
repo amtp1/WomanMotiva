@@ -34,7 +34,7 @@ table thead, table tbody tr {
     background-color: #F5F5F5;
         }::-webkit-scrollbar-thumb{
             background-color: #000000;
-}*/
+}
 
 input[type="file"] {
     /*display: none;*/
