@@ -92,32 +92,33 @@ class Web:
         status = None
         message = None
         if request.POST:
-            digit_code = request.POST['digit_code']
-            if digit_code:
-                try:
-                    digit_code = int(digit_code)
-                    if len(str(digit_code))!= 6:
-                        status = False
-                        message = "Неккоректный размер кода!"
-                    else:
-                        code = GenerateOTP.objects.filter(code=digit_code)
-                        if not code.exists():
+            if "digit_code" in request.POST:
+                digit_code = request.POST['digit_code']
+                if digit_code:
+                    try:
+                        digit_code = int(digit_code)
+                        if len(str(digit_code))!= 6:
                             status = False
-                            message = "Неверный код!"
+                            message = "Неккоректный размер кода!"
                         else:
-                            code_obj = code.get()
-                            deal = code_obj.deal
-                            if deal.status == "new":
-                                deal.status = "attendance_confirmed"
-                                deal.save()
-                                status = True
-                                message = "Активация успешно пройдена!"
-                            elif deal.status == "attendance_confirmed":
+                            code = GenerateOTP.objects.filter(code=digit_code)
+                            if not code.exists():
                                 status = False
-                                message = "Код был активирован ранее!"
-                except ValueError:
-                    status = False
-                    message = "Неккоректный код!"
+                                message = "Неверный код!"
+                            else:
+                                code_obj = code.get()
+                                deal = code_obj.deal
+                                if deal.status == "new":
+                                    deal.status = "attendance_confirmed"
+                                    deal.save()
+                                    status = True
+                                    message = "Активация успешно пройдена!"
+                                elif deal.status == "attendance_confirmed":
+                                    status = False
+                                    message = "Код был активирован ранее!"
+                    except ValueError:
+                        status = False
+                        message = "Неккоректный код!"
         return render(request, "activate_code.html", dict(status=status, message=message))
 
     def save_profile(request) -> HttpResponseRedirect:
