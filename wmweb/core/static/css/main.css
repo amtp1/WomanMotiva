@@ -5,6 +5,20 @@ body {
     overflow-y: hidden;
 }
 
+.my-custom-scrollbar {
+  height: 550px;
+  overflow: auto;
+}
+
+.my-custom-scrollbar::-webkit-scrollbar{
+  width: 6px;
+  background-color: #F5F5F5;
+}
+
+.my-custom-scrollbar::-webkit-scrollbar-thumb{
+  background-color: #000000;
+}
+
 table tbody {
     display: block;
     max-height: 500px;
@@ -20,13 +34,13 @@ table thead, table tbody tr {
     background-color: #F5F5F5;
         }::-webkit-scrollbar-thumb{
             background-color: #000000;
-}
+}*/
 
 input[type="file"] {
     /*display: none;*/
 }
 
-.custom-file-upload {
+/*.custom-file-upload {
     border: 1px solid #ccc;
     display: inline-block;
     padding: 6px 12px;
