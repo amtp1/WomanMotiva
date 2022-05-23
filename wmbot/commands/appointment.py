@@ -20,6 +20,7 @@ config = Config()
 api = API()
 wa_api = WA_API()
 
+
 @dp.message_handler(lambda message: message.text == "Записаться на прием")
 async def make_appointment(msg: Message):
     cities_inline_markup = InlineKeyboardMarkup(
@@ -161,12 +162,14 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
 
     deal_id = deal_response["deal_id"]
     deal_created = deal_response["deal_created"]
+    code = deal_response["code"]
     deal_created_str = dt.strftime(parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")
     surgeon_message_text = (F"Заявка [#{deal_id}]\n"
                 F"Дата и время заявки: {deal_created_str}\n"
                 F"Начало консультации: {start_session}\n"
                 F"Конец консультации: {end_session}\n"
-                F"Телефон: {phone}")
+                F"Телефон: {phone}\n"
+                F"Код: {code}")
     wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
     complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
