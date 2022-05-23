@@ -19,12 +19,13 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.20.1/dist/bootstrap-table.min.css">
 </head>
 <body>
-    <div class="container py-5 container-fluid" style="background-color: white; width: 400px;">
-      <!--<h2 class="mb-4"><span class="badge badge-secondary w-100">Подтверждение кода</span></h2>-->
+    <br>
+    <div class="container py-5 container-fluid" style="background-color: silver; width: 400px; border-radius: 10px;">
+      <p><h5 class="text-center">OTP Activate</h5></p>
       <form method="post" action="activate_code">
         <div class="input-group mb-3">
             <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-qr-code-scan"></i></span></div>
-            <input name="6-digit_code" type="text" class="form-control" placeholder="Введите 6-значный код подтверждения" aria-label="Server">
+            <input name="digit_code" type="text" class="form-control" placeholder="Введите 6-значный код подтверждения" aria-label="Server">
         </div>
         {% csrf_token %}
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -32,7 +33,21 @@
                 <button type="submit" class="btn btn-primary">Подтвердить</button>
             </div>
         </div>
-    </form>
+      </form>
+      <br>
+      {% if status %}
+        {% if message %}
+          <div class="alert alert-success text-center" role="alert">
+            {{message}}
+          </div>
+        {% endif %}
+      {% else %}
+        {% if message %}
+          <div class="alert alert-danger text-center" role="alert">
+            {{message}}
+          </div>
+        {% endif %}
+      {% endif %}
     </div>
 
     <!-- Optional JavaScript -->
