@@ -1,4 +1,5 @@
 import os
+import random
 from json import dumps
 from datetime import datetime as dt
 from datetime import timedelta
@@ -43,7 +44,8 @@ class API:
                     email=email, cons_format=cons_format,
                     start_session=start_session, end_session=end_session
                 )
-            return HttpResponse(dumps({"deal_id": deal.pk, "deal_created": str(deal.created)}), content_type='application/json')
+            code = GenerateOTP.objects.create(deal=deal, code=generate_code())
+            return HttpResponse(dumps({"deal_id": deal.pk, "code": code.code, "deal_created": str(deal.created)}), content_type='application/json')
 
 
 class Web:
@@ -87,7 +89,36 @@ class Web:
         return render(request, "questions.html", dict(questions=_questions))
 
     def activate_code(request):
-        return render(request, "activate_code.html")
+        status = None
+        message = None
+        if request.POST:
+            digit_code = request.POST['digit_code']
+            if digit_code:
+                try:
+                    digit_code = int(digit_code)
+                    if len(str(digit_code))!= 6:
+                        status = False
+                        message = "Неккоректный размер кода!"
+                    else:
+                        code = GenerateOTP.objects.filter(code=digit_code)
+                        if not code.exists():
+                            status = False
+                            message = "Неверный код!"
+                        else:
+                            code_obj = code.get()
+                            deal = code_obj.deal
+                            if deal.status == "new":
+                                deal.status = "attendance_confirmed"
+                                deal.save()
+                                status = True
+                                message = "Активация успешно пройдена!"
+                            elif deal.status == "attendance_confirmed":
+                                status = False
+                                message = "Код был активирован ранее!"
+                except ValueError:
+                    status = False
+                    message = "Неккоректный код!"
+        return render(request, "activate_code.html", dict(status=status, message=message))
 
     def save_profile(request) -> HttpResponseRedirect:
         if request.method == 'POST' and request.FILES:
@@ -171,7 +202,7 @@ class Web:
         days = request.POST.keys()
         days = int(list(days)[1])
         deals = Deals.objects.filter(created__gt=(dt.now() - timedelta(days=days))).all()
-        deals = [deal.to_dict() for deal in deals]
+        deals = [deal.to_excel_dict() for deal in deals]
         suffix = dt.now().strftime("%y%m%d_%H%M%S")
         filename = "_".join([basename, suffix]) # e.g. 'analytic_deals_120508_171442'
         filepath = rF"{settings.BASE_DIR}/media/excel_analytics/{filename}.xlsx"
@@ -191,3 +222,7 @@ class Web:
         # Set the HTTP header for sending to browser
         response['Content-Disposition'] = "attachment; filename=%s" % filepath
         return response
+
+def generate_code():
+    code = random.choice(range(100000, 999999))  # generating 6 digit random code
+    return code
