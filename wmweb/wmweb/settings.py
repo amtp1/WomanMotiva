@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9r_!au!j3cr=&c#n(bx7t^huvra&l+d+lniw(^^07v#u&q2z52'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,6 +75,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'wmweb.wsgi.application'
+
+COUNT_DAYS = [1,7,30]
+TIMEOUT_SEC = os.getenv("TIMEOUT_SEC")
 
 
 # Database
