@@ -16,6 +16,8 @@ class Config:
     wa_token: str
     wa_license_id: int
 
+    timeout_sec: int
+
     def __init__(self):
         load_dotenv(find_dotenv())
         self.set_config()
@@ -30,3 +32,5 @@ class Config:
         self.wa_app_id = os.getenv("WA_APP_ID")
         self.wa_token = os.getenv("WA_TOKEN")
         self.wa_license_id = os.getenv("WA_LICENSE_ID")
+
+        self.timeout_sec = os.getenv("TIMEOUT_SEC")
