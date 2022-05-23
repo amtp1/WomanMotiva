@@ -47,6 +47,14 @@ class API:
             code = GenerateOTP.objects.create(deal=deal, code=generate_code())
             return HttpResponse(dumps({"deal_id": deal.pk, "code": code.code, "deal_created": str(deal.created)}), content_type='application/json')
 
+    class ChangeStatus(ListAPIView):
+        serializer_class = Deals
+        def get(self, request, deal_id: int, status: str):
+            deal = Deals.objects.get(pk=deal_id)
+            deal.status = status
+            deal.save()
+            return HttpResponse(dumps({"response": True}), content_type='application/json')
+
 
 class Web:
     def index(request) -> HttpResponse:
