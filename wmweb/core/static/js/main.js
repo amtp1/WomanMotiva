@@ -96,13 +96,14 @@ function delete_question(id){
     });
 }
 
-function edit_profile(id, name, city, wa_phone, instagram_link){
+function edit_profile(id, name, city, wa_phone, instagram_link, clinic){
     $.cookie("edit_surgeon_id", id);
     var edit_profile_modal = $('#EditProfile')
     edit_profile_modal.id = id;
     edit_profile_modal.find('.modal-title').text(`Изменить профиль #${id}`);
     edit_profile_modal.find('.name').val(name);
     edit_profile_modal.find('.city').val(city);
+    edit_profile_modal.find('.clinic').val(clinic);
     edit_profile_modal.find('.wa_phone').val(wa_phone);
     if (instagram_link != 'None'){
         edit_profile_modal.find('.instagram_link').val(instagram_link);
