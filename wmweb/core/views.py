@@ -74,8 +74,11 @@ class Web:
         questions = Questions.objects.all()
         new_deals = Deals.objects.filter(status="new").all()
         activate_deals = Deals.objects.filter(status="attendance_confirmed").all()
+        confirmed_deals = Deals.objects.filter(status="confirmed").all()
+        unconfirmed_deals = Deals.objects.filter(status="unconfirmed").all()
         data = dict(surgeons=surgeons, deals=deals,
             new_deals=new_deals, activate_deals=activate_deals,
+            confirmed_deals=confirmed_deals, unconfirmed_deals=unconfirmed_deals,
             cities=cities, questions=questions)
         return render(request, "statistic.html", data)
 
