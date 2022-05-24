@@ -127,7 +127,7 @@
                     <div class="card-body">
                       <div class="d-flex justify-content-between px-md-1">
                         <div>
-                          <h3 class="text-info">{{new_deals|length}}</h3>
+                          <h3 class="text-primary">{{new_deals|length}}</h3>
                           <p class="mb-0">Новые заявки</p>
                         </div>
                         <div class="align-self-center">
@@ -148,8 +148,50 @@
                     <div class="card-body">
                       <div class="d-flex justify-content-between px-md-1">
                         <div>
-                          <h3 class="text-success">{{activate_deals|length}}</h3>
+                          <h3 class="text-info">{{activate_deals|length}}</h3>
                           <p class="mb-0">Активированные заявки</p>
+                        </div>
+                        <div class="align-self-center">
+                          <i class="fas fa-book-open text-info fa-3x"></i>
+                        </div>
+                      </div>
+                      <!--<div class="px-md-1">
+                        <div class="progress mt-3 mb-1 rounded" style="height: 7px;">
+                          <div class="progress-bar bg-info" role="progressbar" style="width: 80%;" aria-valuenow="80"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>-->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between px-md-1">
+                        <div>
+                          <h3 class="text-success">{{confirmed_deals|length}}</h3>
+                          <p class="mb-0">Подтвержденные заявки</p>
+                        </div>
+                        <div class="align-self-center">
+                          <i class="fas fa-book-open text-info fa-3x"></i>
+                        </div>
+                      </div>
+                      <!--<div class="px-md-1">
+                        <div class="progress mt-3 mb-1 rounded" style="height: 7px;">
+                          <div class="progress-bar bg-info" role="progressbar" style="width: 80%;" aria-valuenow="80"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </div>-->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between px-md-1">
+                        <div>
+                          <h3 class="text-danger">{{unconfirmed_deals|length}}</h3>
+                          <p class="mb-0">Неподтвержденные заявки</p>
                         </div>
                         <div class="align-self-center">
                           <i class="fas fa-book-open text-info fa-3x"></i>
