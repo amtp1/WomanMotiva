@@ -39,8 +39,6 @@
           </select>
         </div>
         <div class="input-group mb-3">
-          <!--<div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-          </div>-->
           <input type="text" class="form-control" name="clinic" placeholder="Название клиники">
         </div>
         <div class="input-group mb-3">
@@ -94,6 +92,9 @@
               <option value="{{city.name}}">{{city.name}}</option>
             {% endfor %}
           </select>
+        </div>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control clinic" name="clinic" placeholder="Название клиники">
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
@@ -159,7 +160,7 @@
             </p>
             <div class="btn-group">
               <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
-                onclick="edit_profile(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}');">Редактировать</button>
+                onclick="edit_profile(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}', '{{surgeon.clinic}}');">Редактировать</button>
               <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id);">Удалить</button>
             </div>
           </div>
