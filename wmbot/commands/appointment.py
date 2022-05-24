@@ -79,6 +79,7 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
             id = surgeon["id"]
             name = surgeon["name"]
             city = surgeon["city"]
+            clinic = surgeon["clinic"]
             instagram_link = surgeon["instagram_link"] if surgeon["instagram_link"] else "Отсутствует"
             image = read_image(surgeon["image"])
             choose_inline_markup = InlineKeyboardMarkup(
@@ -89,6 +90,7 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
             await query.message.answer_photo(image, reply_markup=choose_inline_markup,
             caption=F"<b>Имя</b>: {name}\n"
                      F"<b>Город</b>: {city}\n"
+                     F"<b>Клиника</b>: {clinic}\n"
                      F"Instagram: {instagram_link}")
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("surgeon")))
