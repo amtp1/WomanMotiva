@@ -191,11 +191,12 @@ class Web:
             name = request.POST['name']
             city = request.POST['city']
             wa_phone = request.POST['wa_phone']
+            clinic = request.POST['clinic']
             instagram_link = request.POST['instagram_link']
             if request.FILES:
                 user_pic = F"profile_pictures/{request.FILES['user_pic']}"
-                surgeon.update(name=name, city=city, image=user_pic, wa_phone=wa_phone, instagram_link=instagram_link)
-            surgeon.update(name=name, city=city, wa_phone=wa_phone, instagram_link=instagram_link)
+                surgeon.update(name=name, city=city, image=user_pic, wa_phone=wa_phone, clinic=clinic, instagram_link=instagram_link)
+            surgeon.update(name=name, city=city, wa_phone=wa_phone, clinic=clinic, instagram_link=instagram_link)
         response = redirect("surgeons")
         response.delete_cookie("edit_surgeon_id")
         return response
