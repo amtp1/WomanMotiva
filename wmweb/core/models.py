@@ -10,6 +10,7 @@ class Surgeons(models.Model):
     wa_phone = models.BigIntegerField(null=True)
     instagram_link = models.TextField(null=True)
     image = models.ImageField(upload_to="profile_pictures/", null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def to_dict(self):
         return dict(
@@ -18,6 +19,9 @@ class Surgeons(models.Model):
             wa_phone=self.wa_phone, instagram_link=self.instagram_link,
             image=self.image.url
         )
+
+    class Meta:
+        ordering = ['created']
 
 
 class Deals(models.Model):
