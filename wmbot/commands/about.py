@@ -7,6 +7,7 @@ from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, C
 from objects.globals import dp
 from utils.api.api import API
 from config.config import Config
+from utils.utils import cities_markup
 
 
 config = Config()
@@ -29,26 +30,9 @@ async def about_motivia(query: CallbackQuery):
 
 @dp.callback_query_handler(lambda query: query.data == "surgeons_motivia")
 async def surgeons_motivia(query: CallbackQuery):
-    cities_inline_markup = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="Алматы", callback_data="_city#Алматы"),
-             InlineKeyboardButton(text="Нур-Султан", callback_data="_city#Нур-Султан"),
-             InlineKeyboardButton(text="Шымкент", callback_data="_city#Шымкент")],
-
-            [InlineKeyboardButton(text="Актобе", callback_data="_city#Актобе"),
-             InlineKeyboardButton(text="Караганда", callback_data="_city#Караганда"),
-             InlineKeyboardButton(text="Атырау", callback_data="_city#Атырау")],
-
-            [InlineKeyboardButton(text="Тараз", callback_data="_city#Тараз"),
-             InlineKeyboardButton(text="Павлодар", callback_data="_city#Павлодар"),
-             InlineKeyboardButton(text="Семей", callback_data="_city#Семей")],
-
-            [InlineKeyboardButton(text="Усть-Каменогорск", callback_data="_city#Усть-Каменогорск"),
-             InlineKeyboardButton(text="Кызылорда", callback_data="_city#Кызылорда")]
-        ]
-    )
-
-    return await query.message.edit_text("Выберите город", reply_markup=cities_inline_markup)
+    cities = api.get_cities()["cities"]
+    markup = cities_markup(cities, callback_data="_city#")
+    return await query.message.edit_text("Выберите город", reply_markup=markup)
 
 @dp.callback_query_handler(lambda query: query.data == "news_motivia")
 async def news_motivia(query: CallbackQuery):
