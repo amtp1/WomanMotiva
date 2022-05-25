@@ -55,6 +55,13 @@ class API:
             deal.save()
             return HttpResponse(dumps({"response": True}), content_type='application/json')
 
+    class Cities(ListAPIView):
+        serializer_class = Cities
+        def get(self, request):
+            cities = Cities.objects.all()
+            cities = [city.name for city in cities]
+            return HttpResponse(dumps({"cities": cities}), content_type='application/json')
+
 
 class Web:
     def index(request) -> HttpResponse:
