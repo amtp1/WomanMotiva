@@ -196,7 +196,7 @@ async def communicate_ask(query: CallbackQuery):
         response = api.change_status(deal_id=deal_id, status="unconfirmed")
     
     if response["response"]:
-        return await query.message.edit_text("Запрос отправлен.")
+        return await query.message.edit_text("Спасибо за ваш ответ.")
 
 async def notify_about_deal(message: Message, deal_id: int):
     await sleep(int(config.timeout_sec))
