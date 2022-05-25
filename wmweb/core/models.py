@@ -81,7 +81,10 @@ class Deals(models.Model):
             user_id=self.user_id, phone=self.phone,
             fio=self.fio, email=self.email, cons_format=self.cons_format,
             city=self.city, start_session=self.start_session,
-            end_session = self.end_session, created=self.created
+            end_session = self.end_session, created=self.created,
+            status=("Новая" if self.status == "new" else "Посещение подтверждено" if self.status == "attendance_confirmed"
+                else "Подтверждена" if self.status == "confirmed" else "Не подтверждена" if self.status == "unconfirmed" else "Неизвестно"
+            )
         )
 
 
