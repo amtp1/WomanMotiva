@@ -30,7 +30,7 @@
 </div>-->
 </p>
 <div id="MyOrdersTable" class="table-wrapper-scroll-y">
-  <table class="table">
+  <table class="table table-sm">
     <thead class="table-dark">
       <tr>
         <th scope="col" >ID заявки</th>
@@ -58,13 +58,13 @@
           <td class="text-center">{{deal.end_session}}</td>
           <td class="text-center">{{deal.created}}</td>
           {% if deal.status == 'new' %}
-            <td class="text-center"><span class="badge text-bg-secondary">Новая</span></td>
+            <td class="text-center"><span class="badge text-bg-secondary text-uppercase">Новая</span></td>
           {% elif deal.status == 'attendance_confirmed' %}
-            <td class="text-center"><span class="badge text-bg-success">Активирована</span></td>
+            <td class="text-center"><span class="badge text-bg-success text-uppercase">Посещение<br>подтверждено</span></td>
           {% elif deal.status == 'confirmed' %}
-            <td class="text-center"><span class="badge text-bg-success">Подтверждена</span></td>
+            <td class="text-center"><span class="badge text-bg-success text-uppercase">Подтверждена</span></td>
           {% elif deal.status == 'unconfirmed' %}
-            <td class="text-center"><span class="badge text-bg-danger">Отклонена</span></td>
+            <td class="text-center"><span class="badge text-bg-danger text-uppercase">Отклонена</span></td>
           {% endif %}
           <td class="text-center">{{deal.cons_format}}</td>
           <td class="text-center">{{deal.email}}</td>
