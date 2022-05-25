@@ -11,7 +11,7 @@ ignore_callback = calendar_callback.new("IGNORE", -1, -1, -1)  # for buttons wit
 
 
 class DialogCalendar:
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
 
     def __init__(self, year: int = datetime.now().year, month: int = datetime.now().month):
         self.year = year
