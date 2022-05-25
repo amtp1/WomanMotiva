@@ -1,7 +1,15 @@
 from enum import Enum
 
 from django.db import models
+from django.conf import settings
+from os.path import splitext
+from uuid import uuid4
+from django.core.files.storage import FileSystemStorage
 
+class UUIDFileStorage(FileSystemStorage):
+    def get_available_name(self, name, max_length=None):
+        _, ext = splitext(name)
+        return F"{settings.MEDIA_ROOT}/profile_pictures/{uuid4().hex + ext}"
 
 class Surgeons(models.Model):
     name = models.CharField(max_length=255, null=False)
@@ -9,7 +17,7 @@ class Surgeons(models.Model):
     city = models.CharField(max_length=255, null=False)
     wa_phone = models.BigIntegerField(null=True)
     instagram_link = models.TextField(null=True)
-    image = models.ImageField(upload_to="profile_pictures/", null=True)
+    image = models.ImageField(upload_to="profile_pictures/", storage=UUIDFileStorage(), null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
     def to_dict(self):
