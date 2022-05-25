@@ -18,5 +18,5 @@ async def start(msg: Message, state: FSMContext):
         ])
 
     return await msg.answer(
-        text=F"Здравствуйте {msg.from_user.first_name}, мы готовы помочь Вам с подбором имплантата, клиники и врача.",
+        text=F"Здравствуйте {msg.from_user.first_name}, мы готовы помочь Вам с подбором имплантатов, клиники и врача.",
         reply_markup=markup)
