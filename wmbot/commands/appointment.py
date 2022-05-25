@@ -15,6 +15,7 @@ from states.states import Deal
 from config.config import Config
 from utils.api.api import API, WA_API
 from my_calendar.calendar import DialogCalendar, valid_datetime, calendar_callback, Time
+from utils.utils import cities_markup
 
 config = Config()
 api = API()
@@ -23,26 +24,9 @@ wa_api = WA_API()
 
 @dp.message_handler(lambda message: message.text == "Записаться на прием")
 async def make_appointment(msg: Message):
-    cities_inline_markup = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="Алматы", callback_data="city#Алматы"),
-             InlineKeyboardButton(text="Нур-Султан", callback_data="city#Нур-Султан"),
-             InlineKeyboardButton(text="Шымкент", callback_data="city#Шымкент")],
-
-            [InlineKeyboardButton(text="Актобе", callback_data="city#Актобе"),
-             InlineKeyboardButton(text="Караганда", callback_data="city#Караганда"),
-             InlineKeyboardButton(text="Атырау", callback_data="city#Атырау")],
-
-            [InlineKeyboardButton(text="Тараз", callback_data="city#Тараз"),
-             InlineKeyboardButton(text="Павлодар", callback_data="city#Павлодар"),
-             InlineKeyboardButton(text="Семей", callback_data="city#Семей")],
-
-            [InlineKeyboardButton(text="Усть-Каменогорск", callback_data="city#Усть-Каменогорск"),
-             InlineKeyboardButton(text="Кызылорда", callback_data="city#Кызылорда")]
-        ]
-    )
-
-    return await msg.answer("Выберите город", reply_markup=cities_inline_markup)
+    cities = api.get_cities()["cities"]
+    markup = cities_markup(cities, callback_data="city#")
+    return await msg.answer("Выберите город", reply_markup=markup)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("city")))
 async def select_city(query: CallbackQuery, state: FSMContext):
