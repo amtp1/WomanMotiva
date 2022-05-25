@@ -168,7 +168,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                          F"Время консультации: {time}\n"
                          F"Хирург: {surgeon_name}\n"
                          F"Адрес: г.{city}\n"
-                         F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
+                         F"Ниже вы видите QR код, который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
     await query.message.answer(complete_reg_page)
     await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
