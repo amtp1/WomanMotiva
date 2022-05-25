@@ -40,7 +40,7 @@ async def select_city(query: CallbackQuery, state: FSMContext):
         ]
     )
     return await query.message.edit_text(
-        "Имеются ли у вас абсолютные противопоказания? Беременность, стадия кормления ребенка?",
+        "Имеются ли у вас абсолютные противопоказания? Беременность, период грудного вскармливания?",
         reply_markup=contrain_select_markup)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("contrain")))
@@ -84,13 +84,15 @@ async def select_surgeon(query: CallbackQuery, state: FSMContext):
     await query.message.answer("Календарь", reply_markup=await DialogCalendar().start_calendar())
 
 @dp.callback_query_handler(calendar_callback.filter())
-async def process_simple_calendar(callback_query: CallbackQuery, callback_data: dict):
+async def process_simple_calendar(callback_query: CallbackQuery, callback_data: dict, state: FSMContext):
     selected, date = await DialogCalendar().process_selection(callback_query, callback_data)
     if selected:
+        await state.update_data(date=date.strftime("%d-%m-%Y"))
         await callback_query.message.answer("Выберите интервал времени", reply_markup=await Time().start_time(date.strftime("%d-%m-%Y")))
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("int")))
 async def time_interval(query: CallbackQuery, state: FSMContext):
+    await state.update_data(time=query.data.split(" ")[1])
     v_d = valid_datetime(query.data)
     await state.update_data(start_session=v_d[0], end_session=v_d[1])
     keyboard = ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
@@ -135,6 +137,8 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
     city = data.get("city")
     fio = data.get("fio")
     email = data.get("email")
+    date = data.get("date")
+    time = data.get("time")
     cons_format = re.sub("cons#", "", query.data)
     start_session = data.get("start_session")
     end_session = data.get("end_session")
@@ -151,19 +155,20 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
     code = deal_response["code"]
     deal_created_str = dt.strftime(parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")
     surgeon_message_text = (F"Заявка [#{deal_id}]\n"
+                F"ФИО: {fio}\n"
                 F"Дата и время заявки: {deal_created_str}\n"
-                F"Начало консультации: {start_session}\n"
-                F"Конец консультации: {end_session}\n"
+                F"Дата консультации: {date}\n"
+                F"Время консультации: {time}\n"
                 F"Телефон: {phone}\n"
                 F"Код: {code}")
-    wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+    #wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
     complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
-                            F"Начало консультации: {start_session}\n"
-                            F"Конец консультации: {end_session}\n"
-                            F"Хирург: {surgeon_name}\n"
-                            F"Адрес: г.{city}\n"
-                            F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
+                         F"Дата консультации: {date}\n"
+                         F"Время консультации: {time}\n"
+                         F"Хирург: {surgeon_name}\n"
+                         F"Адрес: г.{city}\n"
+                         F"Ниже вы видите QR код который нужно будет показать вашему хирургу непосредственно в день приема. Данный QR код дает специальный бонус от Motiva.")
     await query.message.answer(complete_reg_page)
     await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
