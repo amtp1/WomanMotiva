@@ -1,6 +1,7 @@
 import os
 from dataclasses import dataclass
 
+import dotenv
 from dotenv import load_dotenv, find_dotenv
 
 
@@ -34,3 +35,7 @@ class Config:
         self.wa_license_id = os.getenv("WA_LICENSE_ID")
 
         self.timeout_sec = os.getenv("TIMEOUT_SEC")
+
+    def change_value(self, key, value):
+        os.environ[key] = value
+        dotenv.set_key(dotenv.find_dotenv(), key, os.environ[key])
