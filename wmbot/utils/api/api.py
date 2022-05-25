@@ -74,6 +74,7 @@ class WA_API:
 
         response = requests.request('POST', url, headers=self.headers, json=payload)
         response = response.json()
+        return response
 
     def send_message(self, phone: str, message_text: str):
         url = F'https://api.chatapp.online/v1/licenses/{self.license_id}/messengers/grayWhatsApp/chats/{phone}/messages/text'
