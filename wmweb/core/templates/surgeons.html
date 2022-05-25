@@ -147,18 +147,19 @@
         <div id="card_{{surgeon.pk}}" class="card">
           <img src="{{surgeon.image.url}}" class="card-img-top w-50 h-50" alt="...">
           <div class="card-body">
-            <h5 class="card-title">{{surgeon.name}}
+            <h5 class="card-title">{{surgeon.name}}</h5>
+            <p class="card-text">
+              Город: <strong>{{surgeon.city}}</strong>
+              <br>
+              Клиника: <strong>{{surgeon.clinic}}</strong>
+              <br>
+              Соц. сети:
               {% if surgeon.wa_phone %}
                 <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link"><i class="bi bi-whatsapp"></i></a></span>
               {% endif %}
               {% if surgeon.instagram_link %}
                 <span><a href="{{surgeon.instagram_link}}" class="card-link"><i class="bi bi-instagram"></i></a></span>
               {% endif %}
-            </h5>
-            <p class="card-text">
-              Город: <strong>{{surgeon.city}}</strong>
-              <br>
-              Клиника: <strong>{{surgeon.clinic}}</strong>
             </p>
             <div class="btn-group">
               <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
