@@ -95,3 +95,7 @@ class WA_API:
 
         response = requests.request('POST', url, headers=self.headers, json=payload)
         response = response.json()
+
+        if not response['success']:
+            config.change_value("WA_TOKEN", self.auth()["data"]["accessToken"])
+            self.send_message(phone, message_text)
