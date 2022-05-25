@@ -64,7 +64,7 @@
           {% elif deal.status == 'confirmed' %}
             <td class="text-center"><span class="badge text-bg-success text-uppercase">Подтверждена</span></td>
           {% elif deal.status == 'unconfirmed' %}
-            <td class="text-center"><span class="badge text-bg-danger text-uppercase">Отклонена</span></td>
+            <td class="text-center"><span class="badge text-bg-danger text-uppercase">Не подтверждена</span></td>
           {% endif %}
           <td class="text-center">{{deal.cons_format}}</td>
           <td class="text-center">{{deal.email}}</td>
