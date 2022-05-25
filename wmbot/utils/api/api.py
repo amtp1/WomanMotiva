@@ -36,6 +36,11 @@ class API:
         content = self.serialize_response_content(content=response.content)
         return content
 
+    def get_cities(self) -> dict:
+        response = self._make_get_cities_request(host=self.host, port=self.port)
+        content = self.serialize_response_content(content=response.content)
+        return content
+
     def _make_create_deal_request(self, **kwargs) -> requests.Response:
         url = (r"http://{host}:{port}/api/create_deal/{surgeon_id}/{user_id}/{phone}/{city}/{fio}/{email}/{cons_format}/{start_session}/{end_session}").format(**kwargs)
         response = requests.get(url=url, headers=self.headers)
@@ -48,6 +53,11 @@ class API:
 
     def _make_change_status_request(self, **kwargs) -> requests.Response:
         url = r"http://{host}:{port}/api/change_status/{deal_id}/{status}".format(**kwargs)
+        response = requests.get(url=url, headers=self.headers)
+        return response
+
+    def _make_get_cities_request(self, **kwargs) -> requests.Response:
+        url = r"http://{host}:{port}/api/get_cities".format(**kwargs)
         response = requests.get(url=url, headers=self.headers)
         return response
 
