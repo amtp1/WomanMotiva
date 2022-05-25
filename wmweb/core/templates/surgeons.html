@@ -41,10 +41,11 @@
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="clinic" placeholder="Название клиники">
         </div>
+        <small for="wa_phone" class="form-label">Номер WhatsApp вводить без лишних знаков, только цифры!</small>
         <div class="input-group mb-3">
           <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
           </div>
-          <input type="text" class="form-control" name="wa_phone" placeholder="Номер телефона (WhatsApp)">
+          <input type="text" class="form-control" name="wa_phone" placeholder="Номер телефона (WhatsApp)" pattern="[0-9]">
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-instagram"></i></span></div>
@@ -96,6 +97,7 @@
         <div class="input-group mb-3">
           <input type="text" class="form-control clinic" name="clinic" placeholder="Название клиники">
         </div>
+        <small for="wa_phone" class="form-label">Номер WhatsApp вводить без лишних знаков, только цифры!</small>
         <div class="input-group mb-3">
           <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
           </div>
@@ -128,7 +130,7 @@
         {% csrf_token %}
         <div class="modal-footer">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger" name="save_account">Удалить</button>
+          <button type="submit" class="btn btn-danger" name="save_account">Все равно удалить</button>
         </div>
       </form>
     </div>
