@@ -3,6 +3,18 @@
 
 {% load static %}
 {% block pages_body %}
+<div id="myToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <img src="..." class="rounded me-2" alt="...">
+    <strong class="me-auto">Bootstrap</strong>
+    <small class="text-muted">11 mins ago</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    Hello, world! This is a toast message.
+  </div>
+</div>
+
 <!-- Modal windows -->
 <!-- Add account (modal) -->
 <div id="addNewProfile" class="modal" tabindex="-1" role="dialog">
@@ -12,50 +24,41 @@
         <h4 class="modal-title">Новый профиль</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#addNewProfile').modal('hide');"></button>
       </div>
-      <form method="post" enctype="multipart/form-data" action="save_profile">
+      <div class="wrapper">
+        <div class="file-upload">
+          <input id="user_picture" type="file" />
+          <i class="bi bi-arrow-up"></i>
+        </div>
+      </div>
+      <br>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" name="name" placeholder="ФИО">
+      </div>
+      <div class="input-group mb-3">
+        <select class="form-select" name="city" aria-label="Города">
+          <option selected disabled>Выберите город</option>
+          {% for city in cities %}
+            <option value="{{city.name}}">{{city.name}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" name="clinic" placeholder="Название клиники">
+      </div>
+      <small for="wa_phone" class="form-label">Номер WhatsApp вводить без лишних знаков, только цифры!</small>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
+        </div>
+        <input type="text" class="form-control" name="wa_phone" placeholder="Номер телефона (WhatsApp)" pattern="[0-9]*">
+      </div>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-instagram"></i></span></div>
+        <input type="text" class="form-control" name="instagram_link" placeholder="Ссылка от Instagram">
+      </div>
+      <div class="modal-footer">
         {% csrf_token %}
-        <div class="upload-container">
-          <div class="border-container">
-            <div class="icons fa-4x">
-              <i class="fas fa-file-image" data-fa-transform="shrink-3 down-2 left-6 rotate--45"></i>
-              <i class="fas fa-file-alt" data-fa-transform="shrink-2 up-4"></i>
-              <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
-            </div>
-            <div class="d-flex justify-content-center">
-              <p><input id="file" type="file" name="user_pic"/><p>
-            </div>
-          </div>
-        </div>
-        <br>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="name" placeholder="ФИО">
-        </div>
-        <div class="input-group mb-3">
-          <select class="form-select" name="city" aria-label="Города">
-            <option selected disabled>Выберите город</option>
-            {% for city in cities %}
-              <option value="{{city.name}}">{{city.name}}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" name="clinic" placeholder="Название клиники">
-        </div>
-        <small for="wa_phone" class="form-label">Номер WhatsApp вводить без лишних знаков, только цифры!</small>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-whatsapp"></i></span>
-          </div>
-          <input type="text" class="form-control" name="wa_phone" placeholder="Номер телефона (WhatsApp)" pattern="[0-9]*">
-        </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-instagram"></i></span></div>
-          <input type="text" class="form-control" name="instagram_link" placeholder="Ссылка от Instagram">
-        </div>
-        <div class="modal-footer">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary" name="save_account">Сохранить</button>
-        </div>
-      </form>
+        <button type="submit" class="btn btn-primary" name="save_account" onclick="save_profile();">Сохранить</button>
+      </div>
     </div>
   </div>
 </div>
@@ -139,12 +142,40 @@
 
 <!-- Profiles of surgeons -->
 <p><button type="button" class="btn btn-secondary" onclick="$('#addNewProfile').modal('show');">Добавить профиль</button></p>
-<div class="album py-3 w-100 bg-light">
+<div class="album py-2 w-100 bg-light">
   <div class="table-scroll-y my-custom-scrollbar">
-    <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+    <div class="container-fluid">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
       {% for surgeon in surgeons %}
-        <div id="card_{{surgeon.pk}}" class="card">
+      <div class="col-4">
+        <div id="card_{{surgeon.pk}}" class="card border-secondary mb-3 w-100">
+          <img src="{{surgeon.image.url}}" class="card-img-top" alt="...">
+          <div class="card-block">
+            <div class="card-body">
+              <h5 class="card-title">{{surgeon.name}}</h5>
+              <p class="card-text">
+                Город: <strong>{{surgeon.city}}</strong>
+                <br>
+                Клиника: <strong>{{surgeon.clinic}}</strong>
+                <br>
+                Соц. сети:
+                {% if surgeon.wa_phone %}
+                  <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link"><i class="bi bi-whatsapp"></i></a></span>
+                {% endif %}
+                {% if surgeon.instagram_link %}
+                  <span><a href="{{surgeon.instagram_link}}" class="card-link"><i class="bi bi-instagram"></i></a></span>
+                {% endif %}
+              </p>
+              <div class="btn-group">
+                <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
+                  onclick="edit_profile(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}', '{{surgeon.clinic}}');">Редактировать</button>
+                <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id);">Удалить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+        <!--<div id="card_{{surgeon.pk}}" class="card border-secondary mb-3">
           <img src="{{surgeon.image.url}}" class="card-img-top w-50 h-50" alt="...">
           <div class="card-body">
             <h5 class="card-title">{{surgeon.name}}</h5>
@@ -167,7 +198,7 @@
               <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id);">Удалить</button>
             </div>
           </div>
-        </div>
+        </div>-->
       {% endfor %}
       </div>
     </div>
