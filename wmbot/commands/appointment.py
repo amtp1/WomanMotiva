@@ -161,10 +161,10 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                 F"Время консультации: {time}\n"
                 F"Телефон: {phone}\n"
                 F"Код: {code}")
-    #wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+    wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
     new_deal_markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Начать заново", callback_data="new_deal")]
+        [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
     ])
 
     complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
@@ -173,7 +173,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                          F"Хирург: {surgeon_name}\n"
                          F"Адрес: г.{city}")
     await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
-    #await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
+    # await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
     await notify_about_deal(query.message, deal_id)
 
@@ -192,7 +192,8 @@ async def communicate_ask(query: CallbackQuery):
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
 async def new_deal(query: CallbackQuery):
-    print(query.data)
+    await query.message.edit_text("Новая заявка")
+    return await make_appointment(query.message)
 
 async def notify_about_deal(message: Message, deal_id: int):
     await sleep(int(config.timeout_sec))
