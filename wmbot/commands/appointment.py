@@ -77,7 +77,7 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
                      F"<b>Город</b>: {city}\n"
                      F"<b>Клиника</b>: {clinic}\n"
                      F"<b>Адрес</b>: {address}\n"
-                     F"Instagram: {instagram_link}")
+                     F"<b>Instagram</b>: {instagram_link}")
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("surgeon")))
 async def select_surgeon(query: CallbackQuery, state: FSMContext):
