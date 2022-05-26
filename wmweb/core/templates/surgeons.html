@@ -52,6 +52,10 @@
         <input type="text" class="form-control" name="wa_phone" placeholder="Номер телефона (WhatsApp)" pattern="[0-9]*">
       </div>
       <div class="input-group mb-3">
+        <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-house-door"></i></span></div>
+        <input type="text" class="form-control" name="address" placeholder="Адрес">
+      </div>
+      <div class="input-group mb-3">
         <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-instagram"></i></span></div>
         <input type="text" class="form-control" name="instagram_link" placeholder="Ссылка от Instagram">
       </div>
@@ -107,6 +111,10 @@
           <input type="text" class="form-control wa_phone" name="wa_phone" placeholder="Номер телефона (WhatsApp)">
         </div>
         <div class="input-group mb-3">
+          <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-house-door"></i></span></div>
+          <input type="text" class="form-control" name="address" placeholder="Адрес">
+        </div>
+        <div class="input-group mb-3">
           <div class="input-group-prepend"><span class="input-group-text"><i class="bi bi-instagram"></i></span></div>
           <input type="text" class="form-control instagram_link" name="instagram_link" placeholder="Ссылка от Instagram">
         </div>
@@ -158,6 +166,8 @@
                 Город: <strong>{{surgeon.city}}</strong>
                 <br>
                 Клиника: <strong>{{surgeon.clinic}}</strong>
+                <br>
+                Адрес: <strong>{{surgeon.address}}</strong>
                 <br>
                 Соц. сети:
                 {% if surgeon.wa_phone %}
