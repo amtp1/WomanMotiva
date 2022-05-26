@@ -19,6 +19,47 @@ $(document).ready(function () {
     $('.dataTables_length').addClass('bs-select');
 });
 
+function save_profile(){
+    const image = document.getElementById("user_picture").files[0];
+    const name = document.getElementsByName("name")[0];
+    const city = document.getElementsByName("city")[0];
+    const clinic = document.getElementsByName("clinic")[0];
+    const wa_phone = document.getElementsByName("wa_phone")[0];
+    const instagram_link = document.getElementsByName("instagram_link")[0];
+
+    if (!image){
+        alert("Нужно выбрать фотографию для профиля!");
+    }else{
+        if(!name.value || !city.value || !clinic.value || !wa_phone.value || !instagram_link.value){
+            alert("Все поля должны быть заполнены!");
+        }else{
+            var data = new FormData(); // Init new FormData object.
+            data.append("image", image); // Add id in the FormData object.
+            data.append("name", name.value); // Add id in the FormData object.
+            data.append("city", city.value); // Add id in the FormData object.
+            data.append("clinic", clinic.value); // Add id in the FormData object.
+            data.append("wa_phone", wa_phone.value); // Add id in the FormData object.
+            data.append("instagram_link", instagram_link.value); // Add id in the FormData object.
+            fetch("save_profile/", {
+                method: "POST",
+                body: data,
+                contentType: 'application/json',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": $.cookie("csrftoken")
+                },
+            }).then(function(response){
+                response.json().then(
+                    function(data){
+                        if (data["response"]){
+                            redirect_to_surgeons_page();
+                        }
+                    }
+                )})
+        }
+    }
+}
+
 function delete_profile(id){
     var data = new FormData(); // Init new FormData object.
     data.append("id", id); // Add id in the FormData object.
@@ -109,4 +150,9 @@ function edit_profile(id, name, city, wa_phone, instagram_link, clinic){
         edit_profile_modal.find('.instagram_link').val(instagram_link);
     };
     edit_profile_modal.modal("show");
+}
+
+function show_toast(){
+    const myToastEl = document.getElementById('myToast');
+    myToastEl.addEventListener('show.bs.toast');
 }
