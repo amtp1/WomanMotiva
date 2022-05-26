@@ -66,6 +66,7 @@ class Deals(models.Model):
     start_session = models.DateTimeField(null=True)
     end_session = models.DateTimeField(null=True)
     status = models.CharField(max_length=32, choices=[x.value for x in STATUS], default=STATUS.get_value('new'))
+    code = models.ForeignKey('GenerateOTP', on_delete=models.PROTECT, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def to_dict(self):
