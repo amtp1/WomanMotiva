@@ -40,7 +40,12 @@ async def news_motivia(query: CallbackQuery):
 
 @dp.callback_query_handler(lambda query: query.data == "questions_motivia")
 async def questions_motivia(query: CallbackQuery):
-    pass
+    questions = api.get_questions()['questions']
+    await query.message.edit_text("Часто задаваемые вопросы")
+    for question in questions:
+        question_page = (F"<b>Вопрос</b>: {question['question']}\n"
+                         F"<b>Ответ</b>: {question['answer']}")
+        return query.message.answer(question_page)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("_city")))
 async def contrain_choose(query: CallbackQuery):
