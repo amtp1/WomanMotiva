@@ -28,7 +28,7 @@ async def about(message: Message):
 @dp.callback_query_handler(lambda query: query.data == "about_motivia")
 async def about_motivia(query: CallbackQuery):
     about_path_folder = r"../temp"
-    if not path.exists("about_path_folder"):
+    if not path.exists(F"{about_path_folder}"):
         mkdir(rF"{about_path_folder}")
         with open(rF"{about_path_folder}/about.txt", "w") as f:
             f.close()
