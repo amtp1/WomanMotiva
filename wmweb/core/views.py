@@ -83,9 +83,9 @@ class Web:
 
         Returns
         -------
-            If user auth then 'render'.
-            If user is not auth then 'redirect'.
+            statistic : HttpResponse
         """
+
         surgeons = Surgeons.objects.all()
         deals = Deals.objects.all()
         cities = Cities.objects.all()
