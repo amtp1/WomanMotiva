@@ -98,6 +98,11 @@ class Questions(models.Model):
     question = models.TextField()
     answer = models.TextField()
 
+    def to_dict(self):
+        return dict(
+            question=self.question, answer=self.answer
+        )
+
 
 class GenerateOTP(models.Model):
     deal = models.ForeignKey(Deals, on_delete=models.PROTECT, null=True)
