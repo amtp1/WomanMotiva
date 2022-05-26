@@ -1,4 +1,5 @@
 import re
+from os import path, mkdir
 
 import requests
 from io import BytesIO
@@ -26,7 +27,18 @@ async def about(message: Message):
 
 @dp.callback_query_handler(lambda query: query.data == "about_motivia")
 async def about_motivia(query: CallbackQuery):
-    pass
+    about_path_folder = r"temp"
+    if not path.exists("temp"):
+        mkdir("temp")
+        with open(rF"{about_path_folder}/about.txt", "w") as f:
+            f.close()
+
+    with open(rF"{about_path_folder}/about.txt", "r", encoding="utf-8") as f:
+        about_page = f.read()
+    
+    if not about_page:
+        return await query.message.edit_text("Ничего не найдено")
+    return await query.message.edit_text(about_page)
 
 @dp.callback_query_handler(lambda query: query.data == "surgeons_motivia")
 async def surgeons_motivia(query: CallbackQuery):
