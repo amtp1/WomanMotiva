@@ -63,7 +63,7 @@ class API:
         serializer_class = Cities
         def get(self, request):
             cities = Cities.objects.all()
-            cities = [city.name for city in cities]
+            cities = [city.name for city in cities if Surgeons.objects.filter(city=city.name).exists()]
             return HttpResponse(dumps({"cities": cities}), content_type='application/json')
 
 
