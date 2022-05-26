@@ -65,14 +65,12 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
             city = surgeon["city"]
             clinic = surgeon["clinic"]
             address = surgeon["address"] if surgeon["address"] else "Отсутствует"
-            instagram_link = surgeon["instagram_link"] if surgeon["instagram_link"] else "Отсутствует"
+            instagram_link = surgeon["instagram_link"]
             image = read_image(surgeon["image"])
-            choose_inline_markup = InlineKeyboardMarkup(
-                inline_keyboard=[
-                    [InlineKeyboardButton(text="Instagram", url=instagram_link)],
-                    [InlineKeyboardButton(text="Выбрать", callback_data=rF"surgeon_{id}")]
-                ]
-            )
+            choose_inline_markup = InlineKeyboardMarkup()
+            if instagram_link:
+                choose_inline_markup.add(InlineKeyboardButton(text="Instagram", url=instagram_link))
+            choose_inline_markup.add(InlineKeyboardButton(text="Выбрать", callback_data=rF"surgeon_{id}"))
             await query.message.answer_photo(image, reply_markup=choose_inline_markup,
             caption=F"<b>Имя</b>: {name}\n"
                      F"<b>Город</b>: {city}\n"
@@ -163,14 +161,18 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                 F"Время консультации: {time}\n"
                 F"Телефон: {phone}\n"
                 F"Код: {code}")
-    wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+    #wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+
+    new_deal_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Начать заново", callback_data="new_deal")]
+    ])
 
     complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
                          F"Дата консультации: {date}\n"
                          F"Время консультации: {time}\n"
                          F"Хирург: {surgeon_name}\n"
                          F"Адрес: г.{city}")
-    await query.message.answer(complete_reg_page)
+    await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
     #await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
     await notify_about_deal(query.message, deal_id)
@@ -187,6 +189,10 @@ async def communicate_ask(query: CallbackQuery):
     
     if response["response"]:
         return await query.message.edit_text("Спасибо за ваш ответ.")
+
+@dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
+async def new_deal(query: CallbackQuery):
+    print(query.data)
 
 async def notify_about_deal(message: Message, deal_id: int):
     await sleep(int(config.timeout_sec))
