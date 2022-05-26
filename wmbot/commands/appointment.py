@@ -171,7 +171,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                          F"Хирург: {surgeon_name}\n"
                          F"Адрес: г.{city}")
     await query.message.answer(complete_reg_page)
-    await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
+    #await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
     await notify_about_deal(query.message, deal_id)
 
