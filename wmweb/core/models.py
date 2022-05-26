@@ -11,12 +11,14 @@ class UUIDFileStorage(FileSystemStorage):
         _, ext = splitext(name)
         return F"{settings.MEDIA_ROOT}/profile_pictures/{uuid4().hex + ext}"
 
+
 class Surgeons(models.Model):
     name = models.CharField(max_length=255, null=False)
     clinic = models.CharField(max_length=255, null=False)
     city = models.CharField(max_length=255, null=False)
     wa_phone = models.BigIntegerField(null=True)
     instagram_link = models.TextField(null=True)
+    address = models.TextField(null=True)
     image = models.ImageField(upload_to="profile_pictures/", storage=UUIDFileStorage(), null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -25,7 +27,7 @@ class Surgeons(models.Model):
             id=self.id, name=self.name,
             clinic=self.clinic, city=self.city,
             wa_phone=self.wa_phone, instagram_link=self.instagram_link,
-            image=self.image.url
+            address=self.address, image=self.image.url
         )
 
     class Meta:
