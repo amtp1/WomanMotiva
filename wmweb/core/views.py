@@ -45,6 +45,8 @@ class API:
                     start_session=start_session, end_session=end_session
                 )
             code = GenerateOTP.objects.create(deal=deal, code=generate_code())
+            deal.code = code
+            deal.save()
             return HttpResponse(dumps({"deal_id": deal.pk, "code": code.code, "deal_created": str(deal.created)}), content_type='application/json')
 
 
