@@ -25,12 +25,13 @@ function save_profile(){
     const city = document.getElementsByName("city")[0];
     const clinic = document.getElementsByName("clinic")[0];
     const wa_phone = document.getElementsByName("wa_phone")[0];
+    const address = document.getElementsByName("address")[0];
     const instagram_link = document.getElementsByName("instagram_link")[0];
 
     if (!image){
         alert("Нужно выбрать фотографию для профиля!");
     }else{
-        if(!name.value || !city.value || !clinic.value || !wa_phone.value || !instagram_link.value){
+        if(!name.value || !city.value || !clinic.value || !wa_phone.value || !address.value || !instagram_link.value){
             alert("Все поля должны быть заполнены!");
         }else{
             var data = new FormData(); // Init new FormData object.
@@ -39,6 +40,7 @@ function save_profile(){
             data.append("city", city.value); // Add id in the FormData object.
             data.append("clinic", clinic.value); // Add id in the FormData object.
             data.append("wa_phone", wa_phone.value); // Add id in the FormData object.
+            data.append("address", address.value); // Add id in the FormData object.
             data.append("instagram_link", instagram_link.value); // Add id in the FormData object.
             fetch("save_profile/", {
                 method: "POST",
