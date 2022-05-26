@@ -3,6 +3,7 @@ env/
 migrations/
 
 wmbot/qr_code/
+wmbot/temp
 
 wmweb/media/qrcode
 wmweb/media/profile_pictures/
