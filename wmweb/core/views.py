@@ -47,7 +47,8 @@ class API:
             code = GenerateOTP.objects.create(deal=deal, code=generate_code())
             return HttpResponse(dumps({"deal_id": deal.pk, "code": code.code, "deal_created": str(deal.created)}), content_type='application/json')
 
-    class ChangeStatus(ListAPIView):
+
+    class ChangeStatusView(ListAPIView):
         serializer_class = Deals
         def get(self, request, deal_id: int, status: str):
             deal = Deals.objects.get(pk=deal_id)
@@ -55,13 +56,21 @@ class API:
             deal.save()
             return HttpResponse(dumps({"response": True}), content_type='application/json')
 
-    class Cities(ListAPIView):
+
+    class CitiesView(ListAPIView):
         serializer_class = Cities
         def get(self, request):
             cities = Cities.objects.all()
             cities = [city.name for city in cities]
             return HttpResponse(dumps({"cities": cities}), content_type='application/json')
 
+
+    class QuestionsView(ListAPIView):
+        serializer_class = Questions
+        def get(self, request):
+            questions = Questions.objects.all()
+            questions = [question.to_dict() for question in questions]
+            return HttpResponse(dumps({"questions": questions}), content_type='application/json')
 
 class Web:
     def index(request) -> HttpResponse:
