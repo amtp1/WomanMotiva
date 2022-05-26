@@ -142,18 +142,19 @@ class Web:
 
     def save_profile(request) -> HttpResponseRedirect:
         if request.method == 'POST' and request.FILES:
-            user_pic = request.FILES['user_pic']
+            image = request.FILES["image"]
             name = request.POST['name']
             city = request.POST['city']
             wa_phone = request.POST['wa_phone']
             instagram_link = request.POST['instagram_link']
             clinic = request.POST['clinic']
+
             Surgeons.objects.create(
                 name=name, city=city,
-                image=user_pic, wa_phone=wa_phone,
+                image=image, wa_phone=wa_phone,
                 clinic=clinic, instagram_link=instagram_link
             )
-        return redirect("surgeons")
+            return HttpResponse(dumps({"response": True}), content_type='application/json')
 
     def save_city(request) -> HttpResponse:
         city = request.POST['city']
