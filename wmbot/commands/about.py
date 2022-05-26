@@ -1,5 +1,6 @@
 import re
-from os import path, mkdir
+from os import mkdir
+from pathlib import Path
 
 import requests
 from io import BytesIO
@@ -10,6 +11,8 @@ from utils.api.api import API
 from config.config import Config
 from utils.utils import cities_markup
 
+
+ABOUT_PATH = rF"{Path(__file__).resolve().parent.parent.parent}/temp"
 
 config = Config()
 api = API()
@@ -27,13 +30,12 @@ async def about(message: Message):
 
 @dp.callback_query_handler(lambda query: query.data == "about_motivia")
 async def about_motivia(query: CallbackQuery):
-    about_path_folder = r"../temp"
-    if not path.exists(F"{about_path_folder}"):
-        mkdir(rF"{about_path_folder}")
-        with open(rF"{about_path_folder}/about.txt", "w") as f:
+    if not Path(ABOUT_PATH).exists():
+        mkdir(ABOUT_PATH)
+        with open(rF"{ABOUT_PATH}/about.txt", "w") as f:
             f.close()
 
-    with open(rF"{about_path_folder}/about.txt", "r", encoding="utf-8") as f:
+    with open(rF"{ABOUT_PATH}/about.txt", "r", encoding="utf-8") as f:
         about_page = f.read()
     
     if not about_page:
