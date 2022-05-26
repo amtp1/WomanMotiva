@@ -44,6 +44,7 @@
         <th scope="col" class="text-center">Статус</th>
         <th scope="col" class="text-center">Формат</th>
         <th scope="col" class="text-center">Email</th>
+        <th scope="col" class="text-center">Код</th>
       </tr>
     </thead>
     <tbody>
@@ -68,6 +69,7 @@
           {% endif %}
           <td class="text-center">{{deal.cons_format}}</td>
           <td class="text-center">{{deal.email}}</td>
+          <td class="text-center">{{deal.code.code}}</td>
         </tr>
       {% endfor %}
     </tbody>
