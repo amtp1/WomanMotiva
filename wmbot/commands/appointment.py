@@ -1,12 +1,12 @@
 import re
-import json
 from datetime import datetime as dt
 from asyncio import sleep
 
 import requests
 from io import BytesIO
 from dateutil import parser
-from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import (Message, InlineKeyboardMarkup, InlineKeyboardButton,
+    CallbackQuery, ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton)
 from aiogram.dispatcher.storage import FSMContext
 
 from objects import globals
@@ -17,19 +17,41 @@ from utils.api.api import API, WA_API
 from my_calendar.calendar import DialogCalendar, valid_datetime, calendar_callback, Time
 from utils.utils import cities_markup
 
-config = Config()
-api = API()
-wa_api = WA_API()
+config = Config() # Init Config object.
+api = API() # Init API object.
+wa_api = WA_API() # Init WA_API object.
 
 
 @dp.message_handler(lambda message: message.text == "Записаться на прием")
-async def make_appointment(msg: Message):
+async def make_appointment(message: Message):
+    """The function creates a new deal. Get cities.
+
+    Parameters
+    ----------
+        message : Message
+
+    Returns
+    -------
+        answer : method of Message object
+    """
+
     cities = api.get_cities()["cities"]
     markup = cities_markup(cities, callback_data="city#")
-    return await msg.answer("Выберите город", reply_markup=markup)
+    return await message.answer("Выберите город", reply_markup=markup)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("city")))
 async def select_city(query: CallbackQuery, state: FSMContext):
+    """The function creates a new deal. Contrain choose. (YES/NO)
+
+    Parameters
+    ----------
+        query : CallbackQuery
+
+    Returns
+    -------
+        edit_text : method of Message object which is inherited from CallbackQuery
+    """
+
     city = re.sub("city#", "", query.data,)
     await state.update_data(city=city)
 
@@ -45,6 +67,17 @@ async def select_city(query: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("contrain")))
 async def contrain_choose(query: CallbackQuery, state: FSMContext):
+    """Contrain choose. (YES/NO)
+
+    Parameters
+    ----------
+        query : CallbackQuery
+
+    Returns
+    -------
+        edit_text : method of Message object which is inherited from CallbackQuery
+    """
+
     is_contrain = re.sub("contrain_", "", query.data)
     is_contrain = True if is_contrain == "yes" else False
     if is_contrain:
@@ -79,12 +112,37 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("surgeon")))
 async def select_surgeon(query: CallbackQuery, state: FSMContext):
+    """The function send calendar. Default month: now
+
+    Parameters
+    ----------
+        query : CallbackQuery
+        state : FSMContext
+
+    Returns
+    -------
+        answer : method of Message object which is inherited from CallbackQuery
+    """
+
     surgeon_id = re.sub("surgeon_", "", query.data)
     await state.update_data(surgeon_id=surgeon_id)
     await query.message.answer("Календарь", reply_markup=await DialogCalendar().start_calendar())
 
 @dp.callback_query_handler(calendar_callback.filter())
 async def process_simple_calendar(callback_query: CallbackQuery, callback_data: dict, state: FSMContext):
+    """The function select calendar parts.
+
+    Parameters
+    ----------
+        query : CallbackQuery
+        callback_data : dict
+        state : FSMContext
+
+    Returns
+    -------
+        answer : method of Message object which is inherited from CallbackQuery
+    """
+
     selected, date = await DialogCalendar().process_selection(callback_query, callback_data)
     if selected:
         await state.update_data(date=date.strftime("%d-%m-%Y"))
@@ -92,6 +150,18 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("int")))
 async def time_interval(query: CallbackQuery, state: FSMContext):
+    """The function select calendar parts.
+
+    Parameters
+    ----------
+        query : CallbackQuery
+        state : FSMContext
+
+    Returns
+    -------
+        answer : method of Message object which is inherited from CallbackQuery
+    """
+
     await state.update_data(time=query.data.split(" ")[1])
     v_d = valid_datetime(query.data)
     await state.update_data(start_session=v_d[0], end_session=v_d[1])
