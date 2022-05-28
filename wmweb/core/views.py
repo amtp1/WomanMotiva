@@ -4,6 +4,7 @@ from json import dumps
 from datetime import datetime as dt
 from datetime import timedelta
 import mimetypes
+from dateutil import parser
 
 import pandas as pd
 
@@ -106,8 +107,11 @@ class Web:
         return render(request, "surgeons.html", dict(surgeons=_surgeons, cities=cities))
 
     def deals(request) -> HttpResponse:
+        today = dt.today().strftime("%Y-%m-%d")
+        max_date = dt.strftime(Deals.objects.latest('created').created, "%Y-%m-%d")
+        min_date  = dt.strftime(Deals.objects.latest('-created').created, "%Y-%m-%d")
         _deals = Deals.objects.all()
-        return render(request, "deals.html", dict(deals=_deals))
+        return render(request, "deals.html", dict(deals=_deals, today=today, min_date=min_date, max_date=max_date))
 
     def cities(request) -> HttpResponse:
         cities = Cities.objects.all()
@@ -235,9 +239,9 @@ class Web:
         return response
 
     def upload_to_excel(request, basename="analytic_deals"):
-        days = request.POST.keys()
-        days = int(list(days)[1])
-        deals = Deals.objects.filter(created__gt=(dt.now() - timedelta(days=days))).all()
+        trip_start = request.POST['trip-start']
+        trip_start = dt.strftime(parser.parse(trip_start), "%Y-%m-%d")
+        deals = Deals.objects.filter(created__date=trip_start).all()
         deals = [deal.to_excel_dict() for deal in deals]
         suffix = dt.now().strftime("%y%m%d_%H%M%S")
         filename = "_".join([basename, suffix]) # e.g. 'analytic_deals_120508_171442'
