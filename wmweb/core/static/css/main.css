@@ -117,3 +117,7 @@ table thead, table tbody tr {
 .table{
     height: 10px;
 }
+
+#start{
+    margin: .4rem 0;
+}
