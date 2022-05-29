@@ -231,7 +231,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                 F"Время консультации: {time}\n"
                 F"Телефон: {phone}\n"
                 F"Код: {code}")
-    # wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+    wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
     new_deal_markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
