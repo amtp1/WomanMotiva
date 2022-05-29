@@ -5,6 +5,7 @@ from datetime import datetime as dt
 from datetime import timedelta
 import mimetypes
 from dateutil import parser
+from time import sleep
 
 import pandas as pd
 
@@ -48,6 +49,9 @@ class API:
             code = GenerateOTP.objects.create(deal=deal, code=generate_code())
             deal.code = code
             deal.save()
+
+            Notices.objects.create(deal=deal)
+
             return HttpResponse(dumps({"deal_id": deal.pk, "code": code.code, "deal_created": str(deal.created)}), content_type='application/json')
 
 
@@ -74,6 +78,26 @@ class API:
             questions = Questions.objects.all()
             questions = [question.to_dict() for question in questions]
             return HttpResponse(dumps({"questions": questions}), content_type='application/json')
+
+
+    class NoticesView(ListAPIView):
+        serializer_class = Notices
+        def get(self, request):
+            sleep(1)
+            notices = Notices.objects.filter(is_send=False).all()
+            notices = [notice.to_dict() for notice in notices]
+            return HttpResponse(dumps({"notices": notices}), content_type='application/json')
+
+
+    class ChangeNoticeStatusView(ListAPIView):
+        serializer_class = Notices
+        def get(self, request, deal_id: int):
+            deal = Deals.objects.get(pk=deal_id)
+            notice = Notices.objects.filter(deal=deal).get()
+            notice.is_send = True
+            notice.save()
+            return HttpResponse(dumps({"response": True}), content_type='application/json')
+
 
 class Web:
     def index(request) -> HttpResponse:
