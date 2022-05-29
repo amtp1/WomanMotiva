@@ -1,4 +1,5 @@
 import asyncio
+from re import A
 
 from aiogram import Dispatcher, Bot
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -6,6 +7,7 @@ from loguru import logger
 
 from objects.globals import config
 from objects import globals
+from utils.utils import check_notices_polling
 
 
 async def main():
@@ -16,12 +18,14 @@ async def main():
     logger.info(F"Bot username: @{bot_info.username}, Bot ID: {bot_info.id}")
 
     import commands
+    
+    asyncio.create_task(check_notices_polling())
 
     await globals.dp.start_polling()
 
 if __name__ == "__main__":
     try:
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(main())
+        main_loop = asyncio.get_event_loop()
+        main_loop.run_until_complete(main())
     except KeyboardInterrupt:
         logger.info("Bot stopped")
