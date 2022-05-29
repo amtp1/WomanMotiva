@@ -51,6 +51,8 @@
             <td class="text-center"><span class="badge text-bg-secondary text-uppercase"><small><strong>Новая</strong></small></span></td>
           {% elif deal.status == 'attendance_confirmed' %}
             <td class="text-center"><span class="badge text-bg-success text-uppercase"><small><strong>Посещение<br>подтверждено</strong></small></span></td>
+          {% elif deal.status == 'without_visit' %}
+            <td class="text-center"><span class="badge text-bg-danger text-uppercase"><small><strong>Без посещения</strong></small></span></td>
           {% elif deal.status == 'confirmed' %}
             <td class="text-center"><span class="badge text-bg-success text-uppercase"><small><strong>Подтверждена</strong></small></span></td>
           {% elif deal.status == 'unconfirmed' %}
