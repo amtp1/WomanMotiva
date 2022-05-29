@@ -23,7 +23,7 @@ wa_api = WA_API() # Init WA_API object.
 
 
 @dp.message_handler(lambda message: message.text == "Записаться на прием")
-async def make_appointment(message: Message):
+async def make_appointment(message: Message, state: FSMContext):
     """The function creates a new deal. Get cities.
 
     Parameters
@@ -34,7 +34,7 @@ async def make_appointment(message: Message):
     -------
         answer : method of Message object
     """
-
+    await state.update_data(user_id=message.from_user.id)
     cities = api.get_cities()["cities"]
     markup = cities_markup(cities, callback_data="city#")
     return await message.answer("Выберите город", reply_markup=markup)
@@ -58,7 +58,7 @@ async def select_city(query: CallbackQuery, state: FSMContext):
     contrain_select_markup = InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text="Да", callback_data="contrain_yes"),
-             InlineKeyboardButton(text="Нет", callback_data="contrain_no")],
+             InlineKeyboardButton(text="Нет", callback_data="contrain_no")]
         ]
     )
     return await query.message.edit_text(
@@ -202,6 +202,7 @@ async def get_email(message: Message, state: FSMContext):
 async def consultation_format(query: CallbackQuery, state: FSMContext):
     data = globals.data
 
+    user_id = data.get("user_id")
     surgeon_id = data.get("surgeon_id")
     phone = data.get("phone")
     city = data.get("city")
@@ -212,7 +213,6 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
     cons_format = re.sub("cons#", "", query.data)
     start_session = data.get("start_session")
     end_session = data.get("end_session")
-    user_id = query.message.from_user.id
     state_surgeon_data = globals.surgeons[int(surgeon_id)]
     surgeon_name = state_surgeon_data[0]
     surgeon_wa_phone = state_surgeon_data[1]
@@ -231,7 +231,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                 F"Время консультации: {time}\n"
                 F"Телефон: {phone}\n"
                 F"Код: {code}")
-    wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+    # wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
     new_deal_markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
@@ -245,25 +245,24 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
     await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
     # await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
-    await notify_about_deal(query.message, deal_id)
-
-@dp.callback_query_handler(lambda query: query.data.startswith(("communicate")))
-async def communicate_ask(query: CallbackQuery):
-    data = re.sub("communicate#", "", query.data).split("_")
-    answer = data[0]
-    deal_id = data[1]
-    if answer == "yes":
-        response = api.change_status(deal_id=deal_id, status="confirmed")
-    elif answer == "no":
-        response = api.change_status(deal_id=deal_id, status="unconfirmed")
-    
-    if response["response"]:
-        return await query.message.edit_text("Спасибо за ваш ответ.")
+    #await notify_about_deal(query.message, deal_id)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
 async def new_deal(query: CallbackQuery):
     await query.message.edit_text("Новая заявка")
     return await make_appointment(query.message)
+
+@dp.callback_query_handler(lambda query: query.data.startswith(("notice")))
+async def notice_request(query: CallbackQuery):
+    deal_id = re.sub("[notice_yes# notice_no#]", "", query.data)
+    answer = re.sub("[#, _]", "", query.data.replace("notice", "").replace(deal_id, ""))
+
+    if answer == "yes":
+        api.change_status(deal_id=deal_id, status="confirmed")
+        return await query.message.edit_text("Спасибо за ваш ответ!")
+    elif answer == "no":
+        api.change_status(deal_id=deal_id, status="unconfirmed")
+        return await query.message.edit_text("Спасибо за ваш ответ, мы уточним у хирурга статус вашей записи и попросим подтвердить ее.")
 
 async def notify_about_deal(message: Message, deal_id: int):
     await sleep(int(config.timeout_sec))
