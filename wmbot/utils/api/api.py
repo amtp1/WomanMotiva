@@ -36,6 +36,11 @@ class API:
         content = self.serialize_response_content(content=response.content)
         return content
 
+    def change_notice_status(self, deal_id: int) -> dict:
+        response = self._make_change_notice_status_request(host=self.host, port=self.port, deal_id=deal_id)
+        content = self.serialize_response_content(content=response.content)
+        return content
+
     def get_cities(self) -> dict:
         response = self._make_get_cities_request(host=self.host, port=self.port)
         content = self.serialize_response_content(content=response.content)
@@ -43,6 +48,11 @@ class API:
 
     def get_questions(self) -> dict:
         response = self._make_get_questions_request(host=self.host, port=self.port)
+        content = self.serialize_response_content(content=response.content)
+        return content
+
+    def get_noticies(self) -> dict:
+        response = self._make_get_notices_request(host=self.host, port=self.port)
         content = self.serialize_response_content(content=response.content)
         return content
 
@@ -61,6 +71,11 @@ class API:
         response = requests.get(url=url, headers=self.headers)
         return response
 
+    def _make_change_notice_status_request(self, **kwargs) -> requests.Response:
+        url = r"http://{host}:{port}/api/change_notice_status/{deal_id}".format(**kwargs)
+        response = requests.get(url=url, headers=self.headers)
+        return response
+
     def _make_get_cities_request(self, **kwargs) -> requests.Response:
         url = r"http://{host}:{port}/api/get_cities".format(**kwargs)
         response = requests.get(url=url, headers=self.headers)
@@ -68,6 +83,11 @@ class API:
 
     def _make_get_questions_request(self, **kwargs) -> requests.Response:
         url = r"http://{host}:{port}/api/get_questions".format(**kwargs)
+        response = requests.get(url=url, headers=self.headers)
+        return response
+
+    def _make_get_notices_request(self, **kwargs) -> requests.Response:
+        url = r"http://{host}:{port}/api/get_notices".format(**kwargs)
         response = requests.get(url=url, headers=self.headers)
         return response
 
