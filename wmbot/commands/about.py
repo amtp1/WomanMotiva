@@ -14,7 +14,7 @@ config = Config()
 api = API()
 
 
-@dp.message_handler(lambda message: message.text == "O Motivia")
+@dp.message_handler(lambda message: message.text == "O Motiva")
 async def about(message: Message):
     about_markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="О Motivia", callback_data="about_motivia")],
