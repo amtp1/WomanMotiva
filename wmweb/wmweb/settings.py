@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
-
 from dotenv import load_dotenv, find_dotenv
 
 
@@ -77,7 +76,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'wmweb.wsgi.application'
 
 COUNT_DAYS = [1,7,30]
-TIMEOUT_SEC = os.getenv("TIMEOUT_SEC")
 
 
 # Database
