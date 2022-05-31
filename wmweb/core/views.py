@@ -16,6 +16,9 @@ from django.db.models.query import QuerySet
 from rest_framework.generics import ListAPIView
 
 from .models import *
+from .config import Config
+
+config = Config()
 
 
 class API:
@@ -286,6 +289,23 @@ class Web:
         # Set the HTTP header for sending to browser
         response['Content-Disposition'] = "attachment; filename=%s" % filepath
         return response
+
+    def settings(request):
+        config = Config()
+        qr_code_seconds_timeout = config.timeout_sec
+        return render(request, "settings.html", dict(timeout=qr_code_seconds_timeout))
+
+    def save_settings(request):
+        timeout = request.POST['timeout']
+        try:
+            timeout = int(timeout)
+            if not timeout or timeout == 0:
+                return redirect("settings")
+            else:
+                config.change_value("TIMEOUT_SEC", str(timeout))
+                return redirect("settings")
+        except ValueError:
+            return redirect("settings")
 
 def generate_code():
     code = random.choice(range(100000, 999999))  # generating 6 digit random code
