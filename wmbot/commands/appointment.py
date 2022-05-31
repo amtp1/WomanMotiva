@@ -126,8 +126,7 @@ async def select_surgeon(query: CallbackQuery, state: FSMContext):
 
     surgeon_id = re.sub("surgeon_", "", query.data)
     await state.update_data(surgeon_id=surgeon_id)
-    await query.message.answer("Календарь", reply_markup=await DialogCalendar().start_calendar())
-    await globals.bot.get_updates(offset=-1)
+    await query.message.edit_caption("Календарь", reply_markup=await DialogCalendar().start_calendar())
 
 @dp.callback_query_handler(calendar_callback.filter())
 async def process_simple_calendar(callback_query: CallbackQuery, callback_data: dict, state: FSMContext):
@@ -147,7 +146,7 @@ async def process_simple_calendar(callback_query: CallbackQuery, callback_data: 
     selected, date = await DialogCalendar().process_selection(callback_query, callback_data)
     if selected:
         await state.update_data(date=date.strftime("%d-%m-%Y"))
-        await callback_query.message.answer("Выберите интервал времени", reply_markup=await Time().start_time(date.strftime("%d-%m-%Y")))
+        await callback_query.message.edit_caption("Выберите интервал времени", reply_markup=await Time().start_time(date.strftime("%d-%m-%Y")))
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("int")))
 async def time_interval(query: CallbackQuery, state: FSMContext):
