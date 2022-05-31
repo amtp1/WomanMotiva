@@ -1,0 +1,25 @@
+{% extends 'profile.html' %}
+{% block title%}Настройки{% endblock %}
+
+{% load static %}
+{% block pages_body %}
+<div class="container py-5 container-fluid" style="background-color: whitesmoke; width: 400px; border-radius: 10px;">
+    <h3 class="text-center">Настройки</h3>
+    <br>
+    <div class="modal-footer">
+      <form class="w-100" method="post" action="save_settings">
+        {% csrf_token %}
+        <span class="badge text-bg-secondary text-uppercase w-100"><small for="timeout" class="form-label">
+          <strong>Время отправки qr-code после создания заявки (Секунды!)</strong></small></span>
+        <div class="input-group mb-3">
+          <input id="timeout" type="text" class="form-control" name="timeout" value="{{timeout}}" disabled>
+        </div>
+        <div class="btn-group w-100">
+        <button type="button" class="btn btn-primary w-100" name="save_account" onclick="enable_edit_settings()">Изменить</button>
+        &nbsp;
+        <button type="submit" class="btn btn-primary w-100">Сохранить</button>
+        </div>
+      </form>
+    </div>
+</div>
+{% endblock %}
