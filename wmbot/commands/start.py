@@ -14,7 +14,7 @@ async def start(msg: Message, state: FSMContext):
     markup = ReplyKeyboardMarkup(resize_keyboard=True,
         keyboard=[
             [KeyboardButton(text="Записаться на прием"),
-             KeyboardButton(text="O Motivia")]
+             KeyboardButton(text="O Motiva")]
         ])
 
     return await msg.answer(
