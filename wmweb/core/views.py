@@ -266,9 +266,11 @@ class Web:
         return response
 
     def upload_to_excel(request, basename="analytic_deals"):
-        trip_start = request.POST['trip-start']
-        trip_start = dt.strftime(parser.parse(trip_start), "%Y-%m-%d")
-        deals = Deals.objects.filter(created__date=trip_start).all()
+        from_trip_start = request.POST['from-trip-start']
+        before_trip_start = request.POST['before-trip-start']
+        from_trip_start = dt.strftime(parser.parse(from_trip_start), "%Y-%m-%d")
+        before_trip_start = dt.strftime(parser.parse(before_trip_start), "%Y-%m-%d")
+        deals = Deals.objects.filter(created__range=[from_trip_start, before_trip_start]).all()
         deals = [deal.to_excel_dict() for deal in deals]
         suffix = dt.now().strftime("%y%m%d_%H%M%S")
         filename = "_".join([basename, suffix]) # e.g. 'analytic_deals_120508_171442'
