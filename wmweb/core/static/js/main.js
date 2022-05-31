@@ -158,3 +158,7 @@ function show_toast(){
     const myToastEl = document.getElementById('myToast');
     myToastEl.addEventListener('show.bs.toast');
 }
+
+function enable_edit_settings(){
+    $( "#timeout" ).prop( "disabled", false );
+}
