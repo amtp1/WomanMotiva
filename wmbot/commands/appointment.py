@@ -248,9 +248,9 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
     await notify_about_deal(query.message, deal_id)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
-async def new_deal(query: CallbackQuery):
+async def new_deal(query: CallbackQuery, state: FSMContext):
     await query.message.edit_text("Новая заявка")
-    return await make_appointment(query.message)
+    return await make_appointment(query.message, state)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("notice")))
 async def notice_request(query: CallbackQuery):
