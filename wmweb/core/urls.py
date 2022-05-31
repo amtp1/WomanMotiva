@@ -16,12 +16,14 @@ urlpatterns = [
     path("save_city", Web.save_city, name="save_city"),
     path("save_question", Web.save_question, name="save_question"),
     path("edit_profile", Web.edit_profile, name="edit_profile"),
+    path("save_settings", Web.save_settings, name="save_settings"),
 
     path("del_profile/", Web.delete_profile, name="delete_profile"),
     path("del_profile_with_deals", Web.delete_profile_with_deals, name="del_profile_with_deals"),
     path("del_city/", Web.delete_city, name="delete_city"),
     path("del_question/", Web.delete_question, name="delete_question"),
 
+    path("settings", Web.settings, name="settings"),
     path("upload_to_excel", Web.upload_to_excel, name="upload_to_excel"),
     path("activate_code", Web.activate_code, name="activate_code"),
 
