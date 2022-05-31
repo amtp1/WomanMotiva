@@ -245,7 +245,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
     await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
     # await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
     # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
-    #await notify_about_deal(query.message, deal_id)
+    await notify_about_deal(query.message, deal_id)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
 async def new_deal(query: CallbackQuery):
