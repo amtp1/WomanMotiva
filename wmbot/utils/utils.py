@@ -63,7 +63,7 @@ async def before_check_notices_polling():
             is_now = (end_session - current_datetime).total_seconds()
 
             if is_now <= BEFORE_CHECK_NOTICES_SECONDS:
-                return await globals.bot.send_photo(read_qr_code_from_url(r"qrcode.png"))
+                return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"))
 
         await sleep(5)
 
