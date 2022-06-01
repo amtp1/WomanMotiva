@@ -33,6 +33,7 @@ urlpatterns = [
     path("api/change_status/<int:deal_id>/<str:status>", API.ChangeStatusView.as_view(), name="change_status"),
     path("api/get_cities", API.CitiesView.as_view(), name="get_cities"),
     path("api/get_questions", API.QuestionsView.as_view(), name="get_questions"),
+    path("api/cancel_deal/<int:deal_id>", API.CancelDealView.as_view(), name="cancel_deal"),
 
     # Notices and QRCodeNotices
     path("api/get_notices", API.NoticesView.as_view(), name="get_notices"),
