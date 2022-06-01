@@ -121,3 +121,15 @@ class Notices(models.Model):
             deal_id=self.deal.id, is_send=self.is_send, user_id=self.deal.user_id,
             start_session=dt.strftime(self.deal.start_session, "%Y-%m-%d %H:%M:%S"), end_session=dt.strftime(self.deal.end_session, "%Y-%m-%d %H:%M:%S")
         )
+
+
+class QRCodeNotices(models.Model):
+    deal = models.ForeignKey(Deals, on_delete=models.PROTECT, null=True)
+    is_send = models.BooleanField(default=False, null=True)
+    updated = models.DateTimeField(auto_now_add=True)
+
+    def to_dict(self):
+        return dict(
+            deal_id=self.deal.id, is_send=self.is_send, user_id=self.deal.user_id,
+            start_session=dt.strftime(self.deal.start_session, "%Y-%m-%d %H:%M:%S"), end_session=dt.strftime(self.deal.end_session, "%Y-%m-%d %H:%M:%S")
+        )
