@@ -244,7 +244,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                          F"Адрес: г.{city}\n"
                          F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
     await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
-    await notify_about_deal(query.message, deal_id)
+    #await notify_about_deal(query.message, deal_id)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
 async def new_deal(query: CallbackQuery, state: FSMContext):
