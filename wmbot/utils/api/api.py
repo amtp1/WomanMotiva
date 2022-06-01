@@ -51,7 +51,7 @@ class API:
         content = self.serialize_response_content(content=response.content)
         return content
 
-    def get_noticies(self) -> dict:
+    def get_notices(self) -> dict:
         response = self._make_get_notices_request(host=self.host, port=self.port)
         content = self.serialize_response_content(content=response.content)
         return content
