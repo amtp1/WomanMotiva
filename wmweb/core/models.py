@@ -42,7 +42,7 @@ class Deals(models.Model):
         unconfirmed = ('unconfirmed', 'Is when the patient pressed no when asked if the surgeon had contacted her')
         without_visit = ('without_visit', 'Is when the time of consultation has already come but the QR code is not scanned')
         attendance_confirmed = ('attendance_confirmed', 'Is when you have scanned the QR code and entered a 6-digit code')
-        сancel_by_client = ('cancel_by_client', 'Is when the customer personally cancels the application')
+        cancel_by_client = ('cancel_by_client', 'Is when the customer personally cancels the application')
 
         @classmethod
         def get_value(cls, member):
@@ -90,6 +90,9 @@ class Deals(models.Model):
                 else "Подтверждена" if self.status == "confirmed" else "Не подтверждена" if self.status == "unconfirmed" else "Неизвестно"
             )
         )
+
+    class Meta:
+        ordering = ['created']
 
 
 class Cities(models.Model):
