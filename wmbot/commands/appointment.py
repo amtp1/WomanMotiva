@@ -243,7 +243,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                          F"Хирург: {surgeon_name}\n"
                          F"Адрес: г.{city}\n"
                          F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
-    await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
+    await query.message.edit_text(complete_reg_page, reply_markup=new_deal_markup)
     #await notify_about_deal(query.message, deal_id)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
@@ -258,10 +258,19 @@ async def notice_request(query: CallbackQuery):
 
     if answer == "yes":
         api.change_status(deal_id=deal_id, status="confirmed")
-        return await query.message.edit_text("Спасибо за ваш ответ!")
+        reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Отменить заявку", callback_data=F"cancel_deal#{deal_id}")]
+        ])
+        return await query.message.edit_text("Спасибо за ваш ответ!", reply_markup=reply_markup)
     elif answer == "no":
         api.change_status(deal_id=deal_id, status="unconfirmed")
         return await query.message.edit_text("Спасибо за ваш ответ, мы уточним у хирурга статус вашей записи и попросим подтвердить ее.")
+
+@dp.callback_query_handler(lambda query: query.data.startswith(("cancel_deal")))
+async def cancel_deal(query: CallbackQuery):
+    deal_id = re.sub("cancel_deal#", "", query.data)
+    api.cancel_deal(deal_id=deal_id)
+    return await query.message.edit_text("Заявка успешно отменена!")
 
 async def notify_about_deal(message: Message, deal_id: int):
     await sleep(int(config.timeout_sec))
