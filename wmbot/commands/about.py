@@ -8,7 +8,7 @@ from utils.api.api import API
 from config.config import Config
 
 
-ABOUT_PATH = rF"{Path(__file__).resolve().parent.parent.parent}/temp"
+TEMP_PATH = rF"{Path(__file__).resolve().parent.parent.parent}/temp"
 
 config = Config()
 api = API()
@@ -34,12 +34,12 @@ async def about_motivia(query: CallbackQuery):
 
 @dp.callback_query_handler(lambda query: query.data == "about_company")
 async def about_company(query: CallbackQuery):
-    if not Path(ABOUT_PATH).exists():
-        mkdir(ABOUT_PATH)
-        with open(rF"{ABOUT_PATH}/about.txt", "w") as f:
+    if not Path(TEMP_PATH).exists():
+        mkdir(TEMP_PATH)
+        with open(rF"{TEMP_PATH}/about.txt", "w") as f:
             f.close()
 
-    with open(rF"{ABOUT_PATH}/about.txt", "r", encoding="utf-8") as f:
+    with open(rF"{TEMP_PATH}/about.txt", "r", encoding="utf-8") as f:
         about_page = f.read()
     
     if not about_page:
@@ -48,7 +48,17 @@ async def about_company(query: CallbackQuery):
 
 @dp.callback_query_handler(lambda query: query.data == "about_products")
 async def about_products(query: CallbackQuery):
-    pass
+    if not Path(TEMP_PATH).exists():
+        mkdir(TEMP_PATH)
+        with open(rF"{TEMP_PATH}/products.txt", "w") as f:
+            f.close()
+
+    with open(rF"{TEMP_PATH}/products.txt", "r", encoding="utf-8") as f:
+        about_page = f.read()
+    
+    if not about_page:
+        return await query.message.edit_text("Ничего не найдено")
+    return await query.message.edit_text(about_page)
 
 @dp.callback_query_handler(lambda query: query.data == "news_motiva")
 async def news_motivia(query: CallbackQuery):
