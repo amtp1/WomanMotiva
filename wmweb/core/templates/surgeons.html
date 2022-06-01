@@ -144,33 +144,36 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
       {% for surgeon in surgeons %}
       <div class="col-4">
-        <div id="card_{{surgeon.pk}}" class="card border-secondary mb-3 w-100">
-          <img src="{{surgeon.image.url}}" class="card-img-top" alt="...">
-          <div class="card-block w-100">
-            <div class="card-body">
-              <h6><span class="badge bg-secondary w-100">{{surgeon.name}}</span></h6>
-              <p class="card-text">
-                <div class="alert alert alert-light" role="alert">
-                Город: <strong>{{surgeon.city}}</strong>
+        <div id="card_{{surgeon.pk}}" class="card testimonial-card mt-2 mb-3">
+          <div class="card-up aqua-gradient"></div>
+          <div class="avatar mx-auto white">
+            <img src="{{surgeon.image.url}}" class="rounded-circle img-fluid" alt="avatar">
+          </div>
+          <div class="card-body text-center">
+            <!--<h5 class="card-title font-weight-bold">Martha Smith</h5>-->
+            <h6 class="font-weight-bold"><i>{{surgeon.name}}</i></h6>
+            <hr>
+            <p>
+              <div class="alert alert alert-light" role="alert">
+                <u>Город:</u> <strong>{{surgeon.city}}</strong>
                 <br>
-                Клиника: <strong>{{surgeon.clinic}}</strong>
+                <u>Клиника:</u> <strong>{{surgeon.clinic}}</strong>
                 <br>
-                Адрес: <strong>{{surgeon.address}}</strong>
+                <u>Адрес:</u> <strong>{{surgeon.address}}</strong>
                 <br>
-                Соц. сети:
-                {% if surgeon.wa_phone %}
-                  <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link text-primary"><i class="bi bi-whatsapp"></i></a></span>
-                {% endif %}
-                {% if surgeon.instagram_link %}
-                  <span><a href="{{surgeon.instagram_link}}" class="card-link text-primary"><i class="bi bi-instagram"></i></a></span>
-                {% endif %}
-              </p>
+              <u>Соц. сети:</u>
+              {% if surgeon.wa_phone %}
+                <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link text-primary"><i class="bi bi-whatsapp"></i></a></span>
+              {% endif %}
+              {% if surgeon.instagram_link %}
+                <span><a href="{{surgeon.instagram_link}}" class="card-link text-primary"><i class="bi bi-instagram"></i></a></span>
+              {% endif %}
+            </p>
             </div>
-              <div class="btn-group w-100">
-                <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
-                  onclick="edit_profile(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}', '{{surgeon.clinic}}');">Редактировать</button>
-                <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id);">Удалить</button>
-              </div>
+            <div class="btn-group w-100">
+              <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
+                onclick="edit_profile(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}', '{{surgeon.clinic}}');">Редактировать</button>
+              <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id);">Удалить</button>
             </div>
           </div>
         </div>
