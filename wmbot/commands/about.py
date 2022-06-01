@@ -17,14 +17,14 @@ api = API()
 @dp.message_handler(lambda message: message.text == "O Motiva")
 async def about(message: Message):
     about_markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="О Motivia", callback_data="about_motivia")],
-        [InlineKeyboardButton(text="Новости", callback_data="news_motivia")],
-        [InlineKeyboardButton(text="Часто задаваемые вопросы", callback_data="questions_motivia")],
+        [InlineKeyboardButton(text="О Motiva", callback_data="about_motiva")],
+        [InlineKeyboardButton(text="Новости", callback_data="news_motiva")],
+        [InlineKeyboardButton(text="Часто задаваемые вопросы", callback_data="questions_motiva")],
         [InlineKeyboardButton(text="Сравнение стоимости операции", callback_data="diff_operation_price")]
     ])
     return await message.answer("Разделы", reply_markup=about_markup)
 
-@dp.callback_query_handler(lambda query: query.data == "about_motivia")
+@dp.callback_query_handler(lambda query: query.data == "about_motiva")
 async def about_motivia(query: CallbackQuery):
     if not Path(ABOUT_PATH).exists():
         mkdir(ABOUT_PATH)
@@ -38,11 +38,11 @@ async def about_motivia(query: CallbackQuery):
         return await query.message.edit_text("Ничего не найдено")
     return await query.message.edit_text(about_page)
 
-@dp.callback_query_handler(lambda query: query.data == "news_motivia")
+@dp.callback_query_handler(lambda query: query.data == "news_motiva")
 async def news_motivia(query: CallbackQuery):
     pass
 
-@dp.callback_query_handler(lambda query: query.data == "questions_motivia")
+@dp.callback_query_handler(lambda query: query.data == "questions_motiva")
 async def questions_motivia(query: CallbackQuery):
     questions = api.get_questions()['questions']
     await query.message.edit_text("Часто задаваемые вопросы")
