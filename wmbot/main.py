@@ -7,7 +7,7 @@ from loguru import logger
 
 from objects.globals import config
 from objects import globals
-from utils.utils import check_notices_polling
+from utils.utils import after_check_notices_polling, before_check_notices_polling
 
 
 async def main():
@@ -18,8 +18,9 @@ async def main():
     logger.info(F"Bot username: @{bot_info.username}, Bot ID: {bot_info.id}")
 
     import commands
-    
-    asyncio.create_task(check_notices_polling())
+
+    asyncio.create_task(before_check_notices_polling())
+    asyncio.create_task(after_check_notices_polling())
 
     await globals.dp.start_polling()
 
