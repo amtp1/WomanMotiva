@@ -241,10 +241,9 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                          F"Дата консультации: {date}\n"
                          F"Время консультации: {time}\n"
                          F"Хирург: {surgeon_name}\n"
-                         F"Адрес: г.{city}")
+                         F"Адрес: г.{city}\n"
+                         F"За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники")
     await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
-    # await query.message.answer_photo(read_qr_code_from_url(r"qrcode.png"))
-    # await message.answer_photo(read_qr_code_from_path(r"qr_code/qrcode.png"))
     await notify_about_deal(query.message, deal_id)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
@@ -279,14 +278,4 @@ async def notify_about_deal(message: Message, deal_id: int):
 def read_image(image_path: str):
     response = requests.get(F"http://{config.host}:{config.port}{image_path}")
     img = BytesIO(response.content)
-    return img
-
-def read_qr_code_from_url(image_name: str):
-    response = requests.get(F"http://{config.host}:{config.port}/media/qrcode/{image_name}")
-    img = BytesIO(response.content)
-    return img
-
-def read_qr_code_from_path(image_path: str):
-    with open(image_path, "rb") as img:
-        img = img.read()
     return img
