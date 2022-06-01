@@ -49,7 +49,7 @@ async def questions_motivia(query: CallbackQuery):
     for k, question in enumerate(questions):
         question_page = (F"<b>Вопрос#{k+1}</b>: {question['question']}\n"
                          F"<b>Ответ</b>: {question['answer']}")
-        return await query.message.answer(question_page)
+        await query.message.answer(question_page)
 
 @dp.callback_query_handler(lambda query: query.data == "diff_operation_price")
 async def diff_operation_price(query: CallbackQuery):
