@@ -26,6 +26,14 @@ async def about(message: Message):
 
 @dp.callback_query_handler(lambda query: query.data == "about_motiva")
 async def about_motivia(query: CallbackQuery):
+    reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="О компании", callback_data="about_company")],
+        [InlineKeyboardButton(text="О продукции", callback_data="about_products")]
+    ])
+    return await query.message.edit_text(text="Разделы O Motiva", reply_markup=reply_markup)
+
+@dp.callback_query_handler(lambda query: query.data == "about_company")
+async def about_company(query: CallbackQuery):
     if not Path(ABOUT_PATH).exists():
         mkdir(ABOUT_PATH)
         with open(rF"{ABOUT_PATH}/about.txt", "w") as f:
@@ -37,6 +45,10 @@ async def about_motivia(query: CallbackQuery):
     if not about_page:
         return await query.message.edit_text("Ничего не найдено")
     return await query.message.edit_text(about_page)
+
+@dp.callback_query_handler(lambda query: query.data == "about_products")
+async def about_products(query: CallbackQuery):
+    pass
 
 @dp.callback_query_handler(lambda query: query.data == "news_motiva")
 async def news_motivia(query: CallbackQuery):
