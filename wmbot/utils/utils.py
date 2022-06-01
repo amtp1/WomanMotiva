@@ -54,7 +54,7 @@ async def check_notices_polling():
 
 async def qrcode_check_notices_polling():
     while True:
-        notices = api.get_qrcode_notices()['notices']
+        notices = api.get_qrcode_notices()['qrcode_notices']
 
         for notice in notices:
             end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S")
