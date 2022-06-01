@@ -33,6 +33,12 @@ urlpatterns = [
     path("api/change_status/<int:deal_id>/<str:status>", API.ChangeStatusView.as_view(), name="change_status"),
     path("api/get_cities", API.CitiesView.as_view(), name="get_cities"),
     path("api/get_questions", API.QuestionsView.as_view(), name="get_questions"),
+
+    # Notices and QRCodeNotices
     path("api/get_notices", API.NoticesView.as_view(), name="get_notices"),
-    path("api/change_notice_status/<int:deal_id>", API.ChangeNoticeStatusView.as_view(), name="change_notice_status")
+    path("api/change_notice_status/<int:deal_id>", API.ChangeNoticeStatusView.as_view(), name="change_notice_status"),
+
+    path("api/get_qrcode_notices", API.QRCodeNoticesView.as_view(), name="get_qrcode_notices"),
+    path("api/change_qrcode_notice_status/<int:deal_id>", API.ChangeQRCodeNoticeView.as_view(), name="change_qrcode_notice_status")
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
