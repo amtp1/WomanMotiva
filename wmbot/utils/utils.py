@@ -28,7 +28,7 @@ def paginate(data_list: list, count: int):
     for i in range(0, len(data_list), count):
         yield data_list[i:i + count]
 
-async def after_check_notices_polling():
+async def check_notices_polling():
     while True:
         notices = api.get_notices()['notices']
 
@@ -52,9 +52,9 @@ async def after_check_notices_polling():
 
         await sleep(5)
 
-async def before_check_notices_polling():
+async def qrcode_check_notices_polling():
     while True:
-        notices = api.get_notices()['notices']
+        notices = api.get_qrcode_notices()['notices']
 
         for notice in notices:
             end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S")
@@ -63,6 +63,7 @@ async def before_check_notices_polling():
             is_now = (end_session - current_datetime).total_seconds()
 
             if is_now <= BEFORE_CHECK_NOTICES_SECONDS:
+                api.change_qrcode_notice_status(deal_id=notice['deal_id'])
                 return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"))
 
         await sleep(5)
