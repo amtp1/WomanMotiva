@@ -122,6 +122,16 @@ class API:
             return HttpResponse(dumps({"response": True}), content_type='application/json')
 
 
+    class CancelDealView(ListAPIView):
+        serializer_class = Deals
+        def get(self, request, deal_id: int):
+            status = "cancel_by_client"
+            deal = Deals.objects.filter(pk=deal_id).get()
+            deal.status = status
+            deal.save()
+            return HttpResponse(dumps({"response": True}), content_type='application/json')
+
+
 class Web:
     def index(request) -> HttpResponse:
         """The index function.
