@@ -242,7 +242,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                          F"Время консультации: {time}\n"
                          F"Хирург: {surgeon_name}\n"
                          F"Адрес: г.{city}\n"
-                         F"За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники")
+                         F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
     await query.message.answer(complete_reg_page, reply_markup=new_deal_markup)
     await notify_about_deal(query.message, deal_id)
 
