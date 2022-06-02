@@ -18,7 +18,6 @@ api = API()
 async def about(message: Message):
     about_markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="О Motiva", callback_data="about_motiva")],
-        [InlineKeyboardButton(text="Новости", callback_data="news_motiva")],
         [InlineKeyboardButton(text="Часто задаваемые вопросы", callback_data="questions_motiva")],
         [InlineKeyboardButton(text="Сравнение стоимости операции", callback_data="diff_operation_price")]
     ])
@@ -59,10 +58,6 @@ async def about_products(query: CallbackQuery):
     if not about_page:
         return await query.message.edit_text("Ничего не найдено")
     return await query.message.edit_text(about_page)
-
-@dp.callback_query_handler(lambda query: query.data == "news_motiva")
-async def news_motivia(query: CallbackQuery):
-    pass
 
 @dp.callback_query_handler(lambda query: query.data == "questions_motiva")
 async def questions_motivia(query: CallbackQuery):
