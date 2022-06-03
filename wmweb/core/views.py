@@ -270,32 +270,34 @@ class Web:
         return HttpResponse(dumps(True), content_type="application/json")
 
     def edit_profile(request) -> HttpResponseRedirect:
-        edit_surgeon_id = request.COOKIES.get("edit_surgeon_id")
-        surgeon = Surgeons.objects.filter(pk=edit_surgeon_id)
         if request.method == 'POST':
+            surgeon = Surgeons.objects.filter(pk=request.POST['surgeon_id'])
             name = request.POST['name']
             city = request.POST['city']
             wa_phone = request.POST['wa_phone']
             clinic = request.POST['clinic']
             address = request.POST['address']
             instagram_link = request.POST['instagram_link']
-            if request.FILES:
-                user_pic = F"profile_pictures/{request.FILES['user_pic']}"
-                surgeon.update(name=name, city=city, image=user_pic, wa_phone=wa_phone, clinic=clinic, address=address, instagram_link=instagram_link)
-            surgeon.update(name=name, city=city, wa_phone=wa_phone, clinic=clinic, address=address, instagram_link=instagram_link)
-        response = redirect("surgeons")
-        response.delete_cookie("edit_surgeon_id")
-        return response
+            image = request.FILES['image']
+            surgeon.update(name=name, city=city,wa_phone=wa_phone, clinic=clinic, address=address, instagram_link=instagram_link)
+            surgeon = surgeon.get()
+            try:
+                os.remove(str(settings.BASE_DIR)+surgeon.image.url)
+            except FileNotFoundError:
+                logger.error(F"При удалении пользователя с id: {surgeon.pk}, не было найдено изображение!")
+            surgeon.image = image
+            surgeon.save()
+        return HttpResponse(dumps({"response": True}), content_type="application/json")
 
     def delete_profile_with_deals(request):
+        delete_profile_id = request.COOKIES.get("delete_profile_id")
+        surgeon = Surgeons.objects.filter(pk=delete_profile_id)
+        deals = Deals.objects.filter(surgeon_id=surgeon.get())
+        deal_ids = [deal.pk for deal in deals]
+        generate_otp = GenerateOTP.objects.filter(deal__in=[deal for deal in deals.all()])
+        notices = Notices.objects.filter(deal_id__in=deal_ids)
+        qr_code_notices = QRCodeNotices.objects.filter(deal_id__in=deal_ids)
         try:
-            delete_profile_id = request.COOKIES.get("delete_profile_id")
-            surgeon = Surgeons.objects.filter(pk=delete_profile_id)
-            deals = Deals.objects.filter(surgeon_id=surgeon.get())
-            deal_ids = [deal.pk for deal in deals]
-            generate_otp = GenerateOTP.objects.filter(deal__in=[deal for deal in deals.all()])
-            notices = Notices.objects.filter(deal_id__in=deal_ids)
-            qr_code_notices = QRCodeNotices.objects.filter(deal_id__in=deal_ids)
             os.remove(str(settings.BASE_DIR)+surgeon.get().image.url)
         except FileNotFoundError:
             logger.error(F"При удалении пользователя с id: {surgeon.get().pk}, не было найдено изображение!")
