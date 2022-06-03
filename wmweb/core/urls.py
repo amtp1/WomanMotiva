@@ -15,7 +15,7 @@ urlpatterns = [
     path("save_profile/", Web.save_profile, name="save_profile"),
     path("save_city", Web.save_city, name="save_city"),
     path("save_question", Web.save_question, name="save_question"),
-    path("edit_profile", Web.edit_profile, name="edit_profile"),
+    path("edit_profile/", Web.edit_profile, name="edit_profile"),
     path("save_settings", Web.save_settings, name="save_settings"),
 
     path("del_profile/", Web.delete_profile, name="delete_profile"),
