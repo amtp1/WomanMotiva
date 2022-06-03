@@ -146,19 +146,19 @@
             <hr>
             <p>
               <div class="alert alert alert-light" role="alert">
-                <u>Город:</u> <strong>{{surgeon.city}}</strong>
+                <i class="bi bi-globe"></i><u>Город:</u> <strong>{{surgeon.city}}</strong>
                 <br>
-                <u>Клиника:</u> <strong>{{surgeon.clinic}}</strong>
+                <i class="bi bi-hospital"></i><u>Клиника:</u> <strong>{{surgeon.clinic}}</strong>
                 <br>
-                <u>Адрес:</u> <strong>{{surgeon.address}}</strong>
+                <i class="bi bi-house-door"></i><u>Адрес:</u> <strong>{{surgeon.address}}</strong>
                 <br>
-              <u>Соц. сети:</u>
-              {% if surgeon.wa_phone %}
-                <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link text-primary"><i class="bi bi-whatsapp"></i></a></span>
-              {% endif %}
-              {% if surgeon.instagram_link %}
-                <span><a href="{{surgeon.instagram_link}}" class="card-link text-primary"><i class="bi bi-instagram"></i></a></span>
-              {% endif %}
+                <i class="bi bi-link"></i><u>Соц. сети:</u>
+                {% if surgeon.wa_phone %}
+                  <span><a href="https://wa.me/{{surgeon.wa_phone}}" class="card-link text-primary"><i class="bi bi-whatsapp"></i></a></span>
+                {% endif %}
+                {% if surgeon.instagram_link %}
+                  <span><a href="{{surgeon.instagram_link}}" class="card-link text-primary"><i class="bi bi-instagram"></i></a></span>
+                {% endif %}
             </p>
             </div>
             <div class="btn-group w-100">
