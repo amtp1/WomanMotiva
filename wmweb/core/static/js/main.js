@@ -1,3 +1,5 @@
+var surgeon_id = null;
+
 function redirect_to_main_page(){
     window.location.replace("/");
 }
@@ -139,19 +141,65 @@ function delete_question(id){
     });
 }
 
-function edit_profile(id, name, city, wa_phone, instagram_link, clinic){
-    $.cookie("edit_surgeon_id", id);
+function edit_profile_modal(id, name, city, wa_phone, instagram_link, clinic, address){
+    surgeon_id = id;
+    //$.cookie("edit_surgeon_id", id);
     var edit_profile_modal = $('#EditProfile')
     edit_profile_modal.id = id;
     edit_profile_modal.find('.modal-title').text(`Изменить профиль #${id}`);
-    edit_profile_modal.find('.name').val(name);
-    edit_profile_modal.find('.city').val(city);
-    edit_profile_modal.find('.clinic').val(clinic);
-    edit_profile_modal.find('.wa_phone').val(wa_phone);
+    edit_profile_modal.find('.edit_name').val(name);
+    edit_profile_modal.find('.edit_city').val(city);
+    edit_profile_modal.find('.edit_clinic').val(clinic);
+    edit_profile_modal.find('.edit_wa_phone').val(wa_phone);
+    edit_profile_modal.find('.edit_address').val(address);
     if (instagram_link != 'None'){
-        edit_profile_modal.find('.instagram_link').val(instagram_link);
+        edit_profile_modal.find('.edit_instagram_link').val(instagram_link);
     };
     edit_profile_modal.modal("show");
+}
+
+function edit_profile(){
+    const image = document.getElementById("edit_user_picture").files[0];
+    const name = document.getElementsByName("edit_name")[0];
+    const city = document.getElementsByName("edit_city")[0];
+    const clinic = document.getElementsByName("edit_clinic")[0];
+    const wa_phone = document.getElementsByName("edit_wa_phone")[0];
+    const address = document.getElementsByName("edit_address")[0];
+    const instagram_link = document.getElementsByName("edit_instagram_link")[0];
+
+    if (!image){
+        alert("Нужно выбрать фотографию для профиля!");
+    }else{
+        if(!name.value || !city.value || !clinic.value || !wa_phone.value || !address.value || !instagram_link.value){
+            alert("Все поля должны быть заполнены!");}
+        else{
+            var data = new FormData(); // Init new FormData object.
+            data.append("surgeon_id", surgeon_id); // Add id in the FormData object.
+            data.append("image", image); // Add id in the FormData object.
+            data.append("name", name.value); // Add id in the FormData object.
+            data.append("city", city.value); // Add id in the FormData object.
+            data.append("clinic", clinic.value); // Add id in the FormData object.
+            data.append("wa_phone", wa_phone.value); // Add id in the FormData object.
+            data.append("address", address.value); // Add id in the FormData object.
+            data.append("instagram_link", instagram_link.value); // Add id in the FormData object.
+            fetch("edit_profile/", {
+                method: "POST",
+                body: data,
+                contentType: 'application/json',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRFToken": $.cookie("csrftoken")
+                },
+            }).then(function(response){
+                response.json().then(
+                    function(data){
+                        if (data["response"]){
+                            redirect_to_surgeons_page();
+                        }
+                    }
+                )})
+        }
+    }
 }
 
 function show_toast(){
