@@ -292,7 +292,7 @@ class Web:
             deals = Deals.objects.filter(surgeon_id=surgeon.get())
             os.remove(str(settings.BASE_DIR)+surgeon.get().image.url)
         except FileNotFoundError:
-            logger.error(F"При удалении пользователя с id: {surgeon.pk}, не было найдено изображение!")
+            logger.error(F"При удалении пользователя с id: {surgeon.get().pk}, не было найдено изображение!")
         deals.delete()
         surgeon.delete()
         response = redirect("surgeons")
