@@ -7,6 +7,7 @@ import mimetypes
 from dateutil import parser
 from time import sleep
 
+from loguru import logger
 import pandas as pd
 
 from django.conf import settings
@@ -285,10 +286,13 @@ class Web:
         return response
 
     def delete_profile_with_deals(request):
-        delete_profile_id = request.COOKIES.get("delete_profile_id")
-        surgeon = Surgeons.objects.filter(pk=delete_profile_id)
-        deals = Deals.objects.filter(surgeon_id=surgeon.get())
-        os.remove(str(settings.BASE_DIR)+surgeon.get().image.url)
+        try:
+            delete_profile_id = request.COOKIES.get("delete_profile_id")
+            surgeon = Surgeons.objects.filter(pk=delete_profile_id)
+            deals = Deals.objects.filter(surgeon_id=surgeon.get())
+            os.remove(str(settings.BASE_DIR)+surgeon.get().image.url)
+        except FileNotFoundError:
+            logger.error(F"При удалении пользователя с id: {surgeon.pk}, не было найдено изображение!")
         deals.delete()
         surgeon.delete()
         response = redirect("surgeons")
