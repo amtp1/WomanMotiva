@@ -27,24 +27,27 @@
   </div>
 
 <p><button type="button" class="btn btn-secondary" onclick="$('#AddCity').modal('show');">Добавить город</button></p>
+<div class="container py-5 container-fluid" style="background-color: whitesmoke; border-radius: 10px;">
+  <h4>Города</h4>
 <div class="scrollable-table-wrapper">
-    <table class="table">
-        <thead>
-            <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Город</th>
-            <th scope="col">Действие</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for city in cities %}
-            <tr>
-              <td><strong>{{city.pk}}</strong></td>
-              <td>{{city.name}}</td>
-              <td><button id="{{city.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_city(this.id)">Удалить</button></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Город</th>
+        <th scope="col">Действие</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for city in cities %}
+        <tr>
+          <td><strong>{{city.pk}}</strong></td>
+          <td>{{city.name}}</td>
+          <td><button id="{{city.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_city(this.id)">Удалить</button></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 </div>
 {% endblock %}
