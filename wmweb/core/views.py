@@ -165,11 +165,13 @@ class Web:
         return render(request, "surgeons.html", dict(surgeons=_surgeons, cities=cities))
 
     def deals(request) -> HttpResponse:
-        today = dt.today().strftime("%Y-%m-%d")
-        max_date = dt.strftime(Deals.objects.latest('created').created, "%Y-%m-%d")
-        min_date  = dt.strftime(Deals.objects.latest('-created').created, "%Y-%m-%d")
         _deals = Deals.objects.all()
-        return render(request, "deals.html", dict(deals=_deals, today=today, min_date=min_date, max_date=max_date))
+        if _deals:
+            today = dt.today().strftime("%Y-%m-%d")
+            max_date = dt.strftime(Deals.objects.latest('created').created, "%Y-%m-%d")
+            min_date  = dt.strftime(Deals.objects.latest('-created').created, "%Y-%m-%d")
+            return render(request, "deals.html", dict(deals=_deals, today=today, min_date=min_date, max_date=max_date))
+        return render(request, "deals.html")
 
     def cities(request) -> HttpResponse:
         cities = Cities.objects.all()
@@ -290,9 +292,16 @@ class Web:
             delete_profile_id = request.COOKIES.get("delete_profile_id")
             surgeon = Surgeons.objects.filter(pk=delete_profile_id)
             deals = Deals.objects.filter(surgeon_id=surgeon.get())
+            deal_ids = [deal.pk for deal in deals]
+            generate_otp = GenerateOTP.objects.filter(deal__in=[deal for deal in deals.all()])
+            notices = Notices.objects.filter(deal_id__in=deal_ids)
+            qr_code_notices = QRCodeNotices.objects.filter(deal_id__in=deal_ids)
             os.remove(str(settings.BASE_DIR)+surgeon.get().image.url)
         except FileNotFoundError:
             logger.error(F"При удалении пользователя с id: {surgeon.get().pk}, не было найдено изображение!")
+        notices.delete()
+        qr_code_notices.delete()
+        generate_otp.delete()
         deals.delete()
         surgeon.delete()
         response = redirect("surgeons")
