@@ -41,11 +41,10 @@ async def check_notices_polling():
                 is_bot = await check_bot(int(notice['user_id']))
 
                 if not is_bot:
-                    end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S") + TIME_ZONE_DELTA
+                    created_deal = dt.strptime(notice['created'], "%Y-%m-%d %H:%M:%S") + TIME_ZONE_DELTA + timedelta(hours=int(config.timeout_sec))
                     current_datetime = dt.strptime(dt.now(TIME_ZONE).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
 
-                    is_now = (end_session - current_datetime).total_seconds()
-                    print(is_now)
+                    is_now = (created_deal - current_datetime).total_seconds()
 
                     if is_now <= BEFORE_CHECK_NOTICES_SECONDS:
                         api.change_notice_status(deal_id=notice['deal_id'])
