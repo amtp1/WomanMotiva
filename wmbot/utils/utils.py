@@ -1,4 +1,4 @@
-from cmath import log
+import pytz
 import io
 from asyncio import sleep
 from datetime import datetime as dt
@@ -72,7 +72,9 @@ async def qrcode_check_notices_polling():
 
                 if is_now <= BEFORE_CHECK_NOTICES_SECONDS:
                     api.change_qrcode_notice_status(deal_id=notice['deal_id'])
-                    return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"))
+                    return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"),
+                        caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
+                        F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
 
         await sleep(5)
 
