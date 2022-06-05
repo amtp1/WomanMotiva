@@ -13,7 +13,7 @@ from objects import globals
 
 
 TIME_ZONE = pytz.timezone('Asia/Almaty')
-TIME_ZONE_DELTA = timedelta(hours=4)
+TIME_ZONE_DELTA = timedelta(hours=5)
 BEFORE_CHECK_QRCODE_NOTICES_SECONDS = 7200
 BEFORE_CHECK_NOTICES_SECONDS = 3600
 
