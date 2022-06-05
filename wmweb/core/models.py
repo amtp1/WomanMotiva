@@ -122,7 +122,8 @@ class Notices(models.Model):
     def to_dict(self):
         return dict(
             deal_id=self.deal.id, is_send=self.is_send, user_id=self.deal.user_id,
-            start_session=dt.strftime(self.deal.start_session, "%Y-%m-%d %H:%M:%S"), end_session=dt.strftime(self.deal.end_session, "%Y-%m-%d %H:%M:%S")
+            start_session=dt.strftime(self.deal.start_session, "%Y-%m-%d %H:%M:%S"), end_session=dt.strftime(self.deal.end_session, "%Y-%m-%d %H:%M:%S"),
+            created=dt.strftime(self.deal.created, "%Y-%m-%d %H:%M:%S"),
         )
 
 
