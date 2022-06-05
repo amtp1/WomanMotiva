@@ -74,7 +74,7 @@
             <td class="text-center"><span class="badge text-bg-success text-uppercase"><small><strong>Подтверждена</strong></small></span></td>
           {% elif deal.status == 'unconfirmed' %}
             <td class="text-center"><span class="badge text-bg-danger text-uppercase"><small><strong>Не подтверждена</strong></small></span></td>
-          {% elif deal.status == 'сancel_by_client' %}
+          {% elif deal.status == 'cancel_by_client' %}
             <td class="text-center"><span class="badge text-bg-danger text-uppercase"><small><strong>Отменена клиентом</strong></small></span></td>
           {% endif %}
           <td class="text-center"><span class="badge text-bg-light">{{deal.cons_format}}</span></td>
