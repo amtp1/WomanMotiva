@@ -48,16 +48,15 @@ async def check_notices_polling():
                     print(is_now)
 
                     if is_now <= BEFORE_CHECK_NOTICES_SECONDS:
-                        #api.change_notice_status(deal_id=notice['deal_id'])
+                        api.change_notice_status(deal_id=notice['deal_id'])
                         reply_markup = InlineKeyboardMarkup(inline_keyboard=[
                             [InlineKeyboardButton(text="Да", callback_data=F"notice_yes#{notice['deal_id']}"),
                             InlineKeyboardButton(text="Нет", callback_data=F"notice_no#{notice['deal_id']}")]
                             ])
-                        """await globals.bot.send_message(chat_id=notice['user_id'],
+                        await globals.bot.send_message(chat_id=notice['user_id'],
                             text=F"<b>Заявка#{notice['deal_id']}</b>\n"
                             F"Пожалуйста ответьте, связался ли с вами представитель хирурга к которому вы записались?",
                             reply_markup=reply_markup)
-                            """
 
         await qrcode_check_notices_polling()
         await sleep(3)
