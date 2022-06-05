@@ -1,7 +1,7 @@
 import pytz
 import io
 from asyncio import sleep
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta
 
 import requests
 from loguru import logger
@@ -13,6 +13,7 @@ from objects import globals
 
 
 TIME_ZONE = pytz.timezone('Asia/Almaty')
+TIME_ZONE_DELTA = timedelta(hours=3)
 BEFORE_CHECK_QRCODE_NOTICES_SECONDS = 7200
 BEFORE_CHECK_NOTICES_SECONDS = 3600
 
@@ -40,7 +41,7 @@ async def check_notices_polling():
                 is_bot = await check_bot(int(notice['user_id']))
 
                 if not is_bot:
-                    end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S")
+                    end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S") + TIME_ZONE_DELTA
                     current_datetime = dt.strptime(dt.now(TIME_ZONE).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
 
                     is_now = (end_session - current_datetime).total_seconds()
@@ -67,7 +68,7 @@ async def qrcode_check_notices_polling():
             is_bot = await check_bot(int(notice['user_id']))
 
             if not is_bot:
-                end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S")
+                end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S") + TIME_ZONE_DELTA
                 current_datetime = dt.strptime(dt.now(TIME_ZONE).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
 
                 is_now = (end_session - current_datetime).total_seconds()
