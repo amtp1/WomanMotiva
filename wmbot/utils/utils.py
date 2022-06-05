@@ -53,7 +53,7 @@ async def check_notices_polling():
                             InlineKeyboardButton(text="Нет", callback_data=F"notice_no#{notice['deal_id']}")]
                             ])
                         await globals.bot.send_message(chat_id=notice['user_id'],
-                            text=F"<b>Завявка#{notice['deal_id']}</b>\n"
+                            text=F"<b>Заявка#{notice['deal_id']}</b>\n"
                             F"Пожалуйста ответьте, связался ли с вами представитель хирурга к которому вы записались?",
                             reply_markup=reply_markup)
 
