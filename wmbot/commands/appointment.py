@@ -200,51 +200,54 @@ async def get_email(message: Message, state: FSMContext):
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("cons")))
 async def consultation_format(query: CallbackQuery, state: FSMContext):
-    data = globals.data
+    try:
+        data = globals.data
 
-    user_id = data.get("user_id")
-    surgeon_id = data.get("surgeon_id")
-    phone = data.get("phone")
-    city = data.get("city")
-    fio = data.get("fio")
-    email = data.get("email")
-    date = data.get("date")
-    time = data.get("time")
-    cons_format = re.sub("cons#", "", query.data)
-    start_session = data.get("start_session")
-    end_session = data.get("end_session")
-    state_surgeon_data = globals.surgeons[int(surgeon_id)]
-    surgeon_name = state_surgeon_data[0]
-    surgeon_wa_phone = state_surgeon_data[1]
-    deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
-        phone=phone, city=city, fio=fio, email=email, cons_format=cons_format,
-        start_session=start_session, end_session=end_session)
+        user_id = data.get("user_id")
+        surgeon_id = data.get("surgeon_id")
+        phone = data.get("phone")
+        city = data.get("city")
+        fio = data.get("fio")
+        email = data.get("email")
+        date = data.get("date")
+        time = data.get("time")
+        cons_format = re.sub("cons#", "", query.data)
+        start_session = data.get("start_session")
+        end_session = data.get("end_session")
+        state_surgeon_data = globals.surgeons[int(surgeon_id)]
+        surgeon_name = state_surgeon_data[0]
+        surgeon_wa_phone = state_surgeon_data[1]
+        deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
+            phone=phone, city=city, fio=fio, email=email, cons_format=cons_format,
+            start_session=start_session, end_session=end_session)
 
-    deal_id = deal_response["deal_id"]
-    deal_created = deal_response["deal_created"]
-    code = deal_response["code"]
-    deal_created_str = dt.strftime(parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")
-    surgeon_message_text = (F"Заявка [#{deal_id}]\n"
-                F"ФИО: {fio}\n"
-                F"Дата и время заявки: {deal_created_str}\n"
-                F"Дата консультации: {date}\n"
-                F"Время консультации: {time}\n"
-                F"Телефон: {phone}\n"
-                F"Код: {code}")
-    wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+        deal_id = deal_response["deal_id"]
+        deal_created = deal_response["deal_created"]
+        code = deal_response["code"]
+        deal_created_str = dt.strftime(parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")
+        surgeon_message_text = (F"Заявка [#{deal_id}]\n"
+                    F"ФИО: {fio}\n"
+                    F"Дата и время заявки: {deal_created_str}\n"
+                    F"Дата консультации: {date}\n"
+                    F"Время консультации: {time}\n"
+                    F"Телефон: {phone}\n"
+                    F"Код: {code}")
+        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
-    new_deal_markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
-    ])
+        new_deal_markup = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
+        ])
 
-    complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
-                         F"Дата консультации: {date}\n"
-                         F"Время консультации: {time}\n"
-                         F"Хирург: {surgeon_name}\n"
-                         F"Адрес: г.{city}\n"
-                         F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
-    await query.message.edit_text(complete_reg_page, reply_markup=new_deal_markup)
-    #await notify_about_deal(query.message, deal_id)
+        complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
+                            F"Дата консультации: {date}\n"
+                            F"Время консультации: {time}\n"
+                            F"Хирург: {surgeon_name}\n"
+                            F"Адрес: г.{city}\n"
+                            F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
+        await query.message.edit_text(complete_reg_page, reply_markup=new_deal_markup)
+        #await notify_about_deal(query.message, deal_id)
+    except TypeError:
+        return await query.message.edit_text("Бот был перезапущен. Нужно создать новую заявку👇", reply_markup=new_deal_markup)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
 async def new_deal(query: CallbackQuery, state: FSMContext):
