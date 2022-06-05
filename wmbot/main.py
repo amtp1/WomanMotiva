@@ -19,7 +19,7 @@ async def main():
 
     import commands
 
-    asyncio.create_task(qrcode_check_notices_polling())
+    #asyncio.create_task(qrcode_check_notices_polling())
     asyncio.create_task(check_notices_polling())
 
     await globals.dp.start_polling()
