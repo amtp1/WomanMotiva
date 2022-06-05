@@ -57,6 +57,7 @@ async def check_notices_polling():
                             reply_markup=reply_markup)
 
         await qrcode_check_notices_polling()
+        await sleep(2)
 
 async def qrcode_check_notices_polling():
     while True:
@@ -78,6 +79,7 @@ async def qrcode_check_notices_polling():
                             caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
                             F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
         await check_notices_polling()
+        await sleep(2)
 
 def read_qr_code_from_url(image_name: str):
     response = requests.get(F"http://{config.host}:{config.port}/media/qrcode/{image_name}")
