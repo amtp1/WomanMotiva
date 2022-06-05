@@ -12,6 +12,7 @@ from utils.api.api import API
 from objects import globals
 
 
+TIME_ZONE = pytz.timezone('Asia/Almaty')
 BEFORE_CHECK_NOTICES_SECONDS = 7200
 AFTER_CHECK_NOTICES_SECONDS = 0
 
@@ -31,6 +32,7 @@ def paginate(data_list: list, count: int):
         yield data_list[i:i + count]
 
 async def check_notices_polling():
+
     while True:
         notices = api.get_notices()['notices']
 
@@ -40,7 +42,7 @@ async def check_notices_polling():
 
                 if not is_bot:
                     end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S")
-                    current_datetime = dt.strptime(dt.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+                    current_datetime = dt.strptime(dt.now(TIME_ZONE).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
 
                     is_now = (end_session - current_datetime).total_seconds()
 
@@ -66,7 +68,7 @@ async def qrcode_check_notices_polling():
 
             if not is_bot:
                 end_session = dt.strptime(notice['end_session'], "%Y-%m-%d %H:%M:%S")
-                current_datetime = dt.strptime(dt.now().strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+                current_datetime = dt.strptime(dt.now(TIME_ZONE).strftime("%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
 
                 is_now = (end_session - current_datetime).total_seconds()
 
