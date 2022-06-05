@@ -13,8 +13,8 @@ from objects import globals
 
 
 TIME_ZONE = pytz.timezone('Asia/Almaty')
-BEFORE_CHECK_NOTICES_SECONDS = 7200
-AFTER_CHECK_NOTICES_SECONDS = 0
+BEFORE_CHECK_QRCODE_NOTICES_SECONDS = 7200
+BEFORE_CHECK_NOTICES_SECONDS = 3600
 
 config = Config()
 api = API()
@@ -45,7 +45,7 @@ async def check_notices_polling():
 
                     is_now = (end_session - current_datetime).total_seconds()
 
-                    if is_now <= AFTER_CHECK_NOTICES_SECONDS:
+                    if is_now <= BEFORE_CHECK_NOTICES_SECONDS:
                         api.change_notice_status(deal_id=notice['deal_id'])
                         reply_markup = InlineKeyboardMarkup(inline_keyboard=[
                             [InlineKeyboardButton(text="Да", callback_data=F"notice_yes#{notice['deal_id']}"),
@@ -73,7 +73,7 @@ async def qrcode_check_notices_polling():
 
                     is_now = (end_session - current_datetime).total_seconds()
 
-                    if is_now <= BEFORE_CHECK_NOTICES_SECONDS:
+                    if is_now <= BEFORE_CHECK_QRCODE_NOTICES_SECONDS:
                         api.change_qrcode_notice_status(deal_id=notice['deal_id'])
                         return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"),
                             caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
