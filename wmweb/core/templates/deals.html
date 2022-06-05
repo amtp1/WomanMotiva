@@ -48,9 +48,21 @@
           <td class="align-text-top text-center">{{deal.fio}}</td>
           <td class="align-text-top text-center">{{deal.surgeon.name}}</td>
           <td class="align-text-top text-center">{{deal.phone}}</td>
-          <td class="align-text-top text-center">{{deal.city}}</td>
-          <td class="align-text-top text-center">{{deal.start_session}}</td>
-          <td class="align-text-top text-center">{{deal.end_session}}</td>
+          <td class="align-text-top text-center">{{deal.city}}</td> 
+          <td class="align-text-top text-center">
+            {% load tz %}
+            {% get_current_timezone as tz %}
+            {% timezone tz %}
+              {{deal.start_session}}
+            {% endtimezone %}
+          </td>
+          <td class="align-text-top text-center">
+            {% load tz %}
+            {% get_current_timezone as tz %}
+            {% timezone tz %}
+              {{deal.end_session}}
+            {% endtimezone %}
+          </td>
           <td class="align-text-top text-center">{{deal.created}}</td>
           {% if deal.status == 'new' %}
             <td class="text-center"><span class="badge text-bg-secondary text-uppercase"><small><strong>Новая</strong></small></span></td>
