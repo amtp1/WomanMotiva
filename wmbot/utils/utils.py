@@ -1,40 +1,26 @@
-import pytz
 import io
+import pytz
 from asyncio import sleep
 from datetime import datetime as dt, timedelta
 
 import requests
-from loguru import logger
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from config.config import Config
-from utils.api.api import API
 from objects import globals
-
+from utils.api.api import API
+from config.config import Config
 
 TIME_ZONE = pytz.timezone('Asia/Almaty')
 TIME_ZONE_DELTA = timedelta(hours=5)
-BEFORE_CHECK_QRCODE_NOTICES_SECONDS = 7200
-BEFORE_CHECK_NOTICES_SECONDS = 3600
+BEFORE_CHECK_QRCODE_NOTICES_SECONDS: int = 7200
+BEFORE_CHECK_NOTICES_SECONDS: int = 3600
 
-config = Config()
-api = API()
-
-def cities_markup(cities: list, callback_data: str):
-    inline_cities = []
-    cities = list(paginate(cities, 3))
-    for city in cities:
-        inline_cities.append([InlineKeyboardButton(text=c, callback_data=F"{callback_data}{c}") for c in city])
-    markup = InlineKeyboardMarkup(inline_keyboard=inline_cities)
-    return markup
-
-def paginate(data_list: list, count: int):
-    for i in range(0, len(data_list), count):
-        yield data_list[i:i + count]
+config: Config = Config()
+api: API = API()
 
 async def check_notices_polling():
     while True:
-        notices = api.get_notices()['notices']
+        notices: dict = api.get_notices()['notices']
 
         if notices:
             for notice in notices:
@@ -79,11 +65,23 @@ async def qrcode_check_notices_polling():
                         caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
                         F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
 
+async def check_bot(user_id: int) -> bool:
+    me = await globals.bot.get_me()
+    return me.id==user_id
+
+def cities_markup(cities: list, callback_data: str):
+    inline_cities: list = []
+    cities: list[list] = list(paginate(cities, 3))
+    for city in cities:
+        inline_cities.append([InlineKeyboardButton(text=c, callback_data=F"{callback_data}{c}") for c in city])
+    markup = InlineKeyboardMarkup(inline_keyboard=inline_cities)
+    return markup
+
+def paginate(data_list: list, count: int):
+    for i in range(0, len(data_list), count):
+        yield data_list[i:i + count]
+
 def read_qr_code_from_url(image_name: str):
     response = requests.get(F"http://{config.host}:{config.port}/media/qrcode/{image_name}")
     img = io.BytesIO(response.content)
     return img
-
-async def check_bot(user_id: int) -> bool:
-    me = await globals.bot.get_me()
-    return me.id==user_id
