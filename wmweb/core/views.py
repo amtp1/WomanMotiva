@@ -154,6 +154,10 @@ class Web:
             statistic : HttpResponse
         """
 
+        percent_activate_deals = 0
+        percent_confirmed_deals = 0
+        percent_unconfirmed_deals = 0
+
         surgeons = Surgeons.objects.all()
         deals = Deals.objects.all()
         cities = Cities.objects.all()
@@ -162,10 +166,20 @@ class Web:
         activate_deals = Deals.objects.filter(status="attendance_confirmed").all()
         confirmed_deals = Deals.objects.filter(status="confirmed").all()
         unconfirmed_deals = Deals.objects.filter(status="unconfirmed").all()
+
+        if confirmed_deals:
+            percent_confirmed_deals = int(len(deals) / len(confirmed_deals))
+        elif unconfirmed_deals:
+            percent_unconfirmed_deals = int(len(deals) / len(unconfirmed_deals))
+        elif activate_deals:
+            percent_activate_deals = int(len(deals) / len(activate_deals))
         data = dict(surgeons=surgeons, deals=deals,
             new_deals=new_deals, activate_deals=activate_deals,
             confirmed_deals=confirmed_deals, unconfirmed_deals=unconfirmed_deals,
-            cities=cities, questions=questions)
+            cities=cities, questions=questions,
+            percent_confirmed_deals=percent_confirmed_deals,
+            percent_unconfirmed_deals=percent_unconfirmed_deals,
+            percent_activate_deals=percent_activate_deals)
         return render(request, "statistic.html", data)
 
     def surgeons(request: HttpRequest) -> HttpResponse:
