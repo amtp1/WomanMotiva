@@ -88,7 +88,7 @@ class API:
     class NoticesView(ListAPIView):
         serializer_class = Notices
         def get(self, request):
-            sleep(2)
+            sleep(1)
             notices = Notices.objects.filter(is_send=False).all()
             notices = [notice.to_dict() for notice in notices]
             return HttpResponse(dumps({"notices": notices}), content_type='application/json')
@@ -107,7 +107,7 @@ class API:
     class QRCodeNoticesView(ListAPIView):
         serializer_class = QRCodeNotices
         def get(self, request):
-            sleep(2)
+            sleep(1)
             qrcode_notices = QRCodeNotices.objects.filter(is_send=False).all()
             qrcode_notices = [notice.to_dict() for notice in qrcode_notices]
             return HttpResponse(dumps({"qrcode_notices": qrcode_notices}), content_type='application/json')
