@@ -200,6 +200,10 @@ async def get_email(message: Message, state: FSMContext):
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("cons")))
 async def consultation_format(query: CallbackQuery, state: FSMContext):
+    reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
+    ])
+
     try:
         data = globals.data
 
@@ -239,10 +243,6 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                     F"Код: {code}")
 
         wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
-
-        reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
-        ])
 
         complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
                             F"Дата консультации: {date}\n"
