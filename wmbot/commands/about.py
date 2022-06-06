@@ -1,3 +1,4 @@
+import re
 from os import mkdir
 from pathlib import Path
 
@@ -9,6 +10,22 @@ from config.config import Config
 
 
 TEMP_PATH = rF"{Path(__file__).resolve().parent.parent.parent}/temp"
+TEMP_COUNTRIES = {
+    "price":{
+        "South Korea": "5000-10000",
+        "Russia": "2800-7000",
+        "Kazakhstan": "1800-6000",
+        "Kyrgyzstan": "2300-3000",
+        "Turkey": "3000-4000"
+    },
+    "inducement": {
+        "South Korea": "Южной Корее",
+        "Russia": "России",
+        "Kazakhstan": "Казахстане",
+        "Kyrgyzstan": "Кыргызстане",
+        "Turkey": "Турции"
+    }
+}
 
 config = Config()
 api = API()
@@ -70,13 +87,27 @@ async def questions_motivia(query: CallbackQuery):
 
 @dp.callback_query_handler(lambda query: query.data == "diff_operation_price")
 async def diff_operation_price(query: CallbackQuery):
-    diff_page = ("В данном разделе приведен сравнительный анализ стоимостей операций в разных странах.\n"
-                "— Южная Корея $5000-10000\n"
-                "— Россия $2800-7000\n"
-                "— Казахстан $1800-6000\n"
-                "— Кыргызстан $2300-3000\n"
-                "— Турция $3000-4000\n"
+    diff_page = ("В данном разделе приведен сравнительный анализ средних стоимостей операций в разных странах.\n"
+    "В стоимость не включены дополнительные расходы (билеты, гостиница, пребывание в стационаре, анализы). Указана только стоимость операции.\n"
+    "Нажмите на название страны что бы увидеть стоимость👇")
+    reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Южная корея", callback_data="country#South Korea")],
+        [InlineKeyboardButton(text="Россия", callback_data="country#Russia")],
+        [InlineKeyboardButton(text="Казахстан", callback_data="country#Kazakhstan")],
+        [InlineKeyboardButton(text="Кыргызстан", callback_data="country#Kyrgyzstan")],
+        [InlineKeyboardButton(text="Турция", callback_data="country#Turkey")],
+    ])
+    return await query.message.edit_text(diff_page, reply_markup=reply_markup)
 
-                "<b>По курсу на 06.05.2022 (427.80)</b>\n"
-                "<b>В стоимость не включены дополнительные расходы (билеты, гостиница, пребывание в стационаре, анализы). Указана только стоимость операции.</b>")
-    return await query.message.edit_text(diff_page)
+@dp.callback_query_handler(lambda query: query.data.startswith(("country")))
+async def select_country(query: CallbackQuery):
+    country = re.sub("country#", "", query.data)
+    reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Назад", callback_data="go_back")]
+    ])
+    return await query.message.edit_text(F"Стоимость операции в {TEMP_COUNTRIES['inducement'][country]} ${TEMP_COUNTRIES['price'][country]}",
+        reply_markup=reply_markup)
+
+@dp.callback_query_handler(lambda query: query.data == "go_back")
+async def select_country(query: CallbackQuery):
+    return await diff_operation_price(query)
