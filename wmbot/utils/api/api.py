@@ -29,9 +29,7 @@ class API:
         content = self.serialize_response_content(content=response.text)
         return content
 
-    def change_status(self,
-        deal_id: int, status: str
-    ) -> dict:
+    def change_status(self, deal_id: int, status: str) -> dict:
         response = self._make_change_status_request(host=self.host, port=self.port, deal_id=deal_id, status=status)
         content = self.serialize_response_content(content=response.content)
         return content
