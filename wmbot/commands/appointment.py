@@ -221,6 +221,11 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
             phone=phone, city=city, fio=fio, email=email, cons_format=cons_format,
             start_session=start_session, end_session=end_session)
 
+        is_created = deal_response['is_created']
+
+        if not is_created:
+            return await query.message.edit_text("Такая заявка уже существует!")
+
         deal_id = deal_response["deal_id"]
         deal_created = deal_response["deal_created"]
         code = deal_response["code"]
@@ -232,9 +237,10 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                     F"Время консультации: {time}\n"
                     F"Телефон: {phone}\n"
                     F"Код: {code}")
+
         wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
-        new_deal_markup = InlineKeyboardMarkup(inline_keyboard=[
+        reply_markup = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="Начать сначала", callback_data="new_deal")]
         ])
 
@@ -244,10 +250,10 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                             F"Хирург: {surgeon_name}\n"
                             F"Адрес: г.{city}\n"
                             F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
-        await query.message.edit_text(complete_reg_page, reply_markup=new_deal_markup)
+        await query.message.edit_text(complete_reg_page, reply_markup=reply_markup)
         #await notify_about_deal(query.message, deal_id)
     except TypeError:
-        return await query.message.edit_text("Бот был перезапущен. Нужно создать новую заявку👇", reply_markup=new_deal_markup)
+        return await query.message.edit_text("Бот был перезапущен. Нужно создать новую заявку👇", reply_markup=reply_markup)
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("new_deal")))
 async def new_deal(query: CallbackQuery, state: FSMContext):
