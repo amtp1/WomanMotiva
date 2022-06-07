@@ -144,7 +144,7 @@ class DialogCalendar:
         current_month: int = int(datetime.now().month)
         current_day: int = int(datetime.now().day)
 
-        if year == current_year and month == current_month and day < current_day:
+        if year == current_year and month == current_month and day <= current_day:
             return False
         return True
 
