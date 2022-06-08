@@ -131,7 +131,6 @@ class API:
             notice.save()
             return HttpResponse(dumps({"response": True}), content_type='application/json')
 
-
     class CancelDealView(ListAPIView):
         serializer_class = Deals # Set serializer object.
         def get(self, request: HttpRequest, deal_id: int):
@@ -154,6 +153,7 @@ class Web:
             statistic : HttpResponse
         """
 
+        percent_new_deals = 0
         percent_activate_deals = 0
         percent_confirmed_deals = 0
         percent_unconfirmed_deals = 0
@@ -167,19 +167,21 @@ class Web:
         confirmed_deals = Deals.objects.filter(status="confirmed").all()
         unconfirmed_deals = Deals.objects.filter(status="unconfirmed").all()
 
+        if new_deals:
+            percent_new_deals = "{:.2f}".format(float(len(new_deals) / len(deals)) * 100)
         if confirmed_deals:
-            percent_confirmed_deals = int(len(deals) / len(confirmed_deals))
-        elif unconfirmed_deals:
-            percent_unconfirmed_deals = int(len(deals) / len(unconfirmed_deals))
-        elif activate_deals:
-            percent_activate_deals = int(len(deals) / len(activate_deals))
+            percent_confirmed_deals = "{:.2f}".format(float(len(confirmed_deals) / len(deals)) * 100)
+        if unconfirmed_deals:
+            percent_unconfirmed_deals = "{:.2f}".format(float(len(unconfirmed_deals) / len(deals)) * 100)
+        if activate_deals:
+            percent_activate_deals = "{:.2f}".format(float(len(activate_deals) / len(deals)) * 100)
+
         data = dict(surgeons=surgeons, deals=deals,
             new_deals=new_deals, activate_deals=activate_deals,
             confirmed_deals=confirmed_deals, unconfirmed_deals=unconfirmed_deals,
             cities=cities, questions=questions,
-            percent_confirmed_deals=percent_confirmed_deals,
-            percent_unconfirmed_deals=percent_unconfirmed_deals,
-            percent_activate_deals=percent_activate_deals)
+            percent_new_deals=percent_new_deals, percent_confirmed_deals=percent_confirmed_deals,
+            percent_unconfirmed_deals=percent_unconfirmed_deals, percent_activate_deals=percent_activate_deals)
         return render(request, "statistic.html", data)
 
     def surgeons(request: HttpRequest) -> HttpResponse:
