@@ -5,49 +5,49 @@
 {% block pages_body %}
 <!-- Add city (modal) -->
 <div id="AddCity" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Добавить город</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#AddCity').modal('hide');"></button>
-        </div>
-        <form method="post" enctype="multipart/form-data" action="save_city">
-          {% csrf_token %}
-          <br>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="city" placeholder="Название города">
-          </div>
-          <div class="modal-footer">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary" name="save_city">Сохранить</button>
-          </div>
-        </form>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Добавить город</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#AddCity').modal('hide');"></button>
       </div>
+      <form method="post" enctype="multipart/form-data" action="save_city">
+        {% csrf_token %}
+        <br>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" name="city" placeholder="Название города">
+        </div>
+        <div class="modal-footer">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary" name="save_city">Сохранить</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 
 <p><button type="button" class="btn btn-secondary" onclick="$('#AddCity').modal('show');">Добавить город</button></p>
 <div class="container py-5 container-fluid" style="background-color: whitesmoke; border-radius: 10px;">
   <h4>Города</h4>
-<div class="scrollable-table-wrapper">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Город</th>
-        <th scope="col">Действие</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for city in cities %}
+  <div class="scrollable-table-wrapper">
+    <table class="table">
+      <thead>
         <tr>
-          <td><strong>{{city.pk}}</strong></td>
-          <td>{{city.name}}</td>
-          <td><button id="{{city.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_city(this.id)">Удалить</button></td>
+          <th scope="col">ID</th>
+          <th scope="col">Город</th>
+          <th scope="col">Действие</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        {% for city in cities %}
+          <tr>
+            <td><strong>{{city.pk}}</strong></td>
+            <td>{{city.name}}</td>
+            <td><button id="{{city.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_city(this.id)">Удалить</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}
