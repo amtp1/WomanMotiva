@@ -12,11 +12,11 @@
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <form method="post" action="upload_to_excel">
           {% csrf_token %}
-          <div class="input-group-prepend">От:&nbsp;
-            <input class="w-100" type="date" id="start" name="from-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
+          <div class="input-group-prepend">
+            <span class="badge text-bg-success w-100">От:&nbsp;<input class="" type="date" id="start" name="from-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}"></span>
           </div>
-          <div class="input-group-prepend">До:&nbsp;
-            <input class="w-100" type="date" id="start" name="before-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
+          <div class="input-group-prepend">
+            <span class="badge text-bg-success w-100">До:&nbsp;<input class="" type="date" id="start" name="before-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}"></span>
           </div>
           <button type="submit" class="btn btn-outline-primary w-100">Выгрузить</button>
         </form>
