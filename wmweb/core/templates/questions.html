@@ -13,12 +13,13 @@
         </div>
         <form method="post" enctype="multipart/form-data" action="save_question">
           {% csrf_token %}
-          <br>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="question" placeholder="Вопрос">
-          </div>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" name="answer" placeholder="Ответ">
+          <p>
+            <div class="input-group">
+              <textarea class="form-control" name="question" placeholder="Вопрос"></textarea>
+            </div>
+          </p>
+          <div class="input-group">
+            <textarea class="form-control" name="answer" placeholder="Ответ"></textarea>
           </div>
           <div class="modal-footer">
             {% csrf_token %}
@@ -44,7 +45,6 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">ID</th>
           <th scope="col">Вопрос</th>
           <th scope="col">Ответ</th>
           <th scope="col">Действие</th>
@@ -53,7 +53,6 @@
       <tbody>
         {% for question in questions %}
           <tr>
-            <td><strong>{{question.pk}}</strong></td>
             <td>{{question.question}}</td>
             <td>{{question.answer}}</td>
             <td><button id="{{question.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_question(this.id)">Удалить</button></td>
