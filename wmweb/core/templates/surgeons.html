@@ -161,10 +161,20 @@
                 {% endif %}
             </p>
             </div>
-            <div class="btn-group w-100">
+            <!--<div class="btn-group hstack gap-1">
               <button id="{{surgeon.pk}}" type="submit" class="btn btn-sm btn-outline-secondary"
                 onclick="edit_profile_modal(this.id, '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}', '{{surgeon.instagram_link}}', '{{surgeon.clinic}}', '{{surgeon.address}}');">Редактировать</button>
-              <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger" onclick="delete_profile(this.id);">Удалить</button>
+              <div class="vr"></div>
+              <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger w-100" onclick="delete_profile(this.id);">Удалить</button>
+            </div>-->
+            <div class="hstack gap-3">
+              <button id="{{surgeon.pk}}" type="submit" class="btn btn-secondary w-100"
+              onclick="edit_profile_modal(this.id,
+                '{{surgeon.name}}', '{{surgeon.city}}', '{{surgeon.wa_phone}}',
+                '{{surgeon.instagram_link}}', '{{surgeon.clinic}}', '{{surgeon.address}}')">Редактировать</button>
+              <div class="vr"></div>
+              <button id="{{surgeon.pk}}" type="button" class="btn btn-outline-danger w-100"
+              onclick="delete_profile(this.id);">Удалить</button>
             </div>
           </div>
         </div>
