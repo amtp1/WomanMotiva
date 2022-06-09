@@ -79,7 +79,14 @@
             <div class="card-body">
               <div class="d-flex justify-content-between px-md-1">
                 <div>
-                  <h3 class="text-primary">{{new_deals|length}}</h3>
+                  <div class="hstack gap-3">
+                    <div>
+                      <h3 class="text-primary">{{new_deals|length}}</h3>
+                    </div>
+                    <div>
+                        <strong><h6>({{percent_new_deals}}%)</h6></strong>
+                    </div>
+                  </div>
                   <p class="mb-0">Новые заявки</p>
                 </div>
                 <div class="align-self-center">
@@ -87,9 +94,10 @@
                 </div>
               </div>
               <div class="px-md-1">
-                <div class="progress mt-3 mb-1 rounded" style="height: 7px;">
+                <div class="progress mt-3 mb-1 rounded" style="height: 12px;">
                   <div class="progress-bar bg-primary" role="progressbar" style="width: {{percent_new_deals}}%;" aria-valuenow="{{percent_new_deals}}"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                    aria-valuemin="0" aria-valuemax="100">
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,7 +108,14 @@
             <div class="card-body">
               <div class="d-flex justify-content-between px-md-1">
                 <div>
-                  <h3 class="text-info">{{activate_deals|length}}</h3>
+                  <div class="hstack gap-3">
+                    <div>
+                      <h3 class="text-info">{{activate_deals|length}}</h3>
+                    </div>
+                    <div>
+                        <strong><h6>({{percent_activate_deals}}%)</h6></strong>
+                    </div>
+                  </div>
                   <p class="mb-0">Подтвержденные посещением</p>
                 </div>
                 <div class="align-self-center">
@@ -108,9 +123,10 @@
                 </div>
               </div>
               <div class="px-md-1">
-                <div class="progress mt-3 mb-1 rounded" style="height: 7px;">
+                <div class="progress mt-3 mb-1 rounded" style="height: 12px;">
                   <div class="progress-bar bg-info" role="progressbar" style="width: {{percent_activate_deals}}%;" aria-valuenow="{{percent_activate_deals}}"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                    aria-valuemin="0" aria-valuemax="100"><strong style="color: black;">{{percent_activate_deals}}%</strong>
+                  </div>
                 </div>
               </div>
             </div>
@@ -121,7 +137,14 @@
             <div class="card-body">
               <div class="d-flex justify-content-between px-md-1">
                 <div>
-                  <h3 class="text-success">{{confirmed_deals|length}}</h3>
+                  <div class="hstack gap-3">
+                    <div>
+                      <h3 class="text-success">{{confirmed_deals|length}}</h3>
+                    </div>
+                    <div>
+                        <strong><h6>({{percent_confirmed_deals}}%)</h6></strong>
+                    </div>
+                  </div>
                   <p class="mb-0">Подтвержденные заявки</p>
                 </div>
                 <div class="align-self-center">
@@ -129,9 +152,10 @@
                 </div>
               </div>
               <div class="px-md-1">
-                <div class="progress mt-3 mb-1 rounded" style="height: 7px;">
+                <div class="progress mt-3 mb-1 rounded" style="height: 12px;">
                   <div class="progress-bar bg-success" role="progressbar" style="width: {{percent_confirmed_deals}}%;" aria-valuenow="{{percent_confirmed_deals}}"
-                    aria-valuemin="0" aria-valuemax="100"></div>
+                    aria-valuemin="0" aria-valuemax="100">
+                  </div>
                 </div>
               </div>
             </div>
@@ -142,7 +166,14 @@
             <div class="card-body">
               <div class="d-flex justify-content-between px-md-1">
                 <div>
-                  <h3 class="text-danger">{{unconfirmed_deals|length}}</h3>
+                  <div class="hstack gap-3">
+                    <div>
+                      <h3 class="text-danger">{{unconfirmed_deals|length}}</h3>
+                    </div>
+                    <div>
+                        <strong><h6>({{percent_unconfirmed_deals}}%)</h6></strong>
+                    </div>
+                  </div>
                   <p class="mb-0">Неподтвержденные заявки</p>
                 </div>
                 <div class="align-self-center">
@@ -150,11 +181,10 @@
                 </div>
               </div>
               <div class="px-md-1">
-                <div class="progress mt-3 mb-1 rounded" style="height: 7px;">
-                  {% with "width: "|add:percent_unconfirmed_deals|add:"%" as percent %}
+                <div class="progress mt-3 mb-1 rounded" style="height: 12px;">
                   <div class="progress-bar bg-danger" role="progressbar" style="width: {{percent_unconfirmed_deals}}%;" aria-valuenow="{{percent_unconfirmed_deals}}"
-                    aria-valuemin="0" aria-valuemax="100"></div>
-                    {% endwith %}
+                    aria-valuemin="0" aria-valuemax="100"><strong style="color: black;" class="text-center"></strong>
+                  </div>
                 </div>
               </div>
             </div>
