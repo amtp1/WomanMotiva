@@ -26,9 +26,17 @@
   </div>
 </div>
 
-<p><button type="button" class="btn btn-secondary" onclick="$('#AddCity').modal('show');">Добавить город</button></p>
 <div class="container py-5 container-fluid" style="background-color: whitesmoke; border-radius: 10px;">
-  <h4>Города</h4>
+  <p>
+    <div class="hstack gap-3">
+      <div>
+        <h4>Города</h4>
+      </div>
+      <div>
+        <button type="button" class="btn btn-secondary" onclick="$('#AddCity').modal('show');"><i class="bi bi-bookmark-plus"></i></button>
+      </div>
+    </div>
+  </p>
   <div class="scrollable-table-wrapper">
     <table class="table">
       <thead>
