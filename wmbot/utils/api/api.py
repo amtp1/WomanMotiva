@@ -159,8 +159,9 @@ class WA_API:
         print(response)
 
         if not response['success']:
-            if response['code'] == "ApiLicenseError":
-                return logger.error(response['message'])
+            error = response['error']
+            if error['code'] == "ApiLicenseError":
+                return logger.error(error['message'])
             else:
                 logger.error(response['message'])
                 config.change_value("WA_TOKEN", self.auth()["data"]["accessToken"])
