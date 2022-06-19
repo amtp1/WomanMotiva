@@ -6,12 +6,15 @@ from aiogram.types import (CallbackQuery, InlineKeyboardButton,
 from aiogram.utils.callback_data import CallbackData
 
 # setting callback_data prefix and parts
-calendar_callback = CallbackData('dialog_calendar', 'act', 'year', 'month', 'day')
-ignore_callback = calendar_callback.new("IGNORE", -1, -1, -1)  # for buttons with no answer
+calendar_callback = CallbackData(
+    'dialog_calendar', 'act', 'year', 'month', 'day')
+ignore_callback = calendar_callback.new(
+    "IGNORE", -1, -1, -1)  # for buttons with no answer
 
 
 class DialogCalendar:
-    months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+    months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+              "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
 
     def __init__(self, year: int = datetime.now().year, month: int = datetime.now().month):
         self.year = year
@@ -46,24 +49,28 @@ class DialogCalendar:
         inline_kb = InlineKeyboardMarkup(row_width=6)
         # first row with year button
         inline_kb.row()
-        inline_kb.insert(InlineKeyboardButton(" ", callback_data=ignore_callback))
+        inline_kb.insert(InlineKeyboardButton(
+            " ", callback_data=ignore_callback))
         inline_kb.insert(InlineKeyboardButton(
             year,
             callback_data=calendar_callback.new("START", year, -1, -1)
         ))
-        inline_kb.insert(InlineKeyboardButton(" ", callback_data=ignore_callback))
+        inline_kb.insert(InlineKeyboardButton(
+            " ", callback_data=ignore_callback))
         # two rows with 6 months buttons
         inline_kb.row()
         for month in self.months[0:6]:
             inline_kb.insert(InlineKeyboardButton(
                 month,
-                callback_data=calendar_callback.new("SET-MONTH", year, self.months.index(month) + 1, -1)
+                callback_data=calendar_callback.new(
+                    "SET-MONTH", year, self.months.index(month) + 1, -1)
             ))
         inline_kb.row()
         for month in self.months[6:12]:
             inline_kb.insert(InlineKeyboardButton(
                 month,
-                callback_data=calendar_callback.new("SET-MONTH", year, self.months.index(month) + 1, -1)
+                callback_data=calendar_callback.new(
+                    "SET-MONTH", year, self.months.index(month) + 1, -1)
             ))
         return inline_kb
 
@@ -79,7 +86,7 @@ class DialogCalendar:
             callback_data=calendar_callback.new("SET-YEAR", year, -1, -1)
         ))
         inline_kb.row()
-        #for day in ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]:
+        # for day in ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]:
         #    inline_kb.insert(InlineKeyboardButton(day, callback_data=ignore_callback))
 
         month_calendar = calendar.monthcalendar(year, month)
@@ -87,7 +94,8 @@ class DialogCalendar:
             inline_kb.row()
             for day in week:
                 if(day == 0):
-                    inline_kb.insert(InlineKeyboardButton(" ", callback_data=ignore_callback))
+                    inline_kb.insert(InlineKeyboardButton(
+                        " ", callback_data=ignore_callback))
                     continue
                 inline_kb.insert(InlineKeyboardButton(
                     str(day), callback_data=calendar_callback.new("SET-DAY", year, month, day)
@@ -103,10 +111,10 @@ class DialogCalendar:
             await query.message.edit_reply_markup(await self._get_month_kb(int(data['year'])))
         if data['act'] == "PREV-YEARS":
             new_year = int(data['year']) - 5
-            #await query.message.edit_reply_markup(await self.start_calendar(new_year))
+            # await query.message.edit_reply_markup(await self.start_calendar(new_year))
         if data['act'] == "NEXT-YEARS":
             new_year = int(data['year']) + 5
-            #await query.message.edit_reply_markup(await self.start_calendar(new_year))
+            # await query.message.edit_reply_markup(await self.start_calendar(new_year))
         if data['act'] == "START":
             #self.message = "Выберите год"
             await query.message.edit_reply_markup(await self.start_calendar(int(data['year'])))
@@ -128,7 +136,8 @@ class DialogCalendar:
                     pass
             else:
                 await query.message.delete_reply_markup()   # removing inline keyboard
-                return_data = True, datetime(int(data['year']), int(data['month']), int(data['day']))
+                return_data = True, datetime(
+                    int(data['year']), int(data['month']), int(data['day']))
         return return_data
 
     def valid_month(self, year: int, month: int):
@@ -160,18 +169,22 @@ class Time:
     ) -> InlineKeyboardMarkup:
         inline_kb = InlineKeyboardMarkup(row_width=2, inline_keyboard=[
             [InlineKeyboardButton(text="09:00-10:00", callback_data=F"int_{date} 09:00-10:00"),
-            InlineKeyboardButton(text="10:00-11:00", callback_data=F"int_{date} 10:00-11:00"),
-            InlineKeyboardButton(text="11:00-12:00", callback_data=F"int_{date} 11:00-12:00")],
+             InlineKeyboardButton(text="10:00-11:00",
+                                  callback_data=F"int_{date} 10:00-11:00"),
+             InlineKeyboardButton(text="11:00-12:00", callback_data=F"int_{date} 11:00-12:00")],
 
             [InlineKeyboardButton(text="12:00-13:00", callback_data=F"int_{date} 12:00-13:00"),
-            InlineKeyboardButton(text="13:00-14:00", callback_data=F"int_{date} 13:00-14:00"),
-            InlineKeyboardButton(text="14:00-15:00", callback_data=F"int_{date} 14:00-15:00")],
+             InlineKeyboardButton(text="13:00-14:00",
+                                  callback_data=F"int_{date} 13:00-14:00"),
+             InlineKeyboardButton(text="14:00-15:00", callback_data=F"int_{date} 14:00-15:00")],
 
             [InlineKeyboardButton(text="15:00-16:00", callback_data=F"int_{date} 15:00-16:00"),
-            InlineKeyboardButton(text="16:00-17:00", callback_data=F"int_{date} 16:00-17:00"),
-            InlineKeyboardButton(text="17:00-18:00", callback_data=F"int_{date} 17:00-18:00")],
+             InlineKeyboardButton(text="16:00-17:00",
+                                  callback_data=F"int_{date} 16:00-17:00"),
+             InlineKeyboardButton(text="17:00-18:00", callback_data=F"int_{date} 17:00-18:00")],
 
-            [InlineKeyboardButton(text="18:00-19:00", callback_data=F"int_{date} 18:00-19:00")]
+            [InlineKeyboardButton(text="18:00-19:00",
+                                  callback_data=F"int_{date} 18:00-19:00")]
         ])
 
         return inline_kb
