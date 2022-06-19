@@ -99,7 +99,8 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
             name = surgeon.get("name")
             city = surgeon.get("city")
             clinic = surgeon.get("clinic")
-            address = surgeon.get("address") if surgeon.get("address") else "Отсутствует"
+            address = surgeon.get("address") if surgeon.get(
+                "address") else "Отсутствует"
             instagram_link = surgeon.get("instagram_link")
             image = read_image(surgeon.get("image"))
             globals.surgeons[id] = (
@@ -221,37 +222,40 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
         data = globals.data  # Get state data.
 
         # Getting profile data process.
-        user_id = data.get("user_id") # User id.
-        surgeon_id = data.get("surgeon_id") # Profile id.
-        phone = data.get("phone") # Phone.
-        city = data.get("city") # City.
-        fio = data.get("fio") # Fio.
-        email = data.get("email") # Email.
-        date = data.get("date") # Date.
-        time = data.get("time") # Time.
-        cons_format = re.sub("cons#", "", query.data) # Consultation format.
-        start_session = data.get("start_session") # Start session date.
-        end_session = data.get("end_session") # End session date.
-        state_surgeon_data = globals.surgeons[int(surgeon_id)] # Get surgeon profile state data.
-        surgeon_name = state_surgeon_data[0] # Surgeon profile name.
-        surgeon_wa_phone = state_surgeon_data[1] # Surgeon WhatsApp phone.
+        user_id = data.get("user_id")  # User id.
+        surgeon_id = data.get("surgeon_id")  # Profile id.
+        phone = data.get("phone")  # Phone.
+        city = data.get("city")  # City.
+        fio = data.get("fio")  # Fio.
+        email = data.get("email")  # Email.
+        date = data.get("date")  # Date.
+        time = data.get("time")  # Time.
+        cons_format = re.sub("cons#", "", query.data)  # Consultation format.
+        start_session = data.get("start_session")  # Start session date.
+        end_session = data.get("end_session")  # End session date.
+        # Get surgeon profile state data.
+        state_surgeon_data = globals.surgeons[int(surgeon_id)]
+        surgeon_name = state_surgeon_data[0]  # Surgeon profile name.
+        surgeon_wa_phone = state_surgeon_data[1]  # Surgeon WhatsApp phone.
         # Create new deal.
         deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
                                         phone=phone, city=city, fio=fio, email=email, cons_format=cons_format,
                                         start_session=start_session, end_session=end_session)
 
-        is_created = deal_response.get('is_created') # Get response. Default: bool value.
+        # Get response. Default: bool value.
+        is_created = deal_response.get('is_created')
 
         # Check request response.
         if not is_created:
             return await query.message.edit_text("Такая заявка уже существует!")
 
         # Getting request response data.
-        deal_id = deal_response.get("deal_id") # Deal id.
-        deal_created = deal_response.get("deal_created") # Deal created datetime.
-        code = deal_response.get("code") # Deal digit code.
+        deal_id = deal_response.get("deal_id")  # Deal id.
+        # Deal created datetime.
+        deal_created = deal_response.get("deal_created")
+        code = deal_response.get("code")  # Deal digit code.
         deal_created_str = dt.strftime(
-            parser.parse(deal_created), "%d-%m-%Y %H:%M:%S") # Convert created to correct format.
+            parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")  # Convert created to correct format.
         surgeon_message_text = (F"Заявка [#{deal_id}]\n"
                                 F"ФИО: {fio}\n"
                                 F"Дата и время заявки: {deal_created_str}\n"
@@ -260,7 +264,8 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                                 F"Телефон: {phone}\n"
                                 F"Код: {code}")
 
-        wa_api.send_message(surgeon_wa_phone, surgeon_message_text) # Send message in surgeon WhatsApp chat.
+        # Send message in surgeon WhatsApp chat.
+        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
 
         complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
                              F"Дата консультации: {date}\n"
@@ -268,7 +273,8 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                              F"Хирург: {surgeon_name}\n"
                              F"Адрес: г.{city}\n"
                              F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
-        await query.message.edit_text(complete_reg_page, reply_markup=inline_reply_markup) # Send message of user.
+        # Send message of user.
+        await query.message.edit_text(complete_reg_page, reply_markup=inline_reply_markup)
         # await notify_about_deal(query.message, deal_id)
     except TypeError:
         return await query.message.edit_text("Бот был перезапущен. Нужно создать новую заявку👇", reply_markup=inline_reply_markup)

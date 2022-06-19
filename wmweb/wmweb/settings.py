@@ -75,7 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wmweb.wsgi.application'
 
-COUNT_DAYS = [1,7,30]
+COUNT_DAYS = [1, 7, 30]
 
 
 # Database

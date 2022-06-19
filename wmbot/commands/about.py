@@ -11,7 +11,7 @@ from config.config import Config
 
 TEMP_PATH = rF"{Path(__file__).resolve().parent.parent.parent}/temp"
 TEMP_COUNTRIES = {
-    "price":{
+    "price": {
         "South Korea": "5000-10000",
         "Russia": "2800-7000",
         "Kazakhstan": "1800-6000",
@@ -35,18 +35,24 @@ api = API()
 async def about(message: Message):
     about_markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="О Motiva", callback_data="about_motiva")],
-        [InlineKeyboardButton(text="Часто задаваемые вопросы", callback_data="questions_motiva")],
-        [InlineKeyboardButton(text="Сравнение стоимости операции", callback_data="diff_operation_price")]
+        [InlineKeyboardButton(text="Часто задаваемые вопросы",
+                              callback_data="questions_motiva")],
+        [InlineKeyboardButton(
+            text="Сравнение стоимости операции", callback_data="diff_operation_price")]
     ])
     return await message.answer("Разделы", reply_markup=about_markup)
+
 
 @dp.callback_query_handler(lambda query: query.data == "about_motiva")
 async def about_motivia(query: CallbackQuery):
     reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="О компании", callback_data="about_company")],
-        [InlineKeyboardButton(text="О продукции", callback_data="about_products")]
+        [InlineKeyboardButton(
+            text="О компании", callback_data="about_company")],
+        [InlineKeyboardButton(text="О продукции",
+                              callback_data="about_products")]
     ])
     return await query.message.edit_text(text="Разделы O Motiva", reply_markup=reply_markup)
+
 
 @dp.callback_query_handler(lambda query: query.data == "about_company")
 async def about_company(query: CallbackQuery):
@@ -57,10 +63,11 @@ async def about_company(query: CallbackQuery):
 
     with open(rF"{TEMP_PATH}/about.txt", "r", encoding="utf-8") as f:
         about_page = f.read()
-    
+
     if not about_page:
         return await query.message.edit_text("Ничего не найдено")
     return await query.message.edit_text(about_page)
+
 
 @dp.callback_query_handler(lambda query: query.data == "about_products")
 async def about_products(query: CallbackQuery):
@@ -71,10 +78,11 @@ async def about_products(query: CallbackQuery):
 
     with open(rF"{TEMP_PATH}/products.txt", "r", encoding="utf-8") as f:
         about_page = f.read()
-    
+
     if not about_page:
         return await query.message.edit_text("Ничего не найдено")
     return await query.message.edit_text(about_page)
+
 
 @dp.callback_query_handler(lambda query: query.data == "questions_motiva")
 async def questions_motivia(query: CallbackQuery):
@@ -85,19 +93,24 @@ async def questions_motivia(query: CallbackQuery):
                          F"<b>Ответ</b>: {question['answer']}")
         await query.message.answer(question_page)
 
+
 @dp.callback_query_handler(lambda query: query.data == "diff_operation_price")
 async def diff_operation_price(query: CallbackQuery):
     diff_page = ("В данном разделе приведен сравнительный анализ средних стоимостей операций в разных странах.\n"
-    "В стоимость не включены дополнительные расходы (билеты, гостиница, пребывание в стационаре, анализы). Указана только стоимость операции.\n"
-    "Нажмите на название страны что бы увидеть стоимость👇")
+                 "В стоимость не включены дополнительные расходы (билеты, гостиница, пребывание в стационаре, анализы). Указана только стоимость операции.\n"
+                 "Нажмите на название страны что бы увидеть стоимость👇")
     reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Южная корея", callback_data="country#South Korea")],
+        [InlineKeyboardButton(text="Южная корея",
+                              callback_data="country#South Korea")],
         [InlineKeyboardButton(text="Россия", callback_data="country#Russia")],
-        [InlineKeyboardButton(text="Казахстан", callback_data="country#Kazakhstan")],
-        [InlineKeyboardButton(text="Кыргызстан", callback_data="country#Kyrgyzstan")],
+        [InlineKeyboardButton(
+            text="Казахстан", callback_data="country#Kazakhstan")],
+        [InlineKeyboardButton(
+            text="Кыргызстан", callback_data="country#Kyrgyzstan")],
         [InlineKeyboardButton(text="Турция", callback_data="country#Turkey")],
     ])
     return await query.message.edit_text(diff_page, reply_markup=reply_markup)
+
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("country")))
 async def select_country(query: CallbackQuery):
@@ -106,7 +119,8 @@ async def select_country(query: CallbackQuery):
         [InlineKeyboardButton(text="Назад", callback_data="go_back")]
     ])
     return await query.message.edit_text(F"Стоимость операции в {TEMP_COUNTRIES['inducement'][country]} ${TEMP_COUNTRIES['price'][country]}",
-        reply_markup=reply_markup)
+                                         reply_markup=reply_markup)
+
 
 @dp.callback_query_handler(lambda query: query.data == "go_back")
 async def select_country(query: CallbackQuery):
