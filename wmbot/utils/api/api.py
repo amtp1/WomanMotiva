@@ -1,4 +1,5 @@
 import json
+from loguru import logger
 
 import requests
 
@@ -155,6 +156,13 @@ class WA_API:
         response = requests.request('POST', url, headers=self.headers, json=payload)
         response = response.json()
 
+        print(response)
+
         if not response['success']:
-            config.change_value("WA_TOKEN", self.auth()["data"]["accessToken"])
-            self.send_message(phone, message_text)
+            if response['code'] == "ApiLicenseError":
+                return logger.error(response['message'])
+            else:
+                logger.error(response['message'])
+                config.change_value("WA_TOKEN", self.auth()["data"]["accessToken"])
+                self.send_message(phone, message_text)
+                logger.info("Token regenerated!")
