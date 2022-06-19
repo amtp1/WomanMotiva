@@ -7,6 +7,7 @@ from os.path import splitext
 from uuid import uuid4
 from django.core.files.storage import FileSystemStorage
 
+
 class UUIDFileStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):
         _, ext = splitext(name)
@@ -20,7 +21,8 @@ class Surgeons(models.Model):
     wa_phone = models.BigIntegerField(null=True)
     instagram_link = models.TextField(null=True)
     address = models.TextField(null=True)
-    image = models.ImageField(upload_to="profile_pictures/", storage=UUIDFileStorage(), null=True)
+    image = models.ImageField(
+        upload_to="profile_pictures/", storage=UUIDFileStorage(), null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
     def to_dict(self):
@@ -37,12 +39,18 @@ class Surgeons(models.Model):
 
 class Deals(models.Model):
     class STATUS(Enum):
-        new = ('new', 'Is when the request has been sent but the patient has not yet clicked "Yes"')
-        confirmed = ('confirmed', 'Is when the patient pressed yes to the question about whether the surgeon had contacted')
-        unconfirmed = ('unconfirmed', 'Is when the patient pressed no when asked if the surgeon had contacted her')
-        without_visit = ('without_visit', 'Is when the time of consultation has already come but the QR code is not scanned')
-        attendance_confirmed = ('attendance_confirmed', 'Is when you have scanned the QR code and entered a 6-digit code')
-        cancel_by_client = ('cancel_by_client', 'Is when the customer personally cancels the application')
+        new = (
+            'new', 'Is when the request has been sent but the patient has not yet clicked "Yes"')
+        confirmed = (
+            'confirmed', 'Is when the patient pressed yes to the question about whether the surgeon had contacted')
+        unconfirmed = (
+            'unconfirmed', 'Is when the patient pressed no when asked if the surgeon had contacted her')
+        without_visit = (
+            'without_visit', 'Is when the time of consultation has already come but the QR code is not scanned')
+        attendance_confirmed = (
+            'attendance_confirmed', 'Is when you have scanned the QR code and entered a 6-digit code')
+        cancel_by_client = (
+            'cancel_by_client', 'Is when the customer personally cancels the application')
 
         @classmethod
         def get_value(cls, member):
@@ -63,11 +71,14 @@ class Deals(models.Model):
     city = models.CharField(max_length=255, null=True)
     fio = models.CharField(max_length=255, null=True)
     email = models.CharField(max_length=255, null=True)
-    cons_format = models.CharField(max_length=10, choices=[x.value for x in FORMAT], default=FORMAT.get_value('unknow'))
+    cons_format = models.CharField(max_length=10, choices=[
+                                   x.value for x in FORMAT], default=FORMAT.get_value('unknow'))
     start_session = models.DateTimeField(null=True)
     end_session = models.DateTimeField(null=True)
-    status = models.CharField(max_length=32, choices=[x.value for x in STATUS], default=STATUS.get_value('new'))
-    code = models.ForeignKey('GenerateOTP', on_delete=models.CASCADE, null=True)
+    status = models.CharField(max_length=32, choices=[
+                              x.value for x in STATUS], default=STATUS.get_value('new'))
+    code = models.ForeignKey(
+        'GenerateOTP', on_delete=models.CASCADE, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def to_dict(self):
@@ -76,7 +87,7 @@ class Deals(models.Model):
             user_id=self.user_id, phone=self.phone,
             fio=self.fio, email=self.email, cons_format=self.cons_format,
             city=self.city, start_session=self.start_session,
-            end_session = self.end_session, created=self.created
+            end_session=self.end_session, created=self.created
         )
 
     def to_excel_dict(self):
@@ -85,10 +96,10 @@ class Deals(models.Model):
             user_id=self.user_id, phone=self.phone,
             fio=self.fio, email=self.email, cons_format=self.cons_format,
             city=self.city, start_session=self.start_session,
-            end_session = self.end_session, created=self.created,
+            end_session=self.end_session, created=self.created,
             status=("Новая" if self.status == "new" else "Посещение подтверждено" if self.status == "attendance_confirmed"
-                else "Подтверждена" if self.status == "confirmed" else "Не подтверждена" if self.status == "unconfirmed" else "Неизвестно"
-            )
+                    else "Подтверждена" if self.status == "confirmed" else "Не подтверждена" if self.status == "unconfirmed" else "Неизвестно"
+                    )
         )
 
     class Meta:
