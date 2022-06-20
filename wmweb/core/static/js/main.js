@@ -204,10 +204,10 @@ function enable_edit_settings() {
     $("#timeout").prop("disabled", false);
 }
 
-function myFunction() {
+function searchDealById() {
     // Declare variables
     var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("myInput");
+    input = document.getElementById("SearchDealInput");
     filter = input.value.toUpperCase();
     table = document.getElementById("MyOrdersTable");
     tr = table.getElementsByTagName("tr");
@@ -223,5 +223,26 @@ function myFunction() {
           tr[i].style.display = "none";
         }
       }
+    }
+}
+
+function searchSurgeonByName(){
+    // Declare variables
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById('SearchSurgeonInput');
+    filter = input.value;
+    surgeons = document.getElementById("surgeons-div");
+    col = surgeons.getElementsByClassName('col-4');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < col.length; i++) {
+        card = col[i].getElementsByClassName("card")[0];
+        f_w = card.getElementsByClassName("font-weight-bold")[0];
+        txtValue = f_w.textContent || f_w.innerText;
+        if (txtValue.indexOf(filter) > -1) {
+            col[i].style.display = "";
+        } else {
+            col[i].style.display = "none";
+        }
     }
 }

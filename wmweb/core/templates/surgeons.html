@@ -127,12 +127,20 @@
   </div>
 </div>
 
+<div class="row g-3">
+  <div class="col-sm">
+    <p><input  type="text" id="SearchSurgeonInput" onkeyup="searchSurgeonByName()" placeholder="Введите имя хирурга"></p>
+  </div>
+  <div class="col-sm">
+    <p><button type="button" class="btn btn-secondary" onclick="$('#addNewProfile').modal('show');">Добавить профиль</button></p>
+  </div>
+</div>
+
 <!-- Profiles of surgeons -->
-<p><button type="button" class="btn btn-secondary" onclick="$('#addNewProfile').modal('show');">Добавить профиль</button></p>
 <div class="album py-2 bg-light my-custom-scrollbar">
   <div class="table-scroll-y">
     <div class="container-fluid">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+      <div id="surgeons-div" class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
       {% for surgeon in surgeons %}
       <div class="col-4">
         <div id="card_{{surgeon.pk}}" class="card testimonial-card mt-2 mb-3">
