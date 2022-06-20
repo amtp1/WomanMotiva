@@ -22,7 +22,7 @@ body {
 
 table tbody {
     display: block;
-    max-height: 80vh;
+    max-height: 70vh;
     overflow-y: scroll;
 }
 
@@ -160,4 +160,9 @@ table thead, table tbody tr {
   border: 3px solid #ddd;
   border-radius: 5px;
   padding: 1rem 0.5rem;
+}
+
+#cities-container, #questions-container{
+  background-color: whitesmoke;
+  border-radius: 10px;
 }
