@@ -161,7 +161,7 @@ class WA_API:
         return response
 
     def send_message(self, phone: str, message_text: str):
-        url = F'https://api.chatapp.online/v1/licenses/{self.license_id}/messengers/grayWhatsApp/chats/{phone}/messages/text'
+        url = F'https://api.chatapp.online/v1/licenses/{self.license_id}/messengers/grWhatsApp/chats/{phone}/messages/text'
         payload = {
             "text": message_text,
         }
@@ -170,7 +170,6 @@ class WA_API:
         response = requests.request(
             'POST', url, headers=self.headers, json=payload)
         response = response.json()
-
         print(response)
 
         if not response['success']:
@@ -178,7 +177,7 @@ class WA_API:
             if error['code'] == "ApiLicenseError":
                 return logger.error(error['message'])
             else:
-                logger.error(response['message'])
+                logger.error(error['message'])
                 config.change_value("WA_TOKEN", self.auth()
                                     ["data"]["accessToken"])
                 self.send_message(phone, message_text)
