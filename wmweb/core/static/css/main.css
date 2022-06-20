@@ -6,7 +6,7 @@ body {
 }
 
 .my-custom-scrollbar {
-  height: 550px;
+  max-height: 100vh;
   overflow: auto;
 }
 
@@ -154,8 +154,9 @@ table thead, table tbody tr {
 
 .album{
   width: 100%;
-  height: 100%;
+  height: 90vh;
   background-repeat: no-repeat;
   border: 3px solid #ddd;
   border-radius: 5px;
+  padding: 1rem 0.5rem;
 }
