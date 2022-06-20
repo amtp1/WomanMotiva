@@ -151,3 +151,11 @@ table thead, table tbody tr {
   border: 1px solid #ddd; /* Add a grey border */
   margin-bottom: 5px; /* Add some space below the input */
 }
+
+.album{
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  border: 3px solid #ddd;
+  border-radius: 5px;
+}
