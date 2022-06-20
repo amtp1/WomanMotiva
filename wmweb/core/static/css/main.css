@@ -1,3 +1,4 @@
+
 body {
     /*max-width: 100%;
     background-color: #eee;*/
@@ -21,7 +22,7 @@ body {
 
 table tbody {
     display: block;
-    max-height: 500px;
+    max-height: 80vh;
     overflow-y: scroll;
 }
 
