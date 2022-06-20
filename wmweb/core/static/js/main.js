@@ -16,11 +16,6 @@ function redirect_to_questions_page() {
     window.location.replace("questions");
 }
 
-$(document).ready(function () {
-    $('#dtBasicExample').DataTable();
-    $('.dataTables_length').addClass('bs-select');
-});
-
 function save_profile() {
     const image = document.getElementById("user_picture").files[0];
     const name = document.getElementsByName("name")[0];
