@@ -170,7 +170,6 @@ class WA_API:
         response = requests.request(
             'POST', url, headers=self.headers, json=payload)
         response = response.json()
-        print(response)
 
         if not response['success']:
             error = response['error']
