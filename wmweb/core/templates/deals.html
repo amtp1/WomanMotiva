@@ -12,13 +12,17 @@
       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         <form method="post" action="upload_to_excel">
           {% csrf_token %}
-          <div class="input-group-prepend">
-            <span class="badge text-bg-success w-100">От:&nbsp;<input class="" type="date" id="start" name="from-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}"></span>
+          <div class="card-block text-center">
+            <label for="input-groups" class="control-label">Интервал времени</label>
+            <div class="input-group mb-3">
+              <input class="form-control" type="date" id="start" name="from-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
+              <input class="form-control" type="date" id="start" name="before-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
+            </div>
+        </div>
+          <div class='form-group'>
+            <!--<input id="resetBtn" class="btn" role="button" type="reset" value="Сбросить"/>-->
+            <input class="btn btn-primary w-100" role="button" type="submit" value="Выгрузить"/>
           </div>
-          <div class="input-group-prepend">
-            <span class="badge text-bg-success w-100">До:&nbsp;<input class="" type="date" id="start" name="before-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}"></span>
-          </div>
-          <button type="submit" class="btn btn-outline-primary w-100">Выгрузить</button>
         </form>
       </ul>
   </div>
