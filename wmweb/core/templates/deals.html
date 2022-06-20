@@ -4,30 +4,34 @@
 {% load static %}
 {% block pages_body %}
 {% if deals %}
-<p>
-  <div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Выгрузить
-    </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <form method="post" action="upload_to_excel">
-          {% csrf_token %}
-          <div class="card-block text-center">
-            <label for="input-groups" class="control-label">Интервал времени</label>
-            <div class="input-group mb-3">
-              <input class="form-control" type="date" id="start" name="from-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
-              <input class="form-control" type="date" id="start" name="before-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
-            </div>
-        </div>
-          <div class='form-group'>
-            <!--<input id="resetBtn" class="btn" role="button" type="reset" value="Сбросить"/>-->
-            <input class="btn btn-primary w-100" role="button" type="submit" value="Выгрузить"/>
-          </div>
-        </form>
-      </ul>
+<div class="row g-3">
+  <div class="col-sm">
+    <p><input  type="text" id="myInput" onkeyup="myFunction()" placeholder="Введите ID заявки"></p>
   </div>
-</p>
-<p><input  type="text" id="myInput" onkeyup="myFunction()" placeholder="Введите ID заявки"></p>
+  <div class="col-sm">
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Выгрузить
+      </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <form method="post" action="upload_to_excel">
+            {% csrf_token %}
+            <div class="card-block text-center">
+              <label for="input-groups" class="control-label">Интервал времени</label>
+              <div class="input-group mb-3">
+                <input class="form-control" type="date" id="start" name="from-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
+                <input class="form-control" type="date" id="start" name="before-trip-start" value="{{today}}" min="{{min_date}}" max="{{max_date}}">
+              </div>
+          </div>
+            <div class='form-group'>
+              <!--<input id="resetBtn" class="btn" role="button" type="reset" value="Сбросить"/>-->
+              <input class="btn btn-primary w-100" role="button" type="submit" value="Выгрузить"/>
+            </div>
+          </form>
+        </ul>
+    </div>
+  </div>
+</div>
 <div id="MyOrdersTable" class="table-wrapper-scroll-y">
   <table class="table table-sm table-hover">
     <thead class="table-dark">
