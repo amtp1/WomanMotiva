@@ -264,9 +264,6 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                                 F"Телефон: {phone}\n"
                                 F"Код: {code}")
 
-        # Send message in surgeon WhatsApp chat.
-        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
-
         complete_reg_page = (F"Вы успешно зарегистрированы на прием к хирургу Motiva:\n"
                              F"Дата консультации: {date}\n"
                              F"Время консультации: {time}\n"
@@ -276,6 +273,9 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
         # Send message of user.
         await query.message.edit_text(complete_reg_page, reply_markup=inline_reply_markup)
         # await notify_about_deal(query.message, deal_id)
+
+        # Send message in surgeon WhatsApp chat.
+        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
     except TypeError:
         return await query.message.edit_text("Бот был перезапущен. Нужно создать новую заявку👇", reply_markup=inline_reply_markup)
 
