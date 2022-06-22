@@ -74,4 +74,4 @@ urlpatterns = [
     path("api/change_qrcode_notice_status/<int:deal_id>", API.ChangeQRCodeNoticeView.as_view(),
          name="change_qrcode_notice_status")  # Change qrcode notice status by deal id.
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
