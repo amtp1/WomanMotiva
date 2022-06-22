@@ -177,7 +177,11 @@ class WA_API:
                 return logger.error(error['message'])
             else:
                 logger.error(error['message'])
-                config.change_value("WA_TOKEN", self.auth()
-                                    ["data"]["accessToken"])
-                self.send_message(phone, message_text)
-                logger.info("Token regenerated!")
+                data = self.auth().get("data")
+                if data:
+                    token = data.get("accessToken")
+                    config.change_value("WA_TOKEN", token)
+                    self.send_message(phone, message_text)
+                    logger.info("Token regenerated!")
+                else:
+                    logger.error(self.auth().get("message"))
