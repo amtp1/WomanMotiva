@@ -281,6 +281,12 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
 
         # Send message in surgeon WhatsApp chat.
         wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+        markup = ReplyKeyboardMarkup(resize_keyboard=True,
+                                 keyboard=[
+                                     [KeyboardButton(text="Записаться на прием"),
+                                      KeyboardButton(text="O Motiva")]
+                                 ])
+        return await query.message.answer("Выберите действие", reply_markup=markup)
     except TypeError:
         return await query.message.edit_text("Бот был перезапущен. Нужно создать новую заявку👇", reply_markup=inline_reply_markup)
 
