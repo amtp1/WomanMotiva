@@ -17,6 +17,7 @@ from utils.api.api import API, WA_API
 from my_calendar.calendar import DialogCalendar, valid_datetime, calendar_callback, Time
 from utils.utils import cities_markup
 
+
 config = Config()  # Init Config object.
 api = API()  # Init API object.
 wa_api = WA_API()  # Init WA_API object.
@@ -104,7 +105,7 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
             instagram_link = surgeon.get("instagram_link")
             image = read_image(surgeon.get("image"))
             globals.surgeons[id] = (
-                name, surgeon.get("wa_phone"),)
+                name, surgeon.get("wa_phone"),address) # Save user data in the state.
             choose_inline_markup = InlineKeyboardMarkup()
             if instagram_link:
                 choose_inline_markup.add(InlineKeyboardButton(
@@ -225,7 +226,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
         user_id = data.get("user_id")  # User id.
         surgeon_id = data.get("surgeon_id")  # Profile id.
         phone = data.get("phone")  # Phone.
-        city = data.get("city")  # City.
+        city = data.get("city") # City.
         fio = data.get("fio")  # Fio.
         email = data.get("email")  # Email.
         date = data.get("date")  # Date.
@@ -237,9 +238,12 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
         state_surgeon_data = globals.surgeons[int(surgeon_id)]
         surgeon_name = state_surgeon_data[0]  # Surgeon profile name.
         surgeon_wa_phone = state_surgeon_data[1]  # Surgeon WhatsApp phone.
+        surgeon_address = state_surgeon_data[2] # Surgeon address.
+        format_address = F"{city}, {surgeon_address}"
+
         # Create new deal.
         deal_response = api.create_deal(surgeon_id=surgeon_id, user_id=user_id,
-                                        phone=phone, city=city, fio=fio, email=email, cons_format=cons_format,
+                                        phone=phone, address=format_address, fio=fio, email=email, cons_format=cons_format,
                                         start_session=start_session, end_session=end_session)
 
         # Get response. Default: bool value.
@@ -256,6 +260,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
         code = deal_response.get("code")  # Deal digit code.
         deal_created_str = dt.strftime(
             parser.parse(deal_created), "%d-%m-%Y %H:%M:%S")  # Convert created to correct format.
+
         surgeon_message_text = (F"Заявка [#{deal_id}]\n"
                                 F"ФИО: {fio}\n"
                                 F"Дата и время заявки: {deal_created_str}\n"
@@ -268,7 +273,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                              F"Дата консультации: {date}\n"
                              F"Время консультации: {time}\n"
                              F"Хирург: {surgeon_name}\n"
-                             F"Адрес: г.{city}\n"
+                             F"Адрес: {format_address}\n"
                              F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
         # Send message of user.
         await query.message.edit_text(complete_reg_page, reply_markup=inline_reply_markup)

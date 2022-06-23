@@ -40,21 +40,21 @@ class API:
         serializer_class: Deals = Deals  # Set serializer object.
 
         def get(self, request: HttpRequest, surgeon_id: int,
-                user_id: int, phone: int, city: str,
+                user_id: int, phone: int, address: str,
                 fio: str, email: str, cons_format: str,
                 start_session: str, end_session: str
                 ) -> HttpResponse:
             surgeon: Any = Surgeons.objects.get(pk=surgeon_id)
             deal: QuerySet = Deals.objects.filter(
                 surgeon=surgeon, user_id=user_id,
-                phone=phone, city=city, fio=fio,
+                phone=phone, address=address, fio=fio,
                 email=email, cons_format=cons_format,
                 start_session=start_session, end_session=end_session)
 
             if not deal.exists():
                 deal: QuerySet = Deals.objects.create(
                     surgeon=surgeon, user_id=user_id,
-                    phone=phone, city=city, fio=fio,
+                    phone=phone, address=address, fio=fio,
                     email=email, cons_format=cons_format,
                     start_session=start_session, end_session=end_session
                 )

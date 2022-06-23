@@ -68,7 +68,7 @@ class Deals(models.Model):
     surgeon = models.ForeignKey(Surgeons, on_delete=models.PROTECT, null=True)
     user_id = models.BigIntegerField(null=True)
     phone = models.BigIntegerField(null=True)
-    city = models.CharField(max_length=255, null=True)
+    address = models.CharField(max_length=255, null=True)
     fio = models.CharField(max_length=255, null=True)
     email = models.CharField(max_length=255, null=True)
     cons_format = models.CharField(max_length=10, choices=[
@@ -86,7 +86,7 @@ class Deals(models.Model):
             id=self.id, surgeon_id=self.surgeon_id,
             user_id=self.user_id, phone=self.phone,
             fio=self.fio, email=self.email, cons_format=self.cons_format,
-            city=self.city, start_session=self.start_session,
+            address=self.address, start_session=self.start_session,
             end_session=self.end_session, created=self.created
         )
 
@@ -95,7 +95,7 @@ class Deals(models.Model):
             id=self.id, surgeon_name=self.surgeon.name,
             user_id=self.user_id, phone=self.phone,
             fio=self.fio, email=self.email, cons_format=self.cons_format,
-            city=self.city, start_session=self.start_session,
+            address=self.address, start_session=self.start_session,
             end_session=self.end_session, created=self.created,
             status=("Новая" if self.status == "new" else "Посещение подтверждено" if self.status == "attendance_confirmed"
                     else "Подтверждена" if self.status == "confirmed" else "Не подтверждена" if self.status == "unconfirmed" else "Неизвестно"

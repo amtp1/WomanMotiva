@@ -22,11 +22,11 @@ class API:
         return content["surgeons"]
 
     def create_deal(self,
-                    surgeon_id: int, user_id: int, phone: str, city: str,
+                    surgeon_id: int, user_id: int, phone: str, address: str,
                     fio: str, email: str, cons_format: str, start_session, end_session
                     ) -> dict:
         response = self._make_create_deal_request(host=self.host, port=self.port, surgeon_id=surgeon_id,
-                                                  user_id=user_id, phone=phone, city=city, fio=fio, email=email,
+                                                  user_id=user_id, phone=phone, address=address, fio=fio, email=email,
                                                   cons_format=cons_format, start_session=start_session, end_session=end_session)
         content = self.serialize_response_content(content=response.text)
         return content
@@ -80,7 +80,7 @@ class API:
         return content
 
     def _make_create_deal_request(self, **kwargs) -> requests.Response:
-        url = (r"http://{host}:{port}/api/create_deal/{surgeon_id}/{user_id}/{phone}/{city}/{fio}/{email}/{cons_format}/{start_session}/{end_session}").format(**kwargs)
+        url = (r"http://{host}:{port}/api/create_deal/{surgeon_id}/{user_id}/{phone}/{address}/{fio}/{email}/{cons_format}/{start_session}/{end_session}").format(**kwargs)
         response = requests.get(url=url, headers=self.headers)
         return response
 

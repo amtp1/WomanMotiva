@@ -49,7 +49,7 @@ urlpatterns = [
     # Get profiles by city.
     path("api/surgeons/<str:city>",
          API.SurgeonsView.as_view(), name="api-surgeons"),
-    path("api/create_deal/<int:surgeon_id>/<int:user_id>/<int:phone>/<str:city>/<str:fio>/<str:email>/<str:cons_format>/<str:start_session>/<str:end_session>",
+    path("api/create_deal/<int:surgeon_id>/<int:user_id>/<int:phone>/<str:address>/<str:fio>/<str:email>/<str:cons_format>/<str:start_session>/<str:end_session>",
          API.CreateDealView.as_view(), name="create_deal"),  # Create new deal by input data.
     # Change deal status by id.
     path("api/change_status/<int:deal_id>/<str:status>",
