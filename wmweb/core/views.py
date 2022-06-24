@@ -2,6 +2,7 @@
 The name of the 'profile' in the comments will belong to the surgeon profile.
 """
 
+import re
 import os
 import random
 import mimetypes
@@ -267,7 +268,8 @@ class Web:
             # Get profile city from temp.
             city: str | None = request.POST.get('city')
             # Get profile wa_phone from temp.
-            wa_phone: str | None = request.POST.get('wa_phone')
+            wa_phone: str | None = re.sub('[^0-9]', '', request.POST.get('wa_phone'))
+            print(wa_phone)
             # Get profile address from temp.
             address: str | None = request.POST.get('address')
             # Get profile instagram_link from temp.
@@ -386,7 +388,7 @@ class Web:
             # Get profile city from temp.
             city: str | None = request.POST.get('city')
             # Get profile wa_phone from temp.
-            wa_phone: str | None = request.POST.get('wa_phone')
+            wa_phone: str | None = re.sub('[^0-9]', '', request.POST.get('wa_phone'))
             # Get profile clinic from temp.
             clinic: str | None = request.POST.get('clinic')
             # Get profile address from temp.
