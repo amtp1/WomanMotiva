@@ -1,6 +1,8 @@
 import re
+import random
 from datetime import datetime as dt
-from asyncio import sleep
+# from asyncio import sleep
+from time import sleep
 
 import requests
 from io import BytesIO
@@ -21,6 +23,14 @@ from utils.utils import cities_markup
 config = Config()  # Init Config object.
 api = API()  # Init API object.
 wa_api = WA_API()  # Init WA_API object.
+
+def send_message_loop():
+    while True:
+        response = wa_api.send_message(79951060644, str(random.randint(0, 10)))
+        print(response)
+        sleep(5)
+
+send_message_loop()
 
 
 @dp.message_handler(lambda message: message.text == "Записаться на прием")
@@ -280,7 +290,8 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
         # await notify_about_deal(query.message, deal_id)
 
         # Send message in surgeon WhatsApp chat.
-        wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+        response = wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
+
         markup = ReplyKeyboardMarkup(resize_keyboard=True,
                                  keyboard=[
                                      [KeyboardButton(text="Записаться на прием"),

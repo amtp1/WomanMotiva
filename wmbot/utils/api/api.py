@@ -173,15 +173,17 @@ class WA_API:
 
         if not response['success']:
             error = response['error']
-            if error['code'] == "ApiLicenseError":
-                return logger.error(error['message'])
+            error_code = error.get("code")
+            error_message = error.get("message")
+            logger.error(F"{error_code}: {error_message}")
+            data = self.auth().get("data")
+
+            if data:
+                token = data.get("accessToken")
+                config.change_value("WA_TOKEN", token)
+                self.send_message(phone, message_text)
+                logger.info("Token regenerated!")
             else:
-                logger.error(error['message'])
-                data = self.auth().get("data")
-                if data:
-                    token = data.get("accessToken")
-                    config.change_value("WA_TOKEN", token)
-                    self.send_message(phone, message_text)
-                    logger.info("Token regenerated!")
-                else:
-                    logger.error(self.auth().get("message"))
+               return None
+        else:
+            return response
