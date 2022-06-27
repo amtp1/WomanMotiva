@@ -24,14 +24,6 @@ config = Config()  # Init Config object.
 api = API()  # Init API object.
 wa_api = WA_API()  # Init WA_API object.
 
-def send_message_loop():
-    while True:
-        response = wa_api.send_message(79951060644, str(random.randint(0, 10)))
-        print(response)
-        sleep(5)
-
-send_message_loop()
-
 
 @dp.message_handler(lambda message: message.text == "Записаться на прием")
 async def make_appointment(message: Message, state: FSMContext):
