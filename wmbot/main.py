@@ -7,7 +7,7 @@ from loguru import logger
 
 from objects.globals import config
 from objects import globals
-from utils.utils import check_notices_polling, qrcode_check_notices_polling
+from utils.utils import check_notices_polling, qrcode_check_notices_polling, check_wa_token
 
 
 async def main():
@@ -24,6 +24,8 @@ async def main():
         asyncio.create_task(check_notices_polling())
     except Exception as e:
         logger.error(e)
+
+    await check_wa_token(accessToken=config.wa_token)
 
     await globals.dp.start_polling()
 

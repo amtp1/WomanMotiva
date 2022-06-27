@@ -1,14 +1,18 @@
 import io
 import pytz
+import json
+import aiohttp
 from asyncio import sleep
 from datetime import datetime as dt, timedelta
 
 import requests
+from loguru import logger
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from objects import globals
 from utils.api.api import API
 from config.config import Config
+from utils.api.api import WA_API
 
 TIME_ZONE = pytz.timezone('Asia/Almaty')
 TIME_ZONE_DELTA = timedelta(hours=5)
@@ -17,6 +21,7 @@ BEFORE_CHECK_NOTICES_SECONDS: int = 3600
 
 config: Config = Config()
 api: API = API()
+wa_api: WA_API = WA_API()
 
 
 async def check_notices_polling():
@@ -75,6 +80,28 @@ async def qrcode_check_notices_polling():
 async def check_bot(user_id: int) -> bool:
     me = await globals.bot.get_me()
     return me.id == user_id
+
+
+async def check_wa_token(accessToken):
+    url = 'https://api.chatapp.online/v1/tokens/check'
+
+    headers = {
+        'Authorization': accessToken,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers) as response:
+            body = await response.text()
+            body = json.loads(body)
+            if not body.get("success"):
+                data = wa_api.auth().get("data")
+                token = data.get("accessToken")
+                config.change_value("WA_TOKEN", token)
+                logger.info("Token regenerated!")
+
+    await sleep(43200)
 
 
 def cities_markup(cities: list, callback_data: str):
