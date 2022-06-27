@@ -7,7 +7,7 @@ from loguru import logger
 
 from objects.globals import config
 from objects import globals
-from utils.utils import check_notices_polling, qrcode_check_notices_polling, check_wa_token
+from utils.utils import check_notices_polling, check_wa_token
 
 
 async def main():
@@ -19,7 +19,6 @@ async def main():
 
     import commands
 
-    # asyncio.create_task(qrcode_check_notices_polling())
     try:
         asyncio.create_task(check_notices_polling())
     except Exception as e:
