@@ -172,6 +172,11 @@ class WA_API:
         response = response.json()
 
         if not response['success']:
+            data = self.auth().get("data")
+            if data:
+                token = data.get("accessToken")
+                config.change_value("WA_TOKEN", token)
+                logger.info("Token regenerated!")
             error = response['error']
             error_code = error.get("code")
             error_message = error.get("message")

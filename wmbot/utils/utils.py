@@ -82,28 +82,6 @@ async def check_bot(user_id: int) -> bool:
     return me.id == user_id
 
 
-async def check_wa_token(accessToken):
-    url = 'https://api.chatapp.online/v1/tokens/check'
-
-    headers = {
-        'Authorization': accessToken,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    }
-
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers) as response:
-            body = await response.text()
-            body = json.loads(body)
-            if not body.get("success"):
-                data = wa_api.auth().get("data")
-                token = data.get("accessToken")
-                config.change_value("WA_TOKEN", token)
-                logger.info("Token regenerated!")
-
-    await sleep(43200)
-
-
 def cities_markup(cities: list, callback_data: str):
     inline_cities: list = []
     cities: list[list] = list(paginate(cities, 3))
