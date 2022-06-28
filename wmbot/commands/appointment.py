@@ -276,7 +276,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                              F"Время консультации: {time}\n"
                              F"Хирург: {surgeon_name}\n"
                              F"Адрес: {format_address}\n\n"
-                             F"ДЛЯ УТОЧНЕНИЯ ДЕТАЛЕЙ И ПОДТВЕРЖДЕНИЯ ДАТЫ И ВРЕМЕНИ КОНСУЛЬТАЦИИ С ВАМИ СВЯЖЕТСЯ АДМИНИСТРАТОР.\n\n"
+                             F"Для уточнения деталей и подтверждения даты и времени консультации с вами свяжется администратор.\n\n"
                              F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
         # Send message of user.
         await query.message.edit_text(complete_reg_page, reply_markup=inline_reply_markup)
