@@ -1,13 +1,12 @@
 import io
 import pytz
-import json
-import aiohttp
 from asyncio import sleep
 from datetime import datetime as dt, timedelta
 
 import requests
 from loguru import logger
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.exceptions import BadRequest
 
 from objects import globals
 from utils.api.api import API
@@ -72,9 +71,12 @@ async def qrcode_check_notices_polling():
 
                 if is_now <= BEFORE_CHECK_QRCODE_NOTICES_SECONDS:
                     api.change_qrcode_notice_status(deal_id=notice['deal_id'])
-                    return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"),
+                    try:
+                        return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"),
                                                         caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
                                                         F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
+                    except BadRequest as e:
+                        logger.error(e)
 
 
 async def check_bot(user_id: int) -> bool:
