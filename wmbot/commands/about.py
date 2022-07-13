@@ -100,7 +100,7 @@ async def diff_operation_price(query: CallbackQuery):
                  "В стоимость не включены дополнительные расходы (билеты, гостиница, пребывание в стационаре, анализы). Указана только стоимость операции.\n"
                  "Нажмите на название страны что бы увидеть стоимость👇")
     reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Южная корея",
+        [InlineKeyboardButton(text="Южная Корея",
                               callback_data="country#South Korea")],
         [InlineKeyboardButton(text="Россия", callback_data="country#Russia")],
         [InlineKeyboardButton(
