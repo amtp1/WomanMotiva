@@ -67,7 +67,7 @@ async def select_city(query: CallbackQuery, state: FSMContext):
         ]
     )
     return await query.message.edit_text(
-        "Имеются ли у вас абсолютные противопоказания? Беременность, период грудного вскармливания?",
+        "Имеются ли у Вас абсолютные противопоказания: Беременность, период грудного вскармливания?",
         reply_markup=inline_reply_markup)
 
 
@@ -88,7 +88,7 @@ async def contrain_choose(query: CallbackQuery, state: FSMContext):
     is_contrain = True if is_contrain == "yes" else False
     if is_contrain:
         return await query.message.edit_text(
-            "В этом случае мы не рекомендуем вам в ближайшее время проводить операцию. Пожалуйста проконсультируйтесь с нашими представителями по телефону:")
+            "В этом случае мы не рекомендуем Вам в ближайшее время проводить операцию. Пожалуйста проконсультируйтесь с нашими представителями по телефону:")
     else:
         await query.message.edit_text("Выберите хирурга")
         await state.update_data(is_contrain=is_contrain)
@@ -276,8 +276,8 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
                              F"Время консультации: {time}\n"
                              F"Хирург: {surgeon_name}\n"
                              F"Адрес: {format_address}\n\n"
-                             F"Для уточнения деталей и подтверждения даты и времени консультации с вами свяжется администратор.\n\n"
-                             F"<b>За 2 часа до консультации вам будет выслан QR код который необходимо показать хирургу или администратору клиники</b>")
+                             F"Для уточнения деталей и подтверждения даты и времени консультации с Вами свяжется администратор.\n\n"
+                             F"<b>За 2 часа до консультации Вам будет выслан Qr-код, который необходимо показать хирургу или администратору клиники.</b>")
         # Send message of user.
         await query.message.edit_text(complete_reg_page, reply_markup=inline_reply_markup)
         # await notify_about_deal(query.message, deal_id)
@@ -313,10 +313,10 @@ async def notice_request(query: CallbackQuery):
             [InlineKeyboardButton(text="Отменить заявку",
                                   callback_data=F"cancel_deal#{deal_id}")]
         ])
-        return await query.message.edit_text("Спасибо за ваш ответ!", reply_markup=reply_markup)
+        return await query.message.edit_text("Спасибо за Ваш ответ!", reply_markup=reply_markup)
     elif answer == "no":
         api.change_status(deal_id=deal_id, status="unconfirmed")
-        return await query.message.edit_text("Спасибо за ваш ответ, мы уточним у хирурга статус вашей записи и попросим подтвердить ее.")
+        return await query.message.edit_text("Спасибо за Ваш ответ, мы уточним у хирурга статус Вашей записи и попросим подтвердить ее.")
 
 
 @dp.callback_query_handler(lambda query: query.data.startswith(("cancel_deal")))
@@ -335,7 +335,7 @@ async def notify_about_deal(message: Message, deal_id: int):
         ]
     )
     await message.answer(
-        "Пожалуйста ответьте, связался ли с вами представитель хирурга к которому вы записались?",
+        "Пожалуйста ответьте, связался ли с Вами представитель хирурга к которому Вы записались?",
         reply_markup=inline_reply_markup)
 
 
