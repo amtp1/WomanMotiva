@@ -1,3 +1,4 @@
+from email import message
 import json
 from loguru import logger
 
@@ -177,6 +178,7 @@ class WA_API:
                 token = data.get("accessToken")
                 config.change_value("WA_TOKEN", token)
                 logger.info("Token regenerated!")
+                return self.send_message(phone, message_text)
             error = response['error']
             error_code = error.get("code")
             error_message = error.get("message")
