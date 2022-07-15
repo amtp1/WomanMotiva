@@ -6,7 +6,7 @@ from datetime import datetime as dt, timedelta
 import requests
 from loguru import logger
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from aiogram.utils.exceptions import BadRequest
+from aiogram.utils.exceptions import BadRequest, NetworkError
 
 from objects import globals
 from utils.api.api import API
@@ -80,7 +80,10 @@ async def qrcode_check_notices_polling():
 
 
 async def check_bot(user_id: int) -> bool:
-    me = await globals.bot.get_me()
+    try:
+        me = await globals.bot.get_me()
+    except NetworkError as e:
+        logger.error(e)
     return me.id == user_id
 
 
