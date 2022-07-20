@@ -145,6 +145,7 @@ class WA_API:
         self.wa_token = config.wa_token
         self.license_id = config.wa_license_id
         self.app_id = config.wa_app_id
+        self.template_id = config.template_id
         self.headers = {'Content-Type': 'application/json',
                         'Accept': 'application/json'}
 
@@ -168,6 +169,39 @@ class WA_API:
         }
         self.headers['Authorization'] = self.wa_token
 
+        response = requests.request(
+            'POST', url, headers=self.headers, json=payload)
+        response = response.json()
+
+        if not response['success']:
+            data = self.auth().get("data")
+            if data:
+                token = data.get("accessToken")
+                config.change_value("WA_TOKEN", token)
+                self.wa_token = token
+                logger.info("Token regenerated!")
+                return self.send_message(phone, message_text)
+            error = response['error']
+            error_code = error.get("code")
+            error_message = error.get("message")
+            logger.error(F"{error_code}: {error_message}")
+        else:
+            return response
+
+    def send_template(self, phone: str, message_text: str):
+        url = F'https://api.chatapp.online/v1/licenses/{self.license_id}/messengers/WhatsApp/chats/{phone}/messages/template'
+        payload = {
+            "template": {
+            "id": self.template_id,
+            "params": [
+                message_text
+                ]
+            },
+            "file": "ipsam",
+            "tracking": "vero"
+        }
+
+        self.headers['Authorization'] = self.wa_token
         response = requests.request(
             'POST', url, headers=self.headers, json=payload)
         response = response.json()
