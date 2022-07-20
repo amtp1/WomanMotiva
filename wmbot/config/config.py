@@ -33,6 +33,7 @@ class Config:
         self.wa_app_id = os.getenv("WA_APP_ID")
         self.wa_token = os.getenv("WA_TOKEN")
         self.wa_license_id = os.getenv("WA_LICENSE_ID")
+        self.template_id = os.getenv("TEMPLATE_ID")
 
         self.timeout_sec = os.getenv("TIMEOUT_SEC")
 
