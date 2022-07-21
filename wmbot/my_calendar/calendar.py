@@ -4,6 +4,8 @@ from datetime import datetime
 from aiogram.types import (CallbackQuery, InlineKeyboardButton,
                            InlineKeyboardMarkup)
 from aiogram.utils.callback_data import CallbackData
+from aiogram.utils.exceptions import MessageNotModified
+from loguru import logger
 
 # setting callback_data prefix and parts
 calendar_callback = CallbackData(
@@ -126,7 +128,10 @@ class DialogCalendar:
                 except:
                     pass
             else:
-                await query.message.edit_reply_markup(await self._get_days_kb(int(data['year']), int(data['month'])))
+                try:
+                    await query.message.edit_reply_markup(await self._get_days_kb(int(data['year']), int(data['month'])))
+                except MessageNotModified as e:
+                    logger.error(e)
         if data['act'] == "SET-DAY":
             if not self.valid_day(year=int(data['year']), month=int(data['month']), day=int(data['day'])):
                 try:
