@@ -176,10 +176,7 @@ class WA_API:
         if not response['success']:
             data = self.auth().get("data")
             if data:
-                token = data.get("accessToken")
-                config.change_value("WA_TOKEN", token)
-                self.wa_token = token
-                logger.info("Token regenerated!")
+                self.regen_token(data)
                 return self.send_message(phone, message_text)
             error = response['error']
             error_code = error.get("code")
@@ -209,10 +206,7 @@ class WA_API:
         if not response['success']:
             data = self.auth().get("data")
             if data:
-                token = data.get("accessToken")
-                config.change_value("WA_TOKEN", token)
-                self.wa_token = token
-                logger.info("Token regenerated!")
+                self.regen_token(data)
                 return self.send_message(phone, message_text)
             error = response['error']
             error_code = error.get("code")
@@ -220,3 +214,10 @@ class WA_API:
             logger.error(F"{error_code}: {error_message}")
         else:
             return response
+
+
+    def regen_token(self, data):
+        token = data.get("accessToken")
+        config.change_value("WA_TOKEN", token)
+        self.wa_token = token
+        logger.info("Token regenerated!")
