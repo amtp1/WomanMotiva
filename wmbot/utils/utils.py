@@ -42,10 +42,13 @@ async def check_notices_polling():
                         [InlineKeyboardButton(text="Да", callback_data=F"notice_yes#{notice['deal_id']}"),
                             InlineKeyboardButton(text="Нет", callback_data=F"notice_no#{notice['deal_id']}")]
                     ])
-                    await globals.bot.send_message(chat_id=notice['user_id'],
+                    try:
+                        await globals.bot.send_message(chat_id=notice['user_id'],
                                                     text=F"<b>Заявка#{notice['deal_id']}</b>\n"
                                                     F"Пожалуйста ответьте, связался ли с вами представитель хирурга к которому вы записались?",
                                                     reply_markup=reply_markup)
+                    except Exception as e:
+                        logger.error(e)
 
         await qrcode_check_notices_polling()
         await sleep(3)
