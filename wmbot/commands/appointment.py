@@ -38,7 +38,7 @@ async def make_appointment(message: Message, state: FSMContext):
         answer : method of Message object
     """
 
-    await state.update_data(user_id=message.from_user.id)
+    # await state.update_data(user_id=message.from_user.id)
     cities = api.get_cities()["cities"]
     markup = cities_markup(cities, callback_data="city#")
     return await message.answer("Выберите город", reply_markup=markup)
@@ -225,7 +225,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
         data = globals.data  # Get state data.
 
         # Getting profile data process.
-        user_id = data.get("user_id")  # User id.
+        user_id = query.from_user.id  # User id.
         surgeon_id = data.get("surgeon_id")  # Profile id.
         phone = data.get("phone")  # Phone.
         city = data.get("city") # City.
