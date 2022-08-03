@@ -207,7 +207,7 @@ class WA_API:
             data = self.auth().get("data")
             if data:
                 self.regen_token(data)
-                return self.send_message(phone, message_text)
+                return self.send_template(phone, message_text)
             error = response['error']
             error_code = error.get("code")
             error_message = error.get("message")
