@@ -50,30 +50,33 @@ async def check_notices_polling():
                     except Exception as e:
                         logger.error(e)
 
-        await qrcode_check_notices_polling()
-        await sleep(3)
+        await sleep(2)
 
 
 async def qrcode_check_notices_polling():
-    notices = api.get_qrcode_notices()['qrcode_notices']
+    while True:
+        notices = api.get_qrcode_notices()['qrcode_notices']
 
-    if notices:
-        for notice in notices:
-            end_session = dt.strptime(
-                notice['end_session'], "%Y-%m-%d %H:%M:%S") + TIME_ZONE_DELTA
-            current_datetime = dt.strptime(dt.now(TIME_ZONE).strftime(
-                "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+        if notices:
+            for notice in notices:
+                end_session = dt.strptime(
+                    notice['end_session'], "%Y-%m-%d %H:%M:%S") + TIME_ZONE_DELTA
+                current_datetime = dt.strptime(dt.now(TIME_ZONE).strftime(
+                    "%Y-%m-%d %H:%M:%S"), "%Y-%m-%d %H:%M:%S")
 
-            is_now = (end_session - current_datetime).total_seconds()
+                is_now = (end_session - current_datetime).total_seconds()
 
-            if is_now <= BEFORE_CHECK_QRCODE_NOTICES_SECONDS:
-                api.change_qrcode_notice_status(deal_id=notice['deal_id'])
-                try:
-                    return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"),
-                                                    caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
-                                                    F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
-                except BadRequest as e:
-                    logger.error(e)
+                if is_now <= BEFORE_CHECK_QRCODE_NOTICES_SECONDS:
+                    api.change_qrcode_notice_status(deal_id=notice['deal_id'])
+                    try:
+                        return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"),
+                                                        caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
+                                                        F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
+                    except BadRequest as e:
+                        logger.error(e)
+
+        await sleep(2)
+
 
 def cities_markup(cities: list, callback_data: str):
     inline_cities: list = []
