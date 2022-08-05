@@ -74,6 +74,12 @@ async def qrcode_check_notices_polling():
                                                         F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
                     except BadRequest as e:
                         logger.error(e)
+                else:
+                    is_send = bool(notice['is_send'])
+                    if not is_send:
+                        return await globals.bot.send_photo(chat_id=notice['user_id'], photo=read_qr_code_from_url(r"qrcode.png"),
+                                                        caption=F"<b>Заявка#{notice['deal_id']}</b>\n"
+                                                        F"Данный QR код который необходимо показать хирургу или администратору клиники при посещении.")
 
         await sleep(2)
 
