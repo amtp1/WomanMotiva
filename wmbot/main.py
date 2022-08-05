@@ -48,6 +48,5 @@ if __name__ == "__main__":
     try:
         main_loop = asyncio.get_event_loop()
         main_loop.run_until_complete(main())
-
     except KeyboardInterrupt:
         logger.info("Bot stopped")
