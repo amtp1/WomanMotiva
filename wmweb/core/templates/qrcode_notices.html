@@ -1,0 +1,52 @@
+{% extends 'profile.html' %}
+{% block title%}Заявки{% endblock %}
+
+{% load static %}
+{% block pages_body %}
+
+{% if qrcode_notices %}
+<!--<div class="row g-3">
+  <div class="col-sm">
+    <p><input  type="text" id="SearchDealInput" onkeyup="searchDealById()" placeholder="Введите ID заявки"></p>
+    </div>
+</div>-->
+
+<div id="QrCodeNotices" class="table-wrapper-scroll-y">
+    <table id="QrCodeNoticesTable" class="table">
+        <thead>
+          <tr>
+            <th scope="col">Заявка</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Создано</th>
+            <th scope="col">Действие</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for qrcode_notice in qrcode_notices %}
+                <tr>
+                    <td>{{qrcode_notice.deal.pk}}</td>
+                    {% if qrcode_notice.status == 0 %}
+                    <td><span class="badge text-bg-danger">Не отправлено</span></td>
+                    {% elif qrcode_notice.status == 2 %}
+                      <td><span class="badge text-bg-warning">Ожидание</span></td>
+                    {% else %}
+                      <td><span class="badge text-bg-success">Отправлено</span></td>
+                    {% endif %}
+                    <td>{{qrcode_notice.updated}}</td>
+                    {% if qrcode_notice.status == 0 %}
+                      <td><button id="noticebtn#{{qrcode_notice.id}}" type="button" class="btn btn-outline-primary" onclick="sendQrCodeNotice('{{qrcode_notice.id}}')">Отправить</button></td>
+                    {% elif qrcode_notice.status == 2 %}
+                      <td><i class="fs-4 bi-stopwatch"></i></td>
+                    {% else %}
+                      <td><i class="fs-4 bi-check2-circle"></i></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% else %}
+  <h1>Заявки не найдены</h1>
+{% endif %}
+
+{% endblock %}

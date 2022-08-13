@@ -2,6 +2,7 @@
 The name of the 'profile' in the comments will belong to the surgeon profile.
 """
 
+import io
 import re
 import os
 import random
@@ -12,6 +13,7 @@ from typing import Any
 from dateutil import parser
 from datetime import datetime as dt
 
+import requests
 import pandas as pd
 from loguru import logger
 from django.conf import settings
@@ -24,6 +26,7 @@ from django.core.files.uploadedfile import UploadedFile
 
 from .models import *
 from .config import Config
+
 
 config: Config = Config()  # Init new Config object.
 
@@ -552,6 +555,22 @@ class Web:
                     F"Значение ({timeout}) таймаута является неккоректным! Изменения настроек не вступили в силу.")
         return redirect("settings")
 
+    def qrcode_notices(request: HttpRequest):
+        qrcode_notices = [qrcode_notice.to_notice_check() for qrcode_notice in QRCodeNotices.objects.all()]
+        return render(request, "qrcode_notices.html", dict(qrcode_notices=qrcode_notices))
+
+    def change_qrcode_notice_status(request: HttpRequest):
+        qrcode_notice_id = request.POST.get("qrcode_notice_id")
+        if qrcode_notice_id:
+            qrcode_notice = QRCodeNotices.objects.get(pk=qrcode_notice_id)
+            qrcode_notice.is_send = 1
+            qrcode_notice.save()
+            try:
+                sendImageRemoteFile(qrcode_notice.deal.user_id)
+            except Exception as e:
+                logger.error(e)
+        return HttpResponse(dumps({"response": True}), content_type="application/json")
+
 
 def generate_code() -> int:
     """The generate code function.
@@ -564,3 +583,17 @@ def generate_code() -> int:
     # generating 6 digit random code.
     code: int = random.choice(range(100000, 999999))
     return code
+
+def sendImageRemoteFile(chat_id):
+    bot_token = os.getenv("BOT_TOKEN")
+    host = os.getenv("WEB_HOST")
+    port = os.getenv("WEB_PORT")
+    url = F"https://api.telegram.org/bot{bot_token}/sendPhoto"
+    img_url = F"http://{host}:{port}/media/qrcode/qrcode.png"
+    remote_image = requests.get(img_url)
+    photo = io.BytesIO(remote_image.content)
+    photo.name = 'img.png'
+    files = {'photo': photo}
+    data = {'chat_id' : chat_id}
+    response = requests.post(url, files=files, data=data)
+    return response

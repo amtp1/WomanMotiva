@@ -246,3 +246,29 @@ function searchSurgeonByName(){
         }
     }
 }
+
+function sendQrCodeNotice(qrcode_notice_id){
+    var notice_btn = document.getElementById(`noticebtn#${qrcode_notice_id}`);
+    notice_btn.innerHTML = '<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Отправляется';
+    var data = new FormData(); // Init new FormData object.
+    data.append("qrcode_notice_id", qrcode_notice_id); // Add id in the FormData object.
+    fetch("change_qrcode_notice_status/", {
+        method: "POST",
+        body: data,
+        contentType: 'application/json',
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRFToken": $.cookie("csrftoken")
+        },
+    }).then(function (response) {
+        response.json().then(
+            function (data) {
+                if (data["response"]) {
+                    var new_element = document.createElement('i');
+                    new_element.className = 'fs-4 bi-check2-circle';
+                    notice_btn.replaceWith(new_element);
+                }
+            }
+        )
+    })
+}

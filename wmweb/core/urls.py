@@ -43,6 +43,8 @@ urlpatterns = [
     path("del_city/", Web.delete_city, name="delete_city"),  # Delete city.
     # Delete question.
     path("del_question/", Web.delete_question, name="delete_question"),
+    path("notices", Web.qrcode_notices, name="qrcode_notices"),
+    path("change_qrcode_notice_status/", Web.change_qrcode_notice_status, name="change_qrcode_notice_status"),
 
     # ===API urls===
     # Main urls.

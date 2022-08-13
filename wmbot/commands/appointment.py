@@ -284,7 +284,7 @@ async def consultation_format(query: CallbackQuery, state: FSMContext):
 
         # Send message in surgeon WhatsApp chat.
         # response = wa_api.send_message(surgeon_wa_phone, surgeon_message_text)
-        response = wa_api.send_template(surgeon_wa_phone, surgeon_message_text)
+        #response = wa_api.send_template(surgeon_wa_phone, surgeon_message_text)
 
         markup = ReplyKeyboardMarkup(resize_keyboard=True,
                                  keyboard=[

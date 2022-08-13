@@ -1,11 +1,20 @@
+import os
+import pytz
 from enum import Enum
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta
 
 from django.db import models
 from django.conf import settings
 from os.path import splitext
 from uuid import uuid4
 from django.core.files.storage import FileSystemStorage
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
+BEFORE_CHECK_QRCODE_NOTICES_SECONDS: int = 7200
+TIME_ZONE = pytz.timezone('Asia/Almaty')
+TIME_ZONE_DELTA = timedelta(hours=5)
 
 
 class UUIDFileStorage(FileSystemStorage):
@@ -148,3 +157,19 @@ class QRCodeNotices(models.Model):
             deal_id=self.deal.id, is_send=self.is_send, user_id=self.deal.user_id,
             start_session=dt.strftime(self.deal.start_session, "%Y-%m-%d %H:%M:%S"), end_session=dt.strftime(self.deal.end_session, "%Y-%m-%d %H:%M:%S")
         )
+
+    def to_notice_check(self):
+        end_session = self.deal.end_session + TIME_ZONE_DELTA
+        current_datetime = dt.now(TIME_ZONE)
+
+        is_now = (end_session - current_datetime).total_seconds()
+
+        if not self.is_send:
+            if is_now <= BEFORE_CHECK_QRCODE_NOTICES_SECONDS:
+                status = 0
+            else:
+                status = 2
+        else:
+            status = 1
+
+        return dict(id=self.id, deal=self.deal, status=status, is_send=self.is_send, updated=self.updated)
